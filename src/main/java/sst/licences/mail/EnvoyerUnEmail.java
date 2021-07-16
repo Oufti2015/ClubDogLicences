@@ -24,7 +24,7 @@ public class EnvoyerUnEmail {
 
     private void affiliation(Membre membre) {
         final String username = "bcarlonais@gmail.com";
-        final String password = System.getenv("MAIL_PWD");;
+        final String password = System.getenv("MAIL_PWD");
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

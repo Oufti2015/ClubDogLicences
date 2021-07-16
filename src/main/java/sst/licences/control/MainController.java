@@ -9,6 +9,7 @@ import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 import sst.licences.container.LicencesContainer;
 import sst.licences.container.SimpleMembre;
+import sst.licences.excel.ExporterVersExcel;
 import sst.licences.mail.EnvoyerUnEmail;
 import sst.licences.model.Membre;
 
@@ -185,6 +186,8 @@ public class MainController {
     }
 
     public void exportFileForMYKKUSH(ActionEvent actionEvent) {
+        ExporterVersExcel excel = new ExporterVersExcel();
+        excel.exportNewMembers();
     }
 
     public void emailForAffiliation(ActionEvent actionEvent) {
