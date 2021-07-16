@@ -1,17 +1,20 @@
 package sst.licences.control;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import net.sf.oval.ConstraintViolation;
+import net.sf.oval.Validator;
 import sst.licences.container.LicencesContainer;
 import sst.licences.container.SimpleMembre;
+import sst.licences.mail.EnvoyerUnEmail;
+import sst.licences.model.Membre;
 
-import javax.xml.soap.Text;
-import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainController {
     @FXML
@@ -50,18 +53,15 @@ public class MainController {
     @FXML
     public void initialize() {
         ObservableList<SimpleMembre> data = mainTableView.getItems();
-        LicencesContainer.me().membres().forEach(m -> data.add(new SimpleMembre(m)));
-    }
-
-    @FXML
-    public void updateAction(javafx.event.ActionEvent actionEvent) {
+        LicencesContainer.me().membres().stream().sorted().forEach(m -> data.add(new SimpleMembre(m)));
+        licenceText.setDisable(true);
     }
 
     @FXML
     public void rowselected(MouseEvent mouseEvent) {
         System.out.println("rowSelected");
         SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
-        System.out.println("membre selected : "+selectedItem);
+        System.out.println("membre selected : " + selectedItem);
 
         licenceText.setText(selectedItem.getLicence());
         dateDeNaissancePicker.setValue(selectedItem.getMembre().getDateDeNaissance());
@@ -80,5 +80,124 @@ public class MainController {
         affiliationDatePicker.setValue(selectedItem.getMembre().getAffiliation());
 
         affiliationDatePicker.setDisable(selectedItem.isComite());
+    }
+
+    @FXML
+    public void updateAction(javafx.event.ActionEvent actionEvent) {
+        SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
+    }
+
+    @FXML
+    public void createAction(ActionEvent actionEvent) {
+        Membre membre = new Membre();
+
+        membre.setNom(nomText.getText());
+        membre.setPrenom(prenomText.getText());
+        membre.setDateDeNaissance(dateDeNaissancePicker.getValue());
+        membre.setRue(rueText.getText());
+        membre.setNum(numText.getText());
+        membre.setCodePostal(codePostalText.getText());
+        membre.setLocalite(localiteText.getText());
+        membre.setTelephone(telephoneText.getText());
+        membre.setGsm(gsmText.getText());
+        membre.setEmail(emailText.getText());
+        membre.setCodePays(paysText.getText());
+        membre.setLangue(langueText.getText());
+        membre.setComite(comiteCheck.isSelected());
+        membre.setAffiliation(affiliationDatePicker.getValue());
+        membre.setLicence(null);
+
+        if (validate(membre)) {
+            LicencesContainer.me().addMembre(membre);
+            ObservableList<SimpleMembre> data = mainTableView.getItems();
+            data.add(new SimpleMembre(membre));
+
+            reset();
+        }
+    }
+
+    private boolean validate(Membre membre) {
+        Validator validator = new Validator();
+        List<ConstraintViolation> violations = validator.validate(membre);
+        if (!violations.isEmpty()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (ConstraintViolation violation : violations) {
+                stringBuilder.append(message(violation.getMessage()));
+                stringBuilder.append("\n");
+            }
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Création d'un nouveau membre");
+            alert.setHeaderText("Nous ne pouvons pas créer un nouveau membre");
+            alert.setContentText(stringBuilder.toString());
+
+            alert.showAndWait();
+
+            return false;
+        }
+        return true;
+    }
+
+    private static Map<String, String> fields = new HashMap<>();
+
+    static {
+        fields.put("sst.licences.model.Membre.nom", "Le champ 'Nom'");
+        fields.put("sst.licences.model.Membre.prenom", "Le champ 'Prénom'");
+        fields.put("sst.licences.model.Membre.rue", "Le champ 'Rue'");
+        fields.put("sst.licences.model.Membre.num", "Le champ 'Numéro'");
+        fields.put("sst.licences.model.Membre.codePostal", "Le champ 'Code Postal'");
+        fields.put("sst.licences.model.Membre.localite", "Le champ 'Localité'");
+        fields.put("sst.licences.model.Membre.email", "Le champ 'E-Mail'");
+        fields.put("sst.licences.model.Membre.dateDeNaissance", "Le champ 'Date De Naissance'");
+        fields.put("sst.licences.model.Membre.codePays", "Le champ 'Pays'");
+        fields.put("sst.licences.model.Membre.langue", "Le champ 'Langue'");
+    }
+
+    private String message(String message) {
+        String result = message;
+        for (String key : fields.keySet()) {
+            result = result.replace(key, fields.get(key));
+        }
+        return result;
+    }
+
+    @FXML
+    public void resetAction(ActionEvent actionEvent) {
+        reset();
+    }
+
+    @FXML
+    private void reset() {
+        licenceText.setText("");
+        dateDeNaissancePicker.setValue(null);
+        nomText.setText("");
+        prenomText.setText("");
+        rueText.setText("");
+        numText.setText("");
+        codePostalText.setText("");
+        localiteText.setText("");
+        telephoneText.setText("");
+        gsmText.setText("");
+        emailText.setText("");
+        paysText.setText("");
+        langueText.setText("");
+        comiteCheck.setSelected(false);
+        affiliationDatePicker.setValue(null);
+    }
+
+    public void exportFileForMYKKUSH(ActionEvent actionEvent) {
+    }
+
+    public void emailForAffiliation(ActionEvent actionEvent) {
+        EnvoyerUnEmail envoi = new EnvoyerUnEmail();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Êtes-vous sûr de vouloir envoyer " + envoi.eligibleMembresSize() + " e-mail ?",
+                ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.YES) {
+            envoi.envoyerAffiliation();
+            alert = new Alert(Alert.AlertType.INFORMATION, envoi.eligibleMembresSize() + " e-mail envoyés !",
+                    ButtonType.OK);
+            alert.showAndWait();
+        }
     }
 }
