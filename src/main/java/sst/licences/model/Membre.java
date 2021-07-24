@@ -46,8 +46,9 @@ public class Membre implements Comparable<Membre> {
     private String licence;
     @NotNull
     @NotEmpty
-    private boolean comite;
+    private boolean comite = false;
     private LocalDate affiliation;
+    private boolean sentToMyKKusch = false;
 
     @Override
     public boolean equals(Object o) {

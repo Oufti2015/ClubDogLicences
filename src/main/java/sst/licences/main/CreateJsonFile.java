@@ -5,29 +5,33 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
-import org.apache.commons.lang3.CharSet;
 import sst.licences.container.LicencesContainer;
+import sst.licences.model.Comite;
 import sst.licences.model.Membre;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateJsonFile {
 
-    public static final String DATA_LEDEN_MEMBRES_TEMPLATE_CSV = "data//leden-membres-template.csv";
     public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
+    private static Comite comite = Comite.load();
 
     public static void main(String[] args) {
         List<Membre> list = new ArrayList<>();
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
         //FileReader reader1 = new FileReader("data//leden-membres-template.csv");
 
-        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(DATA_LEDEN_MEMBRES_TEMPLATE_CSV), CHARSET);
+        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(LicencesConstants.DATA_LEDEN_MEMBRES_TEMPLATE_CSV), CHARSET);
              CSVReader reader = new CSVReaderBuilder(inputStreamReader)
                      .withCSVParser(csvParser)   // custom CSV parser
                      .withSkipLines(1)           // skip the first line, header info
@@ -69,7 +73,9 @@ public class CreateJsonFile {
         membre.setLangue(x[i++]);
         membre.setLicence(x[i]);
 
-        membre.setComite(false);
+        membre.setComite(comite.isMembreDuComite(membre));
+        membre.setSentToMyKKusch(true);
+        membre.setAffiliation(LocalDate.of(LocalDate.now().getYear(), Month.JANUARY, 1));
 
         System.out.println(membre);
 

@@ -1,6 +1,7 @@
 package sst.licences.container;
 
 import com.google.gson.Gson;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
 import java.io.FileWriter;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LicencesContainer {
-    public static final String MEMBRES_JSON_FILE = "membres.json";
     private static LicencesContainer me = new LicencesContainer();
 
     public static LicencesContainer me() {
@@ -48,14 +48,14 @@ public class LicencesContainer {
             // create Gson instance
             Gson gson = new Gson();
             // create a reader
-            try (Reader reader = Files.newBufferedReader(Paths.get(MEMBRES_JSON_FILE))) {
+            try (Reader reader = Files.newBufferedReader(Paths.get(LicencesConstants.MEMBRES_JSON_FILE))) {
                 // convert JSON string to Book object
                 me = gson.fromJson(reader, LicencesContainer.class);
                 System.out.println(String.format("%d membres chargés.", me().membres.size()));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            System.err.println("Cannot read JSON file " + MEMBRES_JSON_FILE);
+            System.err.println("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE);
             System.exit(-1);
         }
     }
@@ -64,16 +64,12 @@ public class LicencesContainer {
         try {
             // convert book object to JSON
             String json = new Gson().toJson(LicencesContainer.me());
-
-            // print JSON string
-            System.out.println(json);
-
-            try (FileWriter myWriter = new FileWriter("membres.json")) {
+            try (FileWriter myWriter = new FileWriter(LicencesConstants.MEMBRES_JSON_FILE)) {
                 myWriter.write(json);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Cannot write JSON file " + MEMBRES_JSON_FILE);
+            System.err.println("Cannot write JSON file " + LicencesConstants.MEMBRES_JSON_FILE);
             System.exit(-1);
         }
     }

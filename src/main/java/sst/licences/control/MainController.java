@@ -13,6 +13,7 @@ import sst.licences.excel.ExporterVersExcel;
 import sst.licences.mail.EnvoyerUnEmail;
 import sst.licences.model.Membre;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +108,7 @@ public class MainController {
         membre.setComite(comiteCheck.isSelected());
         membre.setAffiliation(affiliationDatePicker.getValue());
         membre.setLicence(null);
+        membre.setSentToMyKKusch(false);
 
         if (validate(membre)) {
             LicencesContainer.me().addMembre(membre);
@@ -187,7 +189,11 @@ public class MainController {
 
     public void exportFileForMYKKUSH(ActionEvent actionEvent) {
         ExporterVersExcel excel = new ExporterVersExcel();
-        excel.exportNewMembers();
+        try {
+            excel.exportNewMembers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void emailForAffiliation(ActionEvent actionEvent) {

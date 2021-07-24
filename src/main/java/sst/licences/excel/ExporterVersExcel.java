@@ -8,25 +8,28 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import sst.licences.container.LicencesContainer;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExporterVersExcel {
 
-    public void exportNewMembers() {
+    public void exportNewMembers() throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Membres");
 
         List<Membre> list = LicencesContainer.me().membres()
                 .stream()
-                .filter(m -> m.getLicence() == null || m.getLicence().isEmpty())
+                .filter(m -> (m.getLicence() == null || m.getLicence().isEmpty()) && !m.isSentToMyKKusch())
                 .collect(Collectors.toList());
 
         int rownum = 0;
@@ -79,16 +82,23 @@ public class ExporterVersExcel {
             // Langue
             cell = row.createCell(i, CellType.STRING);
             cell.setCellValue(membre.getLangue());
+
+            membre.setSentToMyKKusch(true);
         }
 
-        File file = new File("new-membres.xlsx");
+        File file = new File(filename());
 
         try (FileOutputStream outFile = new FileOutputStream(file)) {
             workbook.write(outFile);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         System.out.println("Created file: " + file.getAbsolutePath());
+        LicencesContainer.me().save();
+    }
+
+    private String filename() {
+        String newMembresXlsx = LicencesConstants.NEW_MEMBRES_XLSX;
+        String formattedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMM-yy.HH.mm.ss"));
+        return newMembresXlsx.replace("{date}", formattedDate);
     }
 
     private void addHeader(Row row, XSSFCellStyle style) {
