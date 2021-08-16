@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sst.licences.container.LicencesContainer;
+import sst.licences.control.MainController;
 
 import java.net.URL;
 
@@ -20,6 +21,8 @@ public class Main extends Application {
         loader.setLocation(resource);
 
         Parent root = loader.load();
+        MainController controller = loader.getController();
+        controller.setPrimaryStage(primaryStage);
         primaryStage.setTitle("Berger Club Arlonais - Licences");
         primaryStage.setScene(new Scene(root, 1500, 700));
         primaryStage.show();

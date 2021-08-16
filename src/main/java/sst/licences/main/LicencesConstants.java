@@ -8,4 +8,5 @@ public class LicencesConstants {
     public static final String COMITE_JSON_FILE = WORKING_FOLDER + "comite.json";
 
     public static final String NEW_MEMBRES_XLSX = WORKING_FOLDER + "new-membres{date}.xlsx";
+    public static final String ALL_MEMBRES_XLSX = WORKING_FOLDER + "all-membres{date}.xlsx";
 }

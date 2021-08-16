@@ -8,29 +8,23 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import sst.licences.container.LicencesContainer;
-import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class ExporterVersExcel {
+public abstract class ExportToExcel implements ExcelExporter{
 
-    public void exportNewMembers() throws IOException {
+    public void export() throws IOException {
+        List<Membre> membres = membres();
+
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Membres");
-
-        List<Membre> list = LicencesContainer.me().membres()
-                .stream()
-                .filter(m -> (m.getLicence() == null || m.getLicence().isEmpty()) && !m.isSentToMyKKusch())
-                .collect(Collectors.toList());
 
         int rownum = 0;
         Cell cell;
@@ -40,7 +34,7 @@ public class ExporterVersExcel {
         row = sheet.createRow(rownum);
         addHeader(row, style);
 
-        for (Membre membre : list) {
+        for (Membre membre : membres) {
             rownum++;
             row = sheet.createRow(rownum);
             int i = 0;
@@ -83,22 +77,28 @@ public class ExporterVersExcel {
             cell = row.createCell(i, CellType.STRING);
             cell.setCellValue(membre.getLangue());
 
-            membre.setSentToMyKKusch(true);
+            updateMembre(membre);
         }
 
-        File file = new File(filename());
+        toFile(fileBaseName(), workbook);
+    }
+
+    private void toFile(String baseName, XSSFWorkbook workbook) throws IOException {
+        File file = new File(filename(baseName));
 
         try (FileOutputStream outFile = new FileOutputStream(file)) {
             workbook.write(outFile);
         }
         System.out.println("Created file: " + file.getAbsolutePath());
-        LicencesContainer.me().save();
+
+        if (saveMembres()) {
+            LicencesContainer.me().save();
+        }
     }
 
-    private String filename() {
-        String newMembresXlsx = LicencesConstants.NEW_MEMBRES_XLSX;
-        String formattedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MMM-yy.HH.mm.ss"));
-        return newMembresXlsx.replace("{date}", formattedDate);
+    private String filename(String baseName) {
+        String formattedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MMM-dd.HH.mm.ss"));
+        return baseName.replace("{date}", formattedDate);
     }
 
     private void addHeader(Row row, XSSFCellStyle style) {

@@ -5,20 +5,27 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 import sst.licences.container.LicencesContainer;
 import sst.licences.container.SimpleMembre;
-import sst.licences.excel.ExporterVersExcel;
+import sst.licences.excel.AllMembersExporter;
+import sst.licences.excel.ExcelExporter;
+import sst.licences.excel.Import;
+import sst.licences.excel.NewMembersExporter;
 import sst.licences.mail.EnvoyerUnEmail;
 import sst.licences.model.Membre;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MainController {
+    private Stage primaryStage;
     @FXML
     private TableView mainTableView;
     @FXML
@@ -188,11 +195,29 @@ public class MainController {
     }
 
     public void exportFileForMYKKUSH(ActionEvent actionEvent) {
-        ExporterVersExcel excel = new ExporterVersExcel();
+        ExcelExporter excel = new NewMembersExporter();
         try {
-            excel.exportNewMembers();
+            excel.export();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void exportCompleteFile(ActionEvent actionEvent) {
+        ExcelExporter excel = new AllMembersExporter();
+        try {
+            excel.export();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void importFileFromMYKKUSH(ActionEvent actionEvent) {
+        final FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(this.primaryStage);
+        if (file != null) {
+            System.out.println("file selected = " + file);
+            new Import().importFromCsv(file);
         }
     }
 
@@ -208,5 +233,9 @@ public class MainController {
                     ButtonType.OK);
             alert.showAndWait();
         }
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
     }
 }

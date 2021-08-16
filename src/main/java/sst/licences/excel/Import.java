@@ -1,4 +1,4 @@
-package sst.licences.main;
+package sst.licences.excel;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -6,9 +6,11 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import sst.licences.container.LicencesContainer;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Comite;
 import sst.licences.model.Membre;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,17 +22,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateJsonFile {
+public class Import {
 
-    public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
-    private static final Comite comite = Comite.load();
-
-    public static void main(String[] args) {
+    public void importFromCsv(File file) {
         List<Membre> list = new ArrayList<>();
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
         //FileReader reader1 = new FileReader("data//leden-membres-template.csv");
 
-        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(LicencesConstants.DATA_LEDEN_MEMBRES_TEMPLATE_CSV), CHARSET);
+        LicencesContainer.me().membres().forEach(m -> m.setSentToMyKKusch(false));
+
+        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), CHARSET);
              CSVReader reader = new CSVReaderBuilder(inputStreamReader)
                      .withCSVParser(csvParser)   // custom CSV parser
                      .withSkipLines(1)           // skip the first line, header info
@@ -38,8 +39,14 @@ public class CreateJsonFile {
             List<String[]> r = reader.readAll();
             r.forEach(x -> {
                 if (!x[0].equals("Nom") && !x[0].equals("Rue")) {
-                    Membre m = member(x);
-                    list.add(m);
+                    Membre member = member(x);
+                    if (!LicencesContainer.me().membres().contains(member)) {
+                        list.add(member);
+                    } else {
+                        List<Membre> membres = LicencesContainer.me().membres();
+                        Membre membre = membres.get(membres.indexOf(member));
+                        membre.update(member);
+                    }
                 }
             });
 
@@ -49,7 +56,7 @@ public class CreateJsonFile {
         }
     }
 
-    private static Membre member(String[] x) {
+    private Membre member(String[] x) {
         System.out.println(String.join("|", x));
         Membre membre = new Membre();
         int i = 0;
@@ -76,4 +83,7 @@ public class CreateJsonFile {
 
         return membre;
     }
+
+    private static final Comite comite = Comite.load();
+    public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
 }

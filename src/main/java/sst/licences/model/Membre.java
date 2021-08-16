@@ -1,5 +1,6 @@
 package sst.licences.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.sun.org.apache.xerces.internal.impl.XMLEntityManager;
 import lombok.Data;
@@ -55,15 +56,12 @@ public class Membre implements Comparable<Membre> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Membre membre = (Membre) o;
-        boolean equal = licence != null && membre.licence != null && Objects.equal(licence, membre.licence);
-        if (!equal) {
-            equal = Objects.equal(nom, membre.nom)
-                    && Objects.equal(prenom, membre.prenom)
-                    && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
-                    && Objects.equal(codePays, membre.codePays)
-                    && Objects.equal(langue, membre.langue);
-        }
-        return equal;
+        return Objects.equal(MoreObjects.firstNonNull(licence, ""), MoreObjects.firstNonNull(membre.licence, ""))
+                && Objects.equal(nom, membre.nom)
+                && Objects.equal(prenom, membre.prenom)
+                && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
+                && Objects.equal(codePays, membre.codePays)
+                && Objects.equal(langue, membre.langue);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class Membre implements Comparable<Membre> {
 
     @Override
     public int compareTo(Membre o) {
-        int result = 0;
+        int result;
         result = nom.compareTo(o.nom);
         if (result == 0) {
             result = prenom.compareTo(o.prenom);
@@ -89,5 +87,10 @@ public class Membre implements Comparable<Membre> {
             result = langue.compareTo(o.langue);
         }
         return result;
+    }
+
+    public void update(Membre m) {
+        this.setLicence(MoreObjects.firstNonNull(m.getLicence(), ""));
+        this.setSentToMyKKusch(true);
     }
 }
