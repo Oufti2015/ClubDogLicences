@@ -216,17 +216,19 @@
 
                         <Label text="Langue" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
                         <TextField fx:id="langueText" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <Label text="Comité ?" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
-                  <CheckBox fx:id="comiteCheck" mnemonicParsing="false" text="fait partie du comité" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                        <Label text="Comité ?" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                  <CheckBox fx:id="comiteCheck" mnemonicParsing="false" text="fait partie du comité" GridPane.columnIndex="3" GridPane.rowIndex="7" />
                   <Label text="Affilié le" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
                   <DatePicker fx:id="affiliationDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7">
+                  <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8">
                     <buttons>
                       <Button mnemonicParsing="false" onAction="#updateAction" text="Mettre à jour" />
                         <Button mnemonicParsing="false" onAction="#createAction" text="Créer" />
                         <Button mnemonicParsing="false" onAction="#resetAction" text="Reset" />
                     </buttons>
                   </ButtonBar>
+                  <Label alignment="TOP_CENTER" text="Numéro de compte" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                  <TextField fx:id="accountText" GridPane.columnIndex="3" GridPane.rowIndex="6" />
                     </children>
                 </GridPane>
             </children>

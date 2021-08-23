@@ -58,6 +58,8 @@ public class MainController {
     private TextField langueText;
     @FXML
     private CheckBox comiteCheck;
+    @FXML
+    private TextField accountText;
 
     @FXML
     public void initialize() {
@@ -87,13 +89,31 @@ public class MainController {
         langueText.setText(selectedItem.getLangue());
         comiteCheck.setSelected(selectedItem.isComite());
         affiliationDatePicker.setValue(selectedItem.getMembre().getAffiliation());
-
+        accountText.setText(selectedItem.getAccountId());
         affiliationDatePicker.setDisable(selectedItem.isComite());
     }
 
     @FXML
     public void updateAction(javafx.event.ActionEvent actionEvent) {
         SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
+        Membre membre = selectedItem.getMembre();
+        membre.setNom(nomText.getText());
+        membre.setPrenom(prenomText.getText());
+        membre.setDateDeNaissance(dateDeNaissancePicker.getValue());
+        membre.setRue(rueText.getText());
+        membre.setNum(numText.getText());
+        membre.setCodePostal(codePostalText.getText());
+        membre.setLocalite(localiteText.getText());
+        membre.setTelephone(telephoneText.getText());
+        membre.setGsm(gsmText.getText());
+        membre.setEmail(emailText.getText());
+        membre.setCodePays(paysText.getText());
+        membre.setLangue(langueText.getText());
+        membre.setComite(comiteCheck.isSelected());
+        membre.setAffiliation(affiliationDatePicker.getValue());
+        membre.setAccountId(accountText.getText());
+
+        LicencesContainer.me().save();
     }
 
     @FXML
@@ -114,6 +134,8 @@ public class MainController {
         membre.setLangue(langueText.getText());
         membre.setComite(comiteCheck.isSelected());
         membre.setAffiliation(affiliationDatePicker.getValue());
+        membre.setAccountId(accountText.getText());
+
         membre.setLicence(null);
         membre.setSentToMyKKusch(false);
 
@@ -190,6 +212,8 @@ public class MainController {
         emailText.setText("");
         paysText.setText("");
         langueText.setText("");
+        accountText.setText("");
+
         comiteCheck.setSelected(false);
         affiliationDatePicker.setValue(null);
     }

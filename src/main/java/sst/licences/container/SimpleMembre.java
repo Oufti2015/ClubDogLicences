@@ -23,6 +23,7 @@ public class SimpleMembre {
     private final SimpleStringProperty licence = new SimpleStringProperty("");
     private final SimpleBooleanProperty comite = new SimpleBooleanProperty(false);
     private final SimpleStringProperty affiliation = new SimpleStringProperty("");
+    private final SimpleStringProperty accountId = new SimpleStringProperty("");
 
     @Getter
     private final Membre membre;
@@ -43,6 +44,7 @@ public class SimpleMembre {
         this.langue.set(membre.getLangue());
         this.licence.set(membre.getLicence());
         this.comite.set(membre.isComite());
+        this.accountId.set(membre.getAccountId());
         if (membre.getAffiliation() != null) {
             this.affiliation.set(membre.getAffiliation().toString());
         }
@@ -166,5 +168,13 @@ public class SimpleMembre {
 
     public SimpleStringProperty affiliationProperty() {
         return affiliation;
+    }
+
+    public String getAccountId() {
+        return accountId.get();
+    }
+
+    public SimpleStringProperty accountIdProperty() {
+        return accountId;
     }
 }
