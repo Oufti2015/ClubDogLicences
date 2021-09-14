@@ -51,6 +51,7 @@ public class Membre implements Comparable<Membre> {
     private LocalDate affiliation;
     private boolean sentToMyKKusch = false;
     private String accountId;
+    private String technicalIdentifer;
 
     @Override
     public boolean equals(Object o) {

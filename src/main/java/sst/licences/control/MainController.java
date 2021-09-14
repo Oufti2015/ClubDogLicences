@@ -9,6 +9,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
+import sst.licences.bank.BankIdentifierGenerator;
 import sst.licences.container.LicencesContainer;
 import sst.licences.container.SimpleMembre;
 import sst.licences.excel.AllMembersExporter;
@@ -138,6 +139,7 @@ public class MainController {
 
         membre.setLicence(null);
         membre.setSentToMyKKusch(false);
+        membre.setTechnicalIdentifer(BankIdentifierGenerator.newId(membre));
 
         if (validate(membre)) {
             LicencesContainer.me().addMembre(membre);
