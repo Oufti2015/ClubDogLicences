@@ -71,9 +71,7 @@ public class MainController {
 
     @FXML
     public void rowselected(MouseEvent mouseEvent) {
-        System.out.println("rowSelected");
         SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
-        System.out.println("membre selected : " + selectedItem);
 
         licenceText.setText(selectedItem.getLicence());
         dateDeNaissancePicker.setValue(selectedItem.getMembre().getDateDeNaissance());

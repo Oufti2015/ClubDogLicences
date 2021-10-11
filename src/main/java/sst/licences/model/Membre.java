@@ -53,6 +53,10 @@ public class Membre implements Comparable<Membre> {
     private String accountId;
     private String technicalIdentifer;
 
+    public static String addressId(Membre membre) {
+        return membre.getRue() + membre.getNum() + membre.getCodePostal() + membre.getLocalite();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

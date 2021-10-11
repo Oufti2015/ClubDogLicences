@@ -1,6 +1,5 @@
 package sst.licences.main;
 
-import sst.licences.bank.BankIdentifierGenerator;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Membre;
 
@@ -19,7 +18,7 @@ public class UpdateJsonFile {
         Map<String, String> addressMap = new HashMap<>();
         for (Membre m : LicencesContainer.me().membres()) {
             if (!m.isComite()) {
-                String addressId = BankIdentifierGenerator.addressId(m);
+                String addressId = Membre.addressId(m);
                 String bankId = addressMap.get(addressId);
                 if (bankId == null) {
                     String id = start.format(formatter) + "01";
@@ -30,7 +29,7 @@ public class UpdateJsonFile {
                     addressMap.put(addressId, bankId);
                     start = start.plusDays(1);
                 }
-                System.out.printf("%s %s %s\n", m.getPrenom(), m.getNom(), bankId);
+                System.out.printf("%s %s %s%n", m.getPrenom(), m.getNom(), bankId);
                 m.setTechnicalIdentifer(bankId);
             }
         }

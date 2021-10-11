@@ -9,14 +9,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BankIdentifierGenerator {
-    private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    private final static Map<String, String> addressesMap = new HashMap<>();
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private static final Map<String, String> addressesMap = new HashMap<>();
+
+    private BankIdentifierGenerator() {
+
+    }
 
     public static String newId(Membre membre) {
         if (addressesMap.size() == 0) {
             initAddresses();
         }
-        String result = addressesMap.get(addressId(membre));
+        String result = addressesMap.get(Membre.addressId(membre));
         if (result == null) {
             String lastId = LicencesContainer.me().getLastBankIdentiferGenerated();
             int lastNumId = 0;
@@ -30,19 +34,15 @@ public class BankIdentifierGenerator {
             long longId = Long.parseLong(id);
             long modulo = longId % 97;
             result = String.format("%s/%s/%s%02d", id.substring(0, 3), id.substring(3, 7), id.substring(7), modulo);
-            addressesMap.put(addressId(membre), result);
+            addressesMap.put(Membre.addressId(membre), result);
         }
         return result;
     }
 
     private static void initAddresses() {
         for (Membre membre : LicencesContainer.me().membres()) {
-            addressesMap.put(addressId(membre), membre.getTechnicalIdentifer());
+            addressesMap.put(Membre.addressId(membre), membre.getTechnicalIdentifer());
         }
-    }
-
-    public static String addressId(Membre membre) {
-        return membre.getRue() + membre.getNum() + membre.getCodePostal() + membre.getLocalite();
     }
 
 }
