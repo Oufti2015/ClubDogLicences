@@ -1,6 +1,8 @@
 package sst.licences.container;
 
 import com.google.gson.Gson;
+import lombok.Getter;
+import lombok.Setter;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
@@ -22,6 +24,9 @@ public class LicencesContainer {
     private LicencesContainer() {
     }
 
+    @Getter
+    @Setter
+    private String lastBankIdentiferGenerated;
     private List<Membre> membres = new ArrayList<>();
 
     public void setMembresList(List<Membre> membres) {

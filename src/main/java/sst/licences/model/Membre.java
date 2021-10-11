@@ -51,6 +51,11 @@ public class Membre implements Comparable<Membre> {
     private LocalDate affiliation;
     private boolean sentToMyKKusch = false;
     private String accountId;
+    private String technicalIdentifer;
+
+    public static String addressId(Membre membre) {
+        return membre.getRue() + membre.getNum() + membre.getCodePostal() + membre.getLocalite();
+    }
 
     @Override
     public boolean equals(Object o) {
