@@ -253,7 +253,7 @@ public class MainController {
     }
 
     public void importFileFromMYKKUSH(ActionEvent actionEvent) {
-        final FileChooser fileChooser = new FileChooser();
+        final FileChooser fileChooser = csvFileChooser("Choisir le fichier de MyKKUSH");
         File file = fileChooser.showOpenDialog(this.primaryStage);
         if (file != null) {
             log.debug("file selected = " + file);
@@ -284,10 +284,21 @@ public class MainController {
     }
 
     public void parseBelfius(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
+        FileChooser fileChooser = csvFileChooser("Choisir le fichier Belfius");
         List<File> files = fileChooser.showOpenMultipleDialog(primaryStage);
-        parseFiles(files);
-        LicencesContainer.me().save();
+        if (files != null) {
+            parseFiles(files);
+            LicencesContainer.me().save();
+        }
+    }
+
+    private FileChooser csvFileChooser(String title) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.setInitialDirectory(new File(LicencesConstants.WORKING_FOLDER));
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("CSV Files", "*.csv");
+        fileChooser.getExtensionFilters().add(filter);
+        return fileChooser;
     }
 
     private void parseFiles(List<File> files) {
