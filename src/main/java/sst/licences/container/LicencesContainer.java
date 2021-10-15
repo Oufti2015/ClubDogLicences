@@ -3,6 +3,7 @@ package sst.licences.container;
 import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
@@ -14,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class LicencesContainer {
     private static LicencesContainer me = new LicencesContainer();
 
@@ -56,11 +58,10 @@ public class LicencesContainer {
             try (Reader reader = Files.newBufferedReader(Paths.get(LicencesConstants.MEMBRES_JSON_FILE))) {
                 // convert JSON string to Book object
                 me = gson.fromJson(reader, LicencesContainer.class);
-                System.out.println(String.format("%d membres chargés.", me().membres.size()));
+                log.info(String.format("%d membres chargés.", me().membres.size()));
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
-            System.err.println("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE);
+            log.fatal("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE, ex);
             System.exit(-1);
         }
     }
@@ -73,8 +74,7 @@ public class LicencesContainer {
                 myWriter.write(json);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Cannot write JSON file " + LicencesConstants.MEMBRES_JSON_FILE);
+            log.fatal("Cannot write JSON file " + LicencesConstants.MEMBRES_JSON_FILE, e);
             System.exit(-1);
         }
     }

@@ -1,5 +1,6 @@
 package sst.licences.excel;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,7 +19,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public abstract class ExportToExcel implements ExcelExporter{
+@Log4j2
+public abstract class ExportToExcel implements ExcelExporter {
 
     public void export() throws IOException {
         List<Membre> membres = membres();
@@ -89,7 +91,7 @@ public abstract class ExportToExcel implements ExcelExporter{
         try (FileOutputStream outFile = new FileOutputStream(file)) {
             workbook.write(outFile);
         }
-        System.out.println("Created file: " + file.getAbsolutePath());
+        log.info("Created file: " + file.getAbsolutePath());
 
         if (saveMembres()) {
             LicencesContainer.me().save();

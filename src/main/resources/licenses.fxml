@@ -61,6 +61,7 @@
                   <MenuItem mnemonicParsing="false" onAction="#exportCompleteFile" text="Create Full File" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#importFileFromMYKKUSH" text="Import from Mykkush" />
+                  <MenuItem mnemonicParsing="false" onAction="#parseBelfius" text="Parse Belfius Csv" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Email">

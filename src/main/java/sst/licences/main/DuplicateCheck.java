@@ -1,13 +1,16 @@
 package sst.licences.main;
 
+import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Membre;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class DuplicateCheck {
     public static void main(String[] args) {
+        log.trace("Starting...");
         LicencesContainer.load();
         List<Membre> duplicates = new ArrayList<>();
         List<Membre> membres = LicencesContainer.me().membres();
@@ -18,14 +21,14 @@ public class DuplicateCheck {
                     .count();
 
             if (!duplicates.contains(m) && count > 1) {
-                System.out.println(m);
+                log.info(m);
                 duplicates.add(m);
             }
         }
-        System.out.println("duplicates found = " + duplicates.size());
+        log.info("duplicates found = " + duplicates.size());
         membres.removeAll(duplicates);
         membres.addAll(duplicates);
-        System.out.println("members = " + membres.size());
+        log.info("members = " + membres.size());
         LicencesContainer.me().save();
     }
 }

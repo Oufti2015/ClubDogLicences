@@ -1,6 +1,7 @@
 package sst.licences.model;
 
 import com.google.gson.Gson;
+import lombok.extern.log4j.Log4j2;
 import sst.licences.main.LicencesConstants;
 
 import java.io.FileWriter;
@@ -11,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class Comite {
 
     public static class MembreDuComite {
@@ -44,11 +46,11 @@ public class Comite {
             try (Reader reader = Files.newBufferedReader(Paths.get(LicencesConstants.COMITE_JSON_FILE))) {
                 // convert JSON string to Book object
                 comite = gson.fromJson(reader, Comite.class);
-                System.out.println(String.format("%d membres chargés.", comite.membresDuComite.size()));
+                log.info(String.format("%d membres chargés.", comite.membresDuComite.size()));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            System.err.println("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE);
+            log.error("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE, ex);
             System.exit(-1);
         }
         return comite;
@@ -60,14 +62,14 @@ public class Comite {
             String json = new Gson().toJson(this);
 
             // print JSON string
-            System.out.println(json);
+            log.debug(json);
 
             try (FileWriter myWriter = new FileWriter(LicencesConstants.COMITE_JSON_FILE)) {
                 myWriter.write(json);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Cannot write JSON file " + LicencesConstants.COMITE_JSON_FILE);
+            log.error("Cannot write JSON file " + LicencesConstants.COMITE_JSON_FILE, e);
             System.exit(-1);
         }
     }

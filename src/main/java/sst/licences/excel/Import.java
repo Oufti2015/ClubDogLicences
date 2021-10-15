@@ -5,6 +5,7 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
+import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Comite;
@@ -22,12 +23,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class Import {
 
     public void importFromCsv(File file) {
         List<Membre> list = new ArrayList<>();
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-        //FileReader reader1 = new FileReader("data//leden-membres-template.csv");
 
         LicencesContainer.me().membres().forEach(m -> m.setSentToMyKKusch(false));
 
@@ -57,7 +58,7 @@ public class Import {
     }
 
     private Membre member(String[] x) {
-        System.out.println(String.join("|", x));
+        log.debug(String.join("|", x));
         Membre membre = new Membre();
         int i = 0;
         membre.setNom(x[i++]);
@@ -79,7 +80,7 @@ public class Import {
         membre.setSentToMyKKusch(true);
         membre.setAffiliation(LocalDate.of(LocalDate.now().getYear(), Month.JANUARY, 1));
 
-        System.out.println(membre);
+        log.info(membre);
 
         return membre;
     }

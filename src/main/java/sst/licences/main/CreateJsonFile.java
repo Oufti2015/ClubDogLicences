@@ -5,6 +5,7 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
+import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Comite;
 import sst.licences.model.Membre;
@@ -20,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class CreateJsonFile {
 
     public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
@@ -50,7 +52,7 @@ public class CreateJsonFile {
     }
 
     private static Membre member(String[] x) {
-        System.out.println(String.join("|", x));
+        log.debug(String.join("|", x));
         Membre membre = new Membre();
         int i = 0;
         membre.setNom(x[i++]);
@@ -72,7 +74,7 @@ public class CreateJsonFile {
         membre.setSentToMyKKusch(true);
         membre.setAffiliation(LocalDate.of(LocalDate.now().getYear(), Month.JANUARY, 1));
 
-        System.out.println(membre);
+        log.info(membre);
 
         return membre;
     }

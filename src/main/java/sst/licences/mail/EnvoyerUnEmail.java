@@ -1,5 +1,6 @@
 package sst.licences.mail;
 
+import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Membre;
 
@@ -12,6 +13,7 @@ import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Log4j2
 public class EnvoyerUnEmail {
 
     private static final String BCARLONAIS_GMAIL_COM = "bcarlonais@gmail.com";
@@ -42,22 +44,25 @@ public class EnvoyerUnEmail {
         List<Membre> membres = eligibleMembres();
         for (Membre membre : membres) {
             if (!emailSent.contains(membre.getEmail()) || emailExceptions.contains(membre.getEmail())) {
-                System.out.printf("%s %s (%s) : ", membre.getPrenom(), membre.getNom(), membre.getEmail());
+                String msg = String.format("%s %s (%s) : ", membre.getPrenom(), membre.getNom(), membre.getEmail());
                 try {
                     affiliation(membre, session);
-                    System.out.println("Sent.");
+                    log.info(msg + "Sent.");
                 } catch (MessagingException | UnsupportedEncodingException e) {
-                    System.out.println("ERROR : "+e.getMessage());
+                    log.error(msg + "ERROR : " + e.getMessage(), e);
                     errors.add(membre);
                 }
             }
+
             emailSent.add(membre.getEmail());
         }
-        System.out.println("--- Errors List ---");
-        for (Membre m : errors) {
-            System.out.printf("%s %s (%s)%n", m.getPrenom(), m.getNom(), m.getEmail());
+        if (!errors.isEmpty()) {
+            log.error("--- Errors List ---");
+            for (Membre m : errors) {
+                log.error(String.format("%s %s (%s)%n", m.getPrenom(), m.getNom(), m.getEmail()));
+            }
+            log.error("--- ----------- ---");
         }
-        System.out.println("--- ----------- ---");
     }
 
     private void affiliation(Membre membre, Session session) throws MessagingException, UnsupportedEncodingException {
@@ -162,7 +167,7 @@ public class EnvoyerUnEmail {
                 .filter(m -> !m.isComite() && (m.getAffiliation() == null ||
                         (m.getAffiliation().isAfter(dateStart) && m.getAffiliation().isBefore(dateEnd))))
                 .collect(Collectors.toList());
-        System.out.println("" + collect.size() + " membres éligibles pour email ! ");
+        log.debug("" + collect.size() + " membres éligibles pour email ! ");
         return collect;
     }
 

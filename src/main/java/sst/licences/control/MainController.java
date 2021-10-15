@@ -1,5 +1,10 @@
 package sst.licences.control;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +12,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import jdk.nashorn.internal.runtime.logging.Logger;
+import lombok.extern.log4j.Log4j2;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 import sst.licences.bank.BankIdentifierGenerator;
@@ -17,15 +24,24 @@ import sst.licences.excel.ExcelExporter;
 import sst.licences.excel.Import;
 import sst.licences.excel.NewMembersExporter;
 import sst.licences.mail.EnvoyerUnEmail;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+@Log4j2
 public class MainController {
+    public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
+
     private Stage primaryStage;
     @FXML
     private TableView mainTableView;
@@ -240,7 +256,7 @@ public class MainController {
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(this.primaryStage);
         if (file != null) {
-            System.out.println("file selected = " + file);
+            log.debug("file selected = " + file);
             new Import().importFromCsv(file);
         }
     }
@@ -256,6 +272,74 @@ public class MainController {
             alert = new Alert(Alert.AlertType.INFORMATION, envoi.eligibleMembresSize() + " e-mail envoyés !",
                     ButtonType.OK);
             alert.showAndWait();
+        }
+    }
+
+    class VirementData {
+        LocalDate date;
+        String compte;
+        String nom;
+        Double montant;
+        String communications;
+    }
+
+    public void parseBelfius(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        List<File> files = fileChooser.showOpenMultipleDialog(primaryStage);
+        parseFiles(files);
+        LicencesContainer.me().save();
+    }
+
+    private void parseFiles(List<File> files) {
+        List<VirementData> belfius = new ArrayList<>();
+        for (File file : files) {
+            CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
+            try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), CHARSET);
+                 CSVReader reader = new CSVReaderBuilder(inputStreamReader)
+                         .withCSVParser(csvParser)   // custom CSV parser
+                         .withSkipLines(13)           // skip the first line, header info
+                         .build()) {
+                List<String[]> lines = reader.readAll();
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                for (String[] data : lines) {
+                    Double montant = Double.parseDouble(data[10].replace(",", "."));
+
+                    if (montant.compareTo(0.00) > 0) {
+                        VirementData vd = new VirementData();
+                        vd.date = LocalDate.parse(data[1], formatter);
+                        vd.compte = data[4];
+                        vd.nom = data[5];
+                        vd.montant = montant;
+                        vd.communications = data[14];
+
+                        belfius.add(vd);
+                    }
+                }
+
+                updateMembres(belfius);
+            } catch (IOException | CsvException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void updateMembres(List<VirementData> belfius) {
+        for (Membre membre : LicencesContainer.me().membres()) {
+            List<VirementData> vds = belfius.stream()
+                    .filter(vd -> membre.getTechnicalIdentifer() != null
+                            && vd.communications != null
+                            && vd.communications.contains(membre.getTechnicalIdentifer()))
+                    .collect(Collectors.toList());
+            for (VirementData vd : vds) {
+                if (membre.getAffiliation() == null || membre.getAffiliation().isBefore(vd.date)) {
+                    membre.setAffiliation(vd.date);
+                    membre.setAccountId(vd.compte);
+
+                    log.debug(membre.getPrenom() + " " + membre.getNom() + " est réaffilié " + vd.date);
+                }
+            }
         }
     }
 

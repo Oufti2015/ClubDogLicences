@@ -2,11 +2,9 @@ package sst.licences.model;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import com.sun.org.apache.xerces.internal.impl.XMLEntityManager;
 import lombok.Data;
 import net.sf.oval.constraint.NotEmpty;
 import net.sf.oval.constraint.NotNull;
-import org.apache.commons.beanutils.BeanUtils;
 
 import java.time.LocalDate;
 

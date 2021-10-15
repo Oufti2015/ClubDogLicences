@@ -1,5 +1,6 @@
 package sst.licences.main;
 
+import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Membre;
 
@@ -9,8 +10,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Log4j2
 public class UpdateJsonFile {
-    private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public static void main(String[] args) {
         LicencesContainer.load();
@@ -29,7 +31,7 @@ public class UpdateJsonFile {
                     addressMap.put(addressId, bankId);
                     start = start.plusDays(1);
                 }
-                System.out.printf("%s %s %s%n", m.getPrenom(), m.getNom(), bankId);
+                log.info("%s %s %s%n", m.getPrenom(), m.getNom(), bankId);
                 m.setTechnicalIdentifer(bankId);
             }
         }
