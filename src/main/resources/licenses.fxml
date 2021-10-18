@@ -51,7 +51,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
+<VBox prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -66,7 +66,12 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Email">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#emailForAffiliation" text="Reaffiliation" />
+                  <Menu mnemonicParsing="false" text="Reaffiliation">
+                    <items>
+                              <MenuItem mnemonicParsing="false" onAction="#emailForAffiliation" text="Tous les membres" />
+                      <MenuItem mnemonicParsing="false" onAction="#emailForAffiliationSelected" text="Membre sélectionné" />
+                    </items>
+                  </Menu>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

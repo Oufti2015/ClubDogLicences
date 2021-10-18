@@ -262,7 +262,15 @@ public class MainController {
     }
 
     public void emailForAffiliation(ActionEvent actionEvent) {
-        EnvoyerUnEmail envoi = new EnvoyerUnEmail();
+        envoyerEmails(new EnvoyerUnEmail());
+    }
+
+    public void emailForAffiliationSelected(ActionEvent actionEvent) {
+        SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
+        envoyerEmails(new EnvoyerUnEmail(selectedItem.getMembre()));
+    }
+
+    private void envoyerEmails(EnvoyerUnEmail envoi) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Êtes-vous sûr de vouloir envoyer " + envoi.eligibleMembresSize() + " e-mail ?",
                 ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         alert.showAndWait();
@@ -348,7 +356,7 @@ public class MainController {
                     membre.setAffiliation(vd.date);
                     membre.setAccountId(vd.compte);
 
-                    log.debug(membre.getPrenom() + " " + membre.getNom() + " est réaffilié " + vd.date);
+                    log.info(membre.getPrenom() + " " + membre.getNom() + " est réaffilié " + vd.date);
                 }
             }
         }

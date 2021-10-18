@@ -7,6 +7,7 @@ import sst.licences.model.Membre;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.swing.text.html.Option;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.Month;
@@ -19,7 +20,17 @@ public class EnvoyerUnEmail {
     private static final String BCARLONAIS_GMAIL_COM = "bcarlonais@gmail.com";
     private static final String BERGER_CLUB_ARLONAIS = "Berger Club Arlonais";
     private static final String MAIL_SUBJECT = "Berger Club Arlonais - Affiliation";
-    private static final List<String> emailExceptions = Arrays.asList("stephane.stiennon@gmail.com");
+    private static final List<String> emailExceptions = Collections.singletonList("stephane.stiennon@gmail.com");
+
+    private final Optional<Membre> selectedMembre;
+
+    public EnvoyerUnEmail() {
+        this.selectedMembre = Optional.empty();
+    }
+
+    public EnvoyerUnEmail(Membre membre) {
+        this.selectedMembre = Optional.of(membre);
+    }
 
     public void envoyerAffiliation() {
         final String password = System.getenv("MAIL_PWD");
@@ -41,6 +52,7 @@ public class EnvoyerUnEmail {
         List<String> emailSent = new ArrayList<>();
 
         List<Membre> errors = new ArrayList<>();
+
         List<Membre> membres = eligibleMembres();
         for (Membre membre : membres) {
             if (!emailSent.contains(membre.getEmail()) || emailExceptions.contains(membre.getEmail())) {
@@ -160,15 +172,19 @@ public class EnvoyerUnEmail {
     }
 
     private List<Membre> eligibleMembres() {
-        LocalDate dateStart = dateStart();
-        LocalDate dateEnd = dateEnd();
-        List<Membre> collect = LicencesContainer.me().membres()
-                .stream()
-                .filter(m -> !m.isComite() && (m.getAffiliation() == null ||
-                        (m.getAffiliation().isAfter(dateStart) && m.getAffiliation().isBefore(dateEnd))))
-                .collect(Collectors.toList());
-        log.debug("" + collect.size() + " membres éligibles pour email ! ");
-        return collect;
+        if (!selectedMembre.isPresent()) {
+            LocalDate dateStart = dateStart();
+            LocalDate dateEnd = dateEnd();
+            List<Membre> collect = LicencesContainer.me().membres()
+                    .stream()
+                    .filter(m -> !m.isComite() && (m.getAffiliation() == null ||
+                            (m.getAffiliation().isAfter(dateStart) && m.getAffiliation().isBefore(dateEnd))))
+                    .collect(Collectors.toList());
+            log.debug("" + collect.size() + " membres éligibles pour email ! ");
+            return collect;
+        } else {
+            return Collections.singletonList(selectedMembre.get());
+        }
     }
 
     private LocalDate dateEnd() {
@@ -182,6 +198,6 @@ public class EnvoyerUnEmail {
     }
 
     public long eligibleMembresSize() {
-        return eligibleMembres().stream().count();
+        return eligibleMembres().size();
     }
 }
