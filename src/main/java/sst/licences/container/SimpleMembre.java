@@ -24,11 +24,16 @@ public class SimpleMembre {
     private final SimpleBooleanProperty comite = new SimpleBooleanProperty(false);
     private final SimpleStringProperty affiliation = new SimpleStringProperty("");
     private final SimpleStringProperty accountId = new SimpleStringProperty("");
+    private final SimpleStringProperty description = new SimpleStringProperty("");
 
     @Getter
-    private final Membre membre;
+    private Membre membre;
 
     public SimpleMembre(Membre membre) {
+        init(membre);
+    }
+
+    public void init(Membre membre) {
         this.membre = membre;
         this.nom.set(membre.getNom());
         this.prenom.set(membre.getPrenom());
@@ -48,6 +53,7 @@ public class SimpleMembre {
         if (membre.getAffiliation() != null) {
             this.affiliation.set(membre.getAffiliation().toString());
         }
+        this.description.set(membre.getDescription());
     }
 
     public String getNom() {
@@ -176,5 +182,13 @@ public class SimpleMembre {
 
     public SimpleStringProperty accountIdProperty() {
         return accountId;
+    }
+
+    public String getDescription() {
+        return description.get();
+    }
+
+    public SimpleStringProperty description() {
+        return description;
     }
 }

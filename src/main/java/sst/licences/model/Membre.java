@@ -50,6 +50,7 @@ public class Membre implements Comparable<Membre> {
     private boolean sentToMyKKusch = false;
     private String accountId;
     private String technicalIdentifer;
+    private String description;
 
     public static String addressId(Membre membre) {
         return membre.getRue() + membre.getNum() + membre.getCodePostal() + membre.getLocalite();

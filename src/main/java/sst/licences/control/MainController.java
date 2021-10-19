@@ -77,6 +77,8 @@ public class MainController {
     private CheckBox comiteCheck;
     @FXML
     private TextField accountText;
+    @FXML
+    private TextArea dscpTextArea;
 
     @FXML
     public void initialize() {
@@ -106,6 +108,7 @@ public class MainController {
         affiliationDatePicker.setValue(selectedItem.getMembre().getAffiliation());
         accountText.setText(selectedItem.getAccountId());
         affiliationDatePicker.setDisable(selectedItem.isComite());
+        dscpTextArea.setText(selectedItem.getDescription());
     }
 
     @FXML
@@ -127,6 +130,9 @@ public class MainController {
         membre.setComite(comiteCheck.isSelected());
         membre.setAffiliation(affiliationDatePicker.getValue());
         membre.setAccountId(accountText.getText());
+        membre.setDescription(dscpTextArea.getText());
+
+        selectedItem.init(membre);
 
         LicencesContainer.me().save();
     }
@@ -150,6 +156,7 @@ public class MainController {
         membre.setComite(comiteCheck.isSelected());
         membre.setAffiliation(affiliationDatePicker.getValue());
         membre.setAccountId(accountText.getText());
+        membre.setDescription(dscpTextArea.getText());
 
         membre.setLicence(null);
         membre.setSentToMyKKusch(false);
@@ -229,6 +236,7 @@ public class MainController {
         paysText.setText("");
         langueText.setText("");
         accountText.setText("");
+        dscpTextArea.setText("");
 
         comiteCheck.setSelected(false);
         affiliationDatePicker.setValue(null);

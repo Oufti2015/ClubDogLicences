@@ -43,6 +43,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.BorderPane?>
@@ -51,7 +52,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
+<VBox prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -188,6 +189,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
                         <Label text="Licence" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
@@ -226,7 +228,7 @@
                   <CheckBox fx:id="comiteCheck" mnemonicParsing="false" text="fait partie du comité" GridPane.columnIndex="3" GridPane.rowIndex="7" />
                   <Label text="Affilié le" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
                   <DatePicker fx:id="affiliationDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8">
+                  <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="9">
                     <buttons>
                       <Button mnemonicParsing="false" onAction="#updateAction" text="Mettre à jour" />
                         <Button mnemonicParsing="false" onAction="#createAction" text="Créer" />
@@ -235,6 +237,8 @@
                   </ButtonBar>
                   <Label alignment="TOP_CENTER" text="Numéro de compte" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
                   <TextField fx:id="accountText" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                  <TextArea fx:id="dscpTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
                     </children>
                 </GridPane>
             </children>

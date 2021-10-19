@@ -24,7 +24,8 @@ public class Main extends Application {
         MainController controller = loader.getController();
         controller.setPrimaryStage(primaryStage);
         primaryStage.setTitle("Berger Club Arlonais - Licences");
-        primaryStage.setScene(new Scene(root, 1500, 700));
+        primaryStage.setScene(new Scene(root, 1920, 1080));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
