@@ -1,11 +1,14 @@
 package sst.licences.container;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.util.Strings;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
+import sst.licences.model.Payment;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Log4j2
 public class LicencesContainer {
@@ -30,6 +35,7 @@ public class LicencesContainer {
     @Setter
     private String lastBankIdentiferGenerated;
     private List<Membre> membres = new ArrayList<>();
+    private List<Payment> payments = new ArrayList<>();
 
     public void setMembresList(List<Membre> membres) {
         this.membres = membres;
@@ -46,11 +52,31 @@ public class LicencesContainer {
         save();
     }
 
+    public void setPaymentsList(List<Payment> payments) {
+        this.payments = payments;
+        save();
+    }
+
+    public void addPaymentsList(List<Payment> payments) {
+        this.payments.addAll(payments);
+        save();
+    }
+
+    public void addMPayment(Payment payment) {
+        this.payments.add(payment);
+        save();
+    }
+
     public List<Membre> membres() {
         return membres;
     }
 
+    public List<Payment> payments() {
+        return payments;
+    }
+
     public static void load() {
+        log.info("Loading JSON file...");
         try {
             // create Gson instance
             Gson gson = new Gson();
@@ -58,7 +84,8 @@ public class LicencesContainer {
             try (Reader reader = Files.newBufferedReader(Paths.get(LicencesConstants.MEMBRES_JSON_FILE))) {
                 // convert JSON string to Book object
                 me = gson.fromJson(reader, LicencesContainer.class);
-                log.info(String.format("%d membres chargés.", me().membres.size()));
+                log.info(String.format("...%5d membres chargés.", me().membres.size()));
+                log.info(String.format("...%5d payements chargés.", me().payments.size()));
             }
         } catch (Exception ex) {
             log.fatal("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE, ex);
@@ -67,9 +94,12 @@ public class LicencesContainer {
     }
 
     public void save() {
+        log.info("Saving JSON file...");
+        log.debug("Saving JSON file...", new Throwable());
         try {
             // convert book object to JSON
-            String json = new Gson().toJson(LicencesContainer.me());
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String json = gson.toJson(LicencesContainer.me());
             try (FileWriter myWriter = new FileWriter(LicencesConstants.MEMBRES_JSON_FILE)) {
                 myWriter.write(json);
             }
@@ -77,5 +107,22 @@ public class LicencesContainer {
             log.fatal("Cannot write JSON file " + LicencesConstants.MEMBRES_JSON_FILE, e);
             System.exit(-1);
         }
+        log.info("...file saved.");
+    }
+
+    public String payments(Membre membre) {
+        String result = "";
+        if (Strings.isNotEmpty(membre.getAccountId())) {
+            result = payments.stream()
+                    .filter(p -> p.getCompte().equals(membre.getAccountId()))
+                    .map(Payment::toString)
+                    .collect(Collectors.joining("\n"));
+        } else {
+            result = payments.stream()
+                    .filter(p -> p.getNom().toLowerCase(Locale.ROOT).contains(membre.getNom().toLowerCase(Locale.ROOT)))
+                    .map(Payment::toFullString)
+                    .collect(Collectors.joining("\n"));
+        }
+        return result;
     }
 }

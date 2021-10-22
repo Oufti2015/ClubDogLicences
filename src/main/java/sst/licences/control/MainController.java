@@ -19,13 +19,11 @@ import net.sf.oval.Validator;
 import sst.licences.bank.BankIdentifierGenerator;
 import sst.licences.container.LicencesContainer;
 import sst.licences.container.SimpleMembre;
-import sst.licences.excel.AllMembersExporter;
-import sst.licences.excel.ExcelExporter;
-import sst.licences.excel.Import;
-import sst.licences.excel.NewMembersExporter;
+import sst.licences.excel.*;
 import sst.licences.mail.EnvoyerUnEmail;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
+import sst.licences.model.Payment;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -40,7 +38,6 @@ import java.util.stream.Collectors;
 
 @Log4j2
 public class MainController {
-    public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
 
     private Stage primaryStage;
     @FXML
@@ -79,6 +76,10 @@ public class MainController {
     private TextField accountText;
     @FXML
     private TextArea dscpTextArea;
+    @FXML
+    private TextArea paymentsTextArea;
+    @FXML
+    private Label techIdLabel;
 
     @FXML
     public void initialize() {
@@ -109,6 +110,8 @@ public class MainController {
         accountText.setText(selectedItem.getAccountId());
         affiliationDatePicker.setDisable(selectedItem.isComite());
         dscpTextArea.setText(selectedItem.getDescription());
+        paymentsTextArea.setText(LicencesContainer.me().payments(selectedItem.getMembre()));
+        techIdLabel.setText(selectedItem.getMembre().getTechnicalIdentifer());
     }
 
     @FXML
@@ -291,19 +294,13 @@ public class MainController {
         }
     }
 
-    class VirementData {
-        LocalDate date;
-        String compte;
-        String nom;
-        Double montant;
-        String communications;
-    }
 
     public void parseBelfius(ActionEvent actionEvent) {
         FileChooser fileChooser = csvFileChooser("Choisir le fichier Belfius");
         List<File> files = fileChooser.showOpenMultipleDialog(primaryStage);
+        BelfiusFile bf = new BelfiusFile();
         if (files != null) {
-            parseFiles(files);
+            bf.parseFiles(files);
             LicencesContainer.me().save();
         }
     }
@@ -315,59 +312,6 @@ public class MainController {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("CSV Files", "*.csv");
         fileChooser.getExtensionFilters().add(filter);
         return fileChooser;
-    }
-
-    private void parseFiles(List<File> files) {
-        List<VirementData> belfius = new ArrayList<>();
-        for (File file : files) {
-            CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-            try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), CHARSET);
-                 CSVReader reader = new CSVReaderBuilder(inputStreamReader)
-                         .withCSVParser(csvParser)   // custom CSV parser
-                         .withSkipLines(13)           // skip the first line, header info
-                         .build()) {
-                List<String[]> lines = reader.readAll();
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-                for (String[] data : lines) {
-                    Double montant = Double.parseDouble(data[10].replace(",", "."));
-
-                    if (montant.compareTo(0.00) > 0) {
-                        VirementData vd = new VirementData();
-                        vd.date = LocalDate.parse(data[1], formatter);
-                        vd.compte = data[4];
-                        vd.nom = data[5];
-                        vd.montant = montant;
-                        vd.communications = data[14];
-
-                        belfius.add(vd);
-                    }
-                }
-
-                updateMembres(belfius);
-            } catch (IOException | CsvException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void updateMembres(List<VirementData> belfius) {
-        for (Membre membre : LicencesContainer.me().membres()) {
-            List<VirementData> vds = belfius.stream()
-                    .filter(vd -> membre.getTechnicalIdentifer() != null
-                            && vd.communications != null
-                            && vd.communications.contains(membre.getTechnicalIdentifer()))
-                    .collect(Collectors.toList());
-            for (VirementData vd : vds) {
-                if (membre.getAffiliation() == null || membre.getAffiliation().isBefore(vd.date)) {
-                    membre.setAffiliation(vd.date);
-                    membre.setAccountId(vd.compte);
-
-                    log.info(membre.getPrenom() + " " + membre.getNom() + " est réaffilié " + vd.date);
-                }
-            }
-        }
     }
 
     public void setPrimaryStage(Stage primaryStage) {
