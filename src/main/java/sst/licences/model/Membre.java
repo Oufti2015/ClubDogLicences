@@ -98,4 +98,8 @@ public class Membre implements Comparable<Membre> {
         this.setLicence(MoreObjects.firstNonNull(m.getLicence(), ""));
         this.setSentToMyKKusch(true);
     }
+
+    public String fullName() {
+        return prenom + " " + nom;
+    }
 }

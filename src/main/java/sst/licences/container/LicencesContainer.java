@@ -119,10 +119,18 @@ public class LicencesContainer {
                     .collect(Collectors.joining("\n"));
         } else {
             result = payments.stream()
-                    .filter(p -> p.getNom().toLowerCase(Locale.ROOT).contains(membre.getNom().toLowerCase(Locale.ROOT)))
+                    .filter(p -> p.getNom().toLowerCase(Locale.ROOT).contains(membre.getNom().toLowerCase(Locale.ROOT))
+                            && LicencesContainer.me.membres().stream().map(Membre::getAccountId).filter(a -> a != null && a.equals(p.getCompte())).count() == 0)
                     .map(Payment::toFullString)
                     .collect(Collectors.joining("\n"));
         }
         return result;
+    }
+
+    public List<Membre> compositionFamily(Membre membre) {
+        return LicencesContainer.me().membres()
+                .stream()
+                .filter(m -> Membre.addressId(m).equals(Membre.addressId(membre)))
+                .collect(Collectors.toList());
     }
 }

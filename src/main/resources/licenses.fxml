@@ -52,7 +52,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
+<VBox prefHeight="1080.0" prefWidth="1920.0" stylesheets="@Licences.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>

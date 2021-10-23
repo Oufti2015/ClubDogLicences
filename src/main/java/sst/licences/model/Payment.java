@@ -42,8 +42,7 @@ public class Payment {
     }
 
     public String toString() {
-        return String.format("- %5s %2d/%2d/%4d %13.2f € %50s (%s)",
-                paymentNumber,
+        return String.format("%02d/%02d/%4d %13.2f EUROS %50s (%s)",
                 date.getDayOfMonth(), date.getMonth().getValue(), date.getYear(),
                 montant,
                 nom,
@@ -51,8 +50,7 @@ public class Payment {
     }
 
     public String toFullString() {
-        return String.format("- %5s %2d/%2d/%4d %13.2f € %50s (%s) - %s",
-                paymentNumber,
+        return String.format("%02d/%02d/%4d %13.2f EUROS %50s (%s) - %s",
                 date.getDayOfMonth(), date.getMonth().getValue(), date.getYear(),
                 montant,
                 nom,

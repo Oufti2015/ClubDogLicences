@@ -1,10 +1,5 @@
 package sst.licences.control;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvException;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import jdk.nashorn.internal.runtime.logging.Logger;
 import lombok.extern.log4j.Log4j2;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
@@ -23,18 +17,12 @@ import sst.licences.excel.*;
 import sst.licences.mail.EnvoyerUnEmail;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
-import sst.licences.model.Payment;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Log4j2
 public class MainController {

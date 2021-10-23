@@ -114,7 +114,7 @@ public class EnvoyerUnEmail {
     }
 
     private String messageBody(Membre membre) {
-        List<Membre> composition = compositionFamily(membre);
+        List<Membre> composition = LicencesContainer.me().compositionFamily(membre);
         StringBuilder sb = new StringBuilder();
         for (Membre m : composition) {
             sb.append("Bonjour ").append(m.getPrenom()).append(",\n");
@@ -162,13 +162,6 @@ public class EnvoyerUnEmail {
         }
         sb.append(" sur le compte du club ?\n");
         return sb.toString();
-    }
-
-    private List<Membre> compositionFamily(Membre membre) {
-        return LicencesContainer.me().membres()
-                .stream()
-                .filter(m -> Membre.addressId(m).equals(Membre.addressId(membre)))
-                .collect(Collectors.toList());
     }
 
     private List<Membre> eligibleMembres() {
