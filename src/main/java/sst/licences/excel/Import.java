@@ -7,7 +7,6 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
-import sst.licences.main.LicencesConstants;
 import sst.licences.model.Comite;
 import sst.licences.model.Membre;
 
@@ -27,6 +26,8 @@ import java.util.List;
 public class Import {
 
     public void importFromCsv(File file) {
+        log.info("Importing file " + file + "...");
+
         List<Membre> list = new ArrayList<>();
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
 
@@ -51,14 +52,24 @@ public class Import {
                 }
             });
 
+            log.info("Adding " + list.size() + " members...");
+            for (Membre membre : list) {
+                log.info("ADDED : " + membre);
+                LicencesContainer.me().membres().stream()
+                        .filter(m -> m.getNom().equals(membre.getNom()))
+                        .filter(m -> m.getPrenom().equals(membre.getPrenom()))
+                        .forEach(m -> log.info("----- : " + m));
+            }
             LicencesContainer.me().addMembresList(list);
+            log.info("... done.");
         } catch (IOException | CsvException e) {
-            e.printStackTrace();
+            log.error("Error parsing file " + file, e);
         }
     }
 
     private Membre member(String[] x) {
         log.debug(String.join("|", x));
+
         Membre membre = new Membre();
         int i = 0;
         membre.setNom(x[i++]);
@@ -79,8 +90,6 @@ public class Import {
         membre.setComite(comite.isMembreDuComite(membre));
         membre.setSentToMyKKusch(true);
         membre.setAffiliation(LocalDate.of(LocalDate.now().getYear(), Month.JANUARY, 1));
-
-        log.info(membre);
 
         return membre;
     }

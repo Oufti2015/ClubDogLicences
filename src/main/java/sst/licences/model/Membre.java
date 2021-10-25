@@ -61,12 +61,15 @@ public class Membre implements Comparable<Membre> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Membre membre = (Membre) o;
-        return Objects.equal(MoreObjects.firstNonNull(licence, ""), MoreObjects.firstNonNull(membre.licence, ""))
-                && Objects.equal(nom, membre.nom)
+        return Objects.equal(nom, membre.nom)
                 && Objects.equal(prenom, membre.prenom)
                 && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
                 && Objects.equal(codePays, membre.codePays)
-                && Objects.equal(langue, membre.langue);
+                && Objects.equal(langue, membre.langue)
+                && Objects.equal(rue, membre.rue)
+                && Objects.equal(num, membre.num)
+                && Objects.equal(codePostal, membre.codePostal)
+                && Objects.equal(localite, membre.localite);
     }
 
     @Override

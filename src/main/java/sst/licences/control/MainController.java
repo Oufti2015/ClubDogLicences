@@ -299,6 +299,7 @@ public class MainController {
         fileChooser.setInitialDirectory(new File(LicencesConstants.WORKING_FOLDER));
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("CSV Files", "*.csv");
         fileChooser.getExtensionFilters().add(filter);
+
         return fileChooser;
     }
 
