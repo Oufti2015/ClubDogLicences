@@ -67,7 +67,7 @@ public class MainController {
     @FXML
     private TextArea paymentsTextArea;
     @FXML
-    private Label techIdLabel;
+    private TextField techIdLabel;
 
     @FXML
     public void initialize() {
@@ -126,6 +126,7 @@ public class MainController {
         selectedItem.init(membre);
 
         LicencesContainer.me().save();
+        reset();
     }
 
     @FXML
@@ -213,24 +214,26 @@ public class MainController {
 
     @FXML
     private void reset() {
-        licenceText.setText("");
+        licenceText.clear();
         dateDeNaissancePicker.setValue(null);
-        nomText.setText("");
-        prenomText.setText("");
-        rueText.setText("");
-        numText.setText("");
-        codePostalText.setText("");
-        localiteText.setText("");
-        telephoneText.setText("");
-        gsmText.setText("");
-        emailText.setText("");
-        paysText.setText("");
-        langueText.setText("");
-        accountText.setText("");
-        dscpTextArea.setText("");
-
+        nomText.clear();
+        prenomText.clear();
+        rueText.clear();
+        numText.clear();
+        codePostalText.clear();
+        localiteText.clear();
+        telephoneText.clear();
+        gsmText.clear();
+        emailText.clear();
+        paysText.clear();
+        langueText.clear();
+        accountText.clear();
+        dscpTextArea.clear();
+        paymentsTextArea.clear();
+        techIdLabel.clear();
         comiteCheck.setSelected(false);
         affiliationDatePicker.setValue(null);
+
     }
 
     public void exportFileForMYKKUSH(ActionEvent actionEvent) {
