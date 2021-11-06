@@ -85,7 +85,7 @@ public class MainController {
     }
 
     private void defaultCountry() {
-        paysCombo.getSelectionModel().select(0);
+        paysCombo.getSelectionModel().select(LicencesConstants.DEFAULT_PAYS_CODE);
     }
 
     @FXML
@@ -104,7 +104,7 @@ public class MainController {
         gsmText.setText(selectedItem.getGsm());
         emailText.setText(selectedItem.getEmail());
         emailOkCheckBox.setSelected(selectedItem.isEmailOk());
-        paysCombo.setValue(CountryList.country(selectedItem.getCodePays()).orElse(CountryList.belgium));
+        paysCombo.setValue(CountryList.country(selectedItem.getCodePays()).orElse(LicencesConstants.DEFAULT_PAYS_CODE));
         langueText.setText(selectedItem.getLangue());
         comiteCheck.setSelected(selectedItem.isComite());
         affiliationDatePicker.setValue(selectedItem.getMembre().getAffiliation());

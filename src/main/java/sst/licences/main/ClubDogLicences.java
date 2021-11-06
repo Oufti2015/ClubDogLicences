@@ -1,13 +1,11 @@
 package sst.licences.main;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.util.Strings;
 import sst.common.file.output.OutputFile;
@@ -22,7 +20,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Log4j2
-public class Main extends Application {
+public class ClubDogLicences extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -30,16 +28,16 @@ public class Main extends Application {
         LicencesContainer.load();
 
         FXMLLoader loader = new FXMLLoader();
-        URL fxml = Main.class.getResource("/licenses.fxml");
+        URL fxml = ClubDogLicences.class.getResource("/licenses.fxml");
         loader.setLocation(fxml);
 
         Parent root = loader.load();
         MainController controller = loader.getController();
         controller.setPrimaryStage(primaryStage);
-        primaryStage.setTitle("Berger Club Arlonais - Licences");
+        primaryStage.setTitle(LicencesConstants.APPLICATION_TITLE);
         primaryStage.setScene(new Scene(root, 1920, 1080));
         primaryStage.setMaximized(true);
-        InputStream icon = Main.class.getResourceAsStream("/icon.png");
+        InputStream icon = ClubDogLicences.class.getResourceAsStream("/icon.png");
         if (icon != null) {
             primaryStage.getIcons().add(new Image(Objects.requireNonNull(icon)));
         }

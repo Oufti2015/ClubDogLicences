@@ -1,9 +1,13 @@
 package sst.licences.main;
 
+import sst.licences.model.Country;
+import sst.licences.model.CountryList;
+
 public class LicencesConstants {
 
-    public static final String DEFAULT_PAYS_CODE = "B";
+    public static final Country DEFAULT_PAYS_CODE = CountryList.belgium;
     public static final String DEFAULT_LANGUE = "FR";
+    public static final String APPLICATION_TITLE = "Berger Club Arlonais - Licences";
 
     private LicencesConstants() {
     }
