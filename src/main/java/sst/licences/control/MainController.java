@@ -68,6 +68,8 @@ public class MainController {
     private TextArea paymentsTextArea;
     @FXML
     private TextField techIdLabel;
+    @FXML
+    private CheckBox emailOkCheckBox;
 
     @FXML
     public void initialize() {
@@ -91,6 +93,7 @@ public class MainController {
         telephoneText.setText(selectedItem.getTelephone());
         gsmText.setText(selectedItem.getGsm());
         emailText.setText(selectedItem.getEmail());
+        emailOkCheckBox.setSelected(selectedItem.isEmailOk());
         paysText.setText(selectedItem.getCodePays());
         langueText.setText(selectedItem.getLangue());
         comiteCheck.setSelected(selectedItem.isComite());
@@ -115,7 +118,7 @@ public class MainController {
         membre.setLocalite(localiteText.getText());
         membre.setTelephone(telephoneText.getText());
         membre.setGsm(gsmText.getText());
-        membre.setEmail(emailText.getText());
+        membre.setEmailAddress(emailText.getText(), emailOkCheckBox.isSelected());
         membre.setCodePays(paysText.getText());
         membre.setLangue(langueText.getText());
         membre.setComite(comiteCheck.isSelected());
@@ -142,7 +145,7 @@ public class MainController {
         membre.setLocalite(localiteText.getText());
         membre.setTelephone(telephoneText.getText());
         membre.setGsm(gsmText.getText());
-        membre.setEmail(emailText.getText());
+        membre.setEmailAddress(emailText.getText());
         membre.setCodePays(paysText.getText());
         membre.setLangue(langueText.getText());
         membre.setComite(comiteCheck.isSelected());
@@ -225,6 +228,7 @@ public class MainController {
         telephoneText.clear();
         gsmText.clear();
         emailText.clear();
+        emailOkCheckBox.setSelected(true);
         paysText.clear();
         langueText.clear();
         accountText.clear();
@@ -233,7 +237,6 @@ public class MainController {
         techIdLabel.clear();
         comiteCheck.setSelected(false);
         affiliationDatePicker.setValue(null);
-
     }
 
     public void exportFileForMYKKUSH(ActionEvent actionEvent) {

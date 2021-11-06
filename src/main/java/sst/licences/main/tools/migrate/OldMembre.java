@@ -1,15 +1,16 @@
-package sst.licences.model;
+package sst.licences.main.tools.migrate;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import lombok.Data;
 import net.sf.oval.constraint.NotEmpty;
 import net.sf.oval.constraint.NotNull;
+import sst.licences.model.Membre;
 
 import java.time.LocalDate;
 
 @Data
-public class Membre implements Comparable<Membre> {
+public class OldMembre implements Comparable<OldMembre> {
     @NotNull
     @NotEmpty
     private String nom;
@@ -31,7 +32,7 @@ public class Membre implements Comparable<Membre> {
     private String telephone;
     private String gsm;
     @NotNull
-    private Email email;
+    private String email;
     @NotNull
     @NotEmpty
     private LocalDate dateDeNaissance;
@@ -51,16 +52,7 @@ public class Membre implements Comparable<Membre> {
     private String technicalIdentifer;
     private String description;
 
-    public void setEmailAddress(String address) {
-        email = new Email(address);
-    }
-
-    public void setEmailAddress(String address, boolean valid) {
-        email = new Email(address);
-        email.setOk(valid);
-    }
-
-    public static String addressId(Membre membre) {
+    public static String addressId(OldMembre membre) {
         return membre.getRue() + membre.getNum() + membre.getCodePostal() + membre.getLocalite();
     }
 
@@ -68,7 +60,7 @@ public class Membre implements Comparable<Membre> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Membre membre = (Membre) o;
+        OldMembre membre = (OldMembre) o;
         return Objects.equal(nom, membre.nom)
                 && Objects.equal(prenom, membre.prenom)
                 && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
@@ -87,7 +79,7 @@ public class Membre implements Comparable<Membre> {
 
 
     @Override
-    public int compareTo(Membre o) {
+    public int compareTo(OldMembre o) {
         int result;
         result = nom.compareTo(o.nom);
         if (result == 0) {
@@ -105,12 +97,38 @@ public class Membre implements Comparable<Membre> {
         return result;
     }
 
-    public void update(Membre m) {
+    public void update(OldMembre m) {
         this.setLicence(MoreObjects.firstNonNull(m.getLicence(), ""));
         this.setSentToMyKKusch(true);
     }
 
     public String fullName() {
         return prenom + " " + nom;
+    }
+
+    public Membre membre() {
+        Membre membre = new Membre();
+
+        membre.setNom(getNom());
+        membre.setPrenom(getPrenom());
+        membre.setRue(getRue());
+        membre.setNum(getNum());
+        membre.setCodePostal(getCodePostal());
+        membre.setLocalite(getLocalite());
+        membre.setTelephone(getTelephone());
+        membre.setGsm(getGsm());
+        membre.setEmailAddress(getEmail());
+        membre.setDateDeNaissance(getDateDeNaissance());
+        membre.setCodePays(getCodePays());
+        membre.setLangue(getLangue());
+        membre.setLicence(getLicence());
+        membre.setComite(isComite());
+        membre.setAffiliation(getAffiliation());
+        membre.setSentToMyKKusch(isSentToMyKKusch());
+        membre.setAccountId(getAccountId());
+        membre.setTechnicalIdentifer(getTechnicalIdentifer());
+        membre.setDescription(getDescription());
+
+        return membre;
     }
 }

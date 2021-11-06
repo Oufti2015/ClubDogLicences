@@ -67,7 +67,7 @@ public abstract class ExportToExcel implements ExcelExporter {
             cell.setCellValue(membre.getGsm());
             // Email
             cell = row.createCell(i++, CellType.STRING);
-            cell.setCellValue(membre.getEmail());
+            cell.setCellValue(membre.getEmail().getAdresse());
             // Date de Naissance
             cell = row.createCell(i++, CellType.STRING);
             LocalDate dateDeNaissance = membre.getDateDeNaissance();

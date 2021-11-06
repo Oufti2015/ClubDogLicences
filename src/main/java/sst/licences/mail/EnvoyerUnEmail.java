@@ -66,7 +66,7 @@ public class EnvoyerUnEmail {
                 }
             }
 
-            emailSent.add(membre.getEmail());
+            emailSent.add(membre.getEmail().getAdresse());
         }
         if (!errors.isEmpty()) {
             log.error("--- Errors List ---");
@@ -86,7 +86,7 @@ public class EnvoyerUnEmail {
         Message message = new MimeMessage(session);
         InternetAddress bergerClubArlonais = new InternetAddress(BCARLONAIS_GMAIL_COM, BERGER_CLUB_ARLONAIS);
         message.setFrom(bergerClubArlonais);
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress(membre.getEmail(), membre.getPrenom() + " " + membre.getNom()));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(membre.getEmail().getAdresse(), membre.getPrenom() + " " + membre.getNom()));
         message.addRecipient(Message.RecipientType.CC, bergerClubArlonais);
         message.setSubject(MAIL_SUBJECT);
         message.setContent(messageBody(membre), "text/plain; charset=\"UTF-8\"");

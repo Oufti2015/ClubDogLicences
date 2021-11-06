@@ -224,12 +224,24 @@
                         <TextField fx:id="gsmText" GridPane.columnIndex="3" GridPane.rowIndex="5" />
 
                         <Label text="email" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
-                        <TextField fx:id="emailText" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <GridPane GridPane.columnIndex="1" GridPane.rowIndex="6">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="85.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                              <TextField fx:id="emailText" />
+                        <CheckBox fx:id="emailOkCheckBox" mnemonicParsing="false" selected="true" text="Ok" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
                         <Label text="Pays" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
-                        <TextField fx:id="paysText" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                        <TextField fx:id="paysText" text="B" GridPane.columnIndex="3" GridPane.rowIndex="6" />
 
                         <Label text="Langue" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
-                        <TextField fx:id="langueText" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <TextField fx:id="langueText" text="FR" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                   <Label alignment="TOP_CENTER" text="Numéro de compte" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
                   <TextField fx:id="accountText" GridPane.columnIndex="3" GridPane.rowIndex="7" />
                   <Label text="Affilié le" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />

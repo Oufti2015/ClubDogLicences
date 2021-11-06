@@ -1,4 +1,4 @@
-package sst.licences.main;
+package sst.licences.main.tools;
 
 import sst.licences.model.Comite;
 

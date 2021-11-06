@@ -17,6 +17,7 @@ public class SimpleMembre {
     private final SimpleStringProperty telephone = new SimpleStringProperty("");
     private final SimpleStringProperty gsm = new SimpleStringProperty("");
     private final SimpleStringProperty email = new SimpleStringProperty("");
+    private final SimpleBooleanProperty emailOk = new SimpleBooleanProperty(true);
     private final SimpleStringProperty dateDeNaissance = new SimpleStringProperty("");
     private final SimpleStringProperty codePays = new SimpleStringProperty("");
     private final SimpleStringProperty langue = new SimpleStringProperty("");
@@ -43,7 +44,8 @@ public class SimpleMembre {
         this.localite.set(membre.getLocalite());
         this.telephone.set(membre.getTelephone());
         this.gsm.set(membre.getGsm());
-        this.email.set(membre.getEmail());
+        this.email.set(membre.getEmail().getAdresse());
+        this.emailOk.set(membre.getEmail().getOk());
         this.dateDeNaissance.set(membre.getDateDeNaissance().toString());
         this.codePays.set(membre.getCodePays());
         this.langue.set(membre.getLangue());
@@ -126,6 +128,14 @@ public class SimpleMembre {
 
     public SimpleStringProperty emailProperty() {
         return email;
+    }
+
+    public boolean isEmailOk() {
+        return emailOk.get();
+    }
+
+    public SimpleBooleanProperty emailOkProperty() {
+        return emailOk;
     }
 
     public String getDateDeNaissance() {

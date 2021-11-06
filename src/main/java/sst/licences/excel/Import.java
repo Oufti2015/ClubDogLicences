@@ -80,7 +80,7 @@ public class Import {
         membre.setLocalite(x[i++]);
         membre.setTelephone(x[i++]);
         membre.setGsm(x[i++]);
-        membre.setEmail(x[i++]);
+        membre.setEmailAddress(x[i++]);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         membre.setDateDeNaissance(LocalDate.parse(x[i++], formatter));
         membre.setCodePays(x[i++]);

@@ -1,4 +1,4 @@
-package sst.licences.main;
+package sst.licences.main.tools;
 
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;

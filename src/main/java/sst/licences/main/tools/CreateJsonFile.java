@@ -1,4 +1,4 @@
-package sst.licences.main;
+package sst.licences.main.tools;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -7,6 +7,7 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Comite;
 import sst.licences.model.Membre;
 
@@ -63,7 +64,7 @@ public class CreateJsonFile {
         membre.setLocalite(x[i++]);
         membre.setTelephone(x[i++]);
         membre.setGsm(x[i++]);
-        membre.setEmail(x[i++]);
+        membre.setEmailAddress(x[i++]);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         membre.setDateDeNaissance(LocalDate.parse(x[i++], formatter));
         membre.setCodePays(x[i++]);
