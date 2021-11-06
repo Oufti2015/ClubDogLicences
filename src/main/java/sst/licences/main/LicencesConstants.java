@@ -2,6 +2,9 @@ package sst.licences.main;
 
 public class LicencesConstants {
 
+    public static final String DEFAULT_PAYS_CODE = "B";
+    public static final String DEFAULT_LANGUE = "FR";
+
     private LicencesConstants() {
     }
 

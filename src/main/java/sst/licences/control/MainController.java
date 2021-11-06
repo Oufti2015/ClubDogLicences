@@ -16,6 +16,8 @@ import sst.licences.container.SimpleMembre;
 import sst.licences.excel.*;
 import sst.licences.mail.EnvoyerUnEmail;
 import sst.licences.main.LicencesConstants;
+import sst.licences.model.Country;
+import sst.licences.model.CountryList;
 import sst.licences.model.Membre;
 
 import java.io.File;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Log4j2
 public class MainController {
@@ -55,7 +58,7 @@ public class MainController {
     @FXML
     private TextField emailText;
     @FXML
-    private TextField paysText;
+    private ComboBox<Country> paysCombo;
     @FXML
     private TextField langueText;
     @FXML
@@ -76,6 +79,13 @@ public class MainController {
         ObservableList<SimpleMembre> data = mainTableView.getItems();
         LicencesContainer.me().membres().stream().sorted().forEach(m -> data.add(new SimpleMembre(m)));
         licenceText.setDisable(true);
+
+        paysCombo.setItems(CountryList.getCountryList());
+        defaultCountry();
+    }
+
+    private void defaultCountry() {
+        paysCombo.getSelectionModel().select(0);
     }
 
     @FXML
@@ -94,7 +104,7 @@ public class MainController {
         gsmText.setText(selectedItem.getGsm());
         emailText.setText(selectedItem.getEmail());
         emailOkCheckBox.setSelected(selectedItem.isEmailOk());
-        paysText.setText(selectedItem.getCodePays());
+        paysCombo.setValue(CountryList.country(selectedItem.getCodePays()).orElse(CountryList.belgium));
         langueText.setText(selectedItem.getLangue());
         comiteCheck.setSelected(selectedItem.isComite());
         affiliationDatePicker.setValue(selectedItem.getMembre().getAffiliation());
@@ -119,7 +129,7 @@ public class MainController {
         membre.setTelephone(telephoneText.getText());
         membre.setGsm(gsmText.getText());
         membre.setEmailAddress(emailText.getText(), emailOkCheckBox.isSelected());
-        membre.setCodePays(paysText.getText());
+        membre.setCodePays(paysCombo.getSelectionModel().getSelectedItem().getCode());
         membre.setLangue(langueText.getText());
         membre.setComite(comiteCheck.isSelected());
         membre.setAffiliation(affiliationDatePicker.getValue());
@@ -146,7 +156,7 @@ public class MainController {
         membre.setTelephone(telephoneText.getText());
         membre.setGsm(gsmText.getText());
         membre.setEmailAddress(emailText.getText());
-        membre.setCodePays(paysText.getText());
+        membre.setCodePays(paysCombo.getSelectionModel().getSelectedItem().getCode());
         membre.setLangue(langueText.getText());
         membre.setComite(comiteCheck.isSelected());
         membre.setAffiliation(affiliationDatePicker.getValue());
@@ -229,8 +239,8 @@ public class MainController {
         gsmText.clear();
         emailText.clear();
         emailOkCheckBox.setSelected(true);
-        paysText.clear();
-        langueText.clear();
+        defaultCountry();
+        langueText.setText(LicencesConstants.DEFAULT_LANGUE);
         accountText.clear();
         dscpTextArea.clear();
         paymentsTextArea.clear();
