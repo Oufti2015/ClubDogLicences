@@ -13,6 +13,8 @@ import net.sf.oval.Validator;
 import sst.licences.bank.BankIdentifierGenerator;
 import sst.licences.container.LicencesContainer;
 import sst.licences.container.SimpleMembre;
+import sst.licences.control.filters.AffiliationFilter;
+import sst.licences.control.filters.ComiteFilter;
 import sst.licences.excel.*;
 import sst.licences.mail.EnvoyerUnEmail;
 import sst.licences.main.LicencesConstants;
@@ -22,10 +24,12 @@ import sst.licences.model.Membre;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 @Log4j2
 public class MainController {
@@ -73,46 +77,130 @@ public class MainController {
     private TextField techIdLabel;
     @FXML
     private CheckBox emailOkCheckBox;
+    @FXML
+    private TextField filterNom;
+    @FXML
+    private TextField filterPrenom;
+    @FXML
+    private TextField filterRue;
+    @FXML
+    private TextField filterEmail;
+    @FXML
+    private TextField filterDscp;
+    @FXML
+    private ComboBox<ComiteFilter> comiteFilterComboBox;
+    @FXML
+    private ComboBox<AffiliationFilter> affiliationFilterComboBox;
 
     @FXML
     public void initialize() {
-        ObservableList<SimpleMembre> data = mainTableView.getItems();
-        LicencesContainer.me().membres().stream().sorted().forEach(m -> data.add(new SimpleMembre(m)));
+        resetFilter();
         licenceText.setDisable(true);
 
         paysCombo.setItems(CountryList.getCountryList());
         defaultCountry();
+
+        comiteFilterComboBox.setItems(ComiteFilter.getList());
+        affiliationFilterComboBox.setItems(AffiliationFilter.getList());
+        defaultComiteFilter();
+        defaultAffiliationFilter();
+
+        filterNom.textProperty().addListener((observable, oldValue, newValue) -> filter());
+        filterPrenom.textProperty().addListener((observable, oldValue, newValue) -> filter());
+        filterRue.textProperty().addListener((observable, oldValue, newValue) -> filter());
+        filterEmail.textProperty().addListener((observable, oldValue, newValue) -> filter());
+        filterDscp.textProperty().addListener((observable, oldValue, newValue) -> filter());
+        comiteFilterComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> filter());
+        affiliationFilterComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> filter());
+    }
+
+    private void filter() {
+        ObservableList<SimpleMembre> data = mainTableView.getItems();
+        data.clear();
+        filter(data);
+    }
+
+    private void filter(ObservableList<SimpleMembre> data) {
+        Stream<Membre> stream = LicencesContainer.me().membres().stream();
+        if (!filterNom.getText().isEmpty()) {
+            stream = stream.filter(m -> m.getNom().contains(filterNom.getText()));
+        }
+        if (!filterPrenom.getText().isEmpty()) {
+            stream = stream.filter(m -> m.getPrenom().contains(filterPrenom.getText()));
+        }
+        if (!filterRue.getText().isEmpty()) {
+            stream = stream.filter(m -> m.getRue().contains(filterRue.getText()));
+        }
+        if (!filterEmail.getText().isEmpty()) {
+            stream = stream.filter(m -> m.getEmail().getAdresse().contains(filterEmail.getText()));
+        }
+        if (!filterDscp.getText().isEmpty()) {
+            stream = stream.filter(m -> m.getDescription() != null && m.getDescription().contains(filterDscp.getText()));
+        }
+        if (comiteFilterComboBox.getSelectionModel().getSelectedItem().equals(ComiteFilter.COMITE)) {
+            stream = stream.filter(Membre::isComite);
+        } else if (comiteFilterComboBox.getSelectionModel().getSelectedItem().equals(ComiteFilter.MEMBER)) {
+            stream = stream.filter(m -> !m.isComite());
+        }
+        if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.CURRENT)) {
+            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().compareTo(LocalDate.of(LocalDate.now().getYear() - 1, Month.SEPTEMBER, 1)) > 0);
+        } else if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.NEXT)) {
+            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().compareTo(LocalDate.of(LocalDate.now().getYear(), Month.SEPTEMBER, 1)) > 0);
+        }
+        stream.forEach(m -> data.add(new SimpleMembre(m)));
+    }
+
+    @FXML
+    private void resetFilter() {
+        filterNom.clear();
+        filterPrenom.clear();
+        filterRue.clear();
+        filterEmail.clear();
+        filterDscp.clear();
+        defaultComiteFilter();
+        defaultAffiliationFilter();
+
+        filter();
     }
 
     private void defaultCountry() {
         paysCombo.getSelectionModel().select(LicencesConstants.DEFAULT_PAYS_CODE);
     }
 
+    private void defaultComiteFilter() {
+        comiteFilterComboBox.getSelectionModel().select(ComiteFilter.ALL);
+    }
+
+    private void defaultAffiliationFilter() {
+        affiliationFilterComboBox.getSelectionModel().select(AffiliationFilter.ALL);
+    }
+
     @FXML
     public void rowselected(MouseEvent mouseEvent) {
         SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
-
-        licenceText.setText(selectedItem.getLicence());
-        dateDeNaissancePicker.setValue(selectedItem.getMembre().getDateDeNaissance());
-        nomText.setText(selectedItem.getNom());
-        prenomText.setText(selectedItem.getPrenom());
-        rueText.setText(selectedItem.getRue());
-        numText.setText(selectedItem.getNum());
-        codePostalText.setText(selectedItem.getCodePostal());
-        localiteText.setText(selectedItem.getLocalite());
-        telephoneText.setText(selectedItem.getTelephone());
-        gsmText.setText(selectedItem.getGsm());
-        emailText.setText(selectedItem.getEmail());
-        emailOkCheckBox.setSelected(selectedItem.isEmailOk());
-        paysCombo.setValue(CountryList.country(selectedItem.getCodePays()).orElse(LicencesConstants.DEFAULT_PAYS_CODE));
-        langueText.setText(selectedItem.getLangue());
-        comiteCheck.setSelected(selectedItem.isComite());
-        affiliationDatePicker.setValue(selectedItem.getMembre().getAffiliation());
-        accountText.setText(selectedItem.getAccountId());
-        affiliationDatePicker.setDisable(selectedItem.isComite());
-        dscpTextArea.setText(selectedItem.getDescription());
-        paymentsTextArea.setText(LicencesContainer.me().payments(selectedItem.getMembre()));
-        techIdLabel.setText(selectedItem.getMembre().getTechnicalIdentifer());
+        if (selectedItem != null) {
+            licenceText.setText(selectedItem.getLicence());
+            dateDeNaissancePicker.setValue(selectedItem.getMembre().getDateDeNaissance());
+            nomText.setText(selectedItem.getNom());
+            prenomText.setText(selectedItem.getPrenom());
+            rueText.setText(selectedItem.getRue());
+            numText.setText(selectedItem.getNum());
+            codePostalText.setText(selectedItem.getCodePostal());
+            localiteText.setText(selectedItem.getLocalite());
+            telephoneText.setText(selectedItem.getTelephone());
+            gsmText.setText(selectedItem.getGsm());
+            emailText.setText(selectedItem.getEmail());
+            emailOkCheckBox.setSelected(selectedItem.isEmailOk());
+            paysCombo.setValue(CountryList.country(selectedItem.getCodePays()).orElse(LicencesConstants.DEFAULT_PAYS_CODE));
+            langueText.setText(selectedItem.getLangue());
+            comiteCheck.setSelected(selectedItem.isComite());
+            affiliationDatePicker.setValue(selectedItem.getMembre().getAffiliation());
+            accountText.setText(selectedItem.getAccountId());
+            affiliationDatePicker.setDisable(selectedItem.isComite());
+            dscpTextArea.setText(selectedItem.getDescription());
+            paymentsTextArea.setText(LicencesContainer.me().payments(selectedItem.getMembre()));
+            techIdLabel.setText(selectedItem.getMembre().getTechnicalIdentifer());
+        }
     }
 
     @FXML
@@ -321,5 +409,17 @@ public class MainController {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+    }
+
+    @FXML
+    private void selectFamily() {
+        log.info("Select Family");
+        SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            resetFilter();
+            ObservableList<SimpleMembre> data = mainTableView.getItems();
+            data.clear();
+            LicencesContainer.me().compositionFamily(selectedItem.getMembre()).forEach(m -> data.add(new SimpleMembre(m)));
+        }
     }
 }

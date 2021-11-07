@@ -32,6 +32,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.CheckBox?>
@@ -88,11 +89,52 @@
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="1500.0" />
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="400.0" vgrow="SOMETIMES" />
             <RowConstraints vgrow="SOMETIMES" />
         </rowConstraints>
         <children>
-                <TableView fx:id="mainTableView" onMouseClicked="#rowselected">
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Nom" />
+                  <Label text="Prénom" GridPane.columnIndex="1" />
+                  <Label text="Rue" GridPane.columnIndex="2" />
+                  <Label text="Famille" GridPane.columnIndex="8" />
+                  <Label text="Comité" GridPane.columnIndex="3" />
+                  <Label text="Affiliation" GridPane.columnIndex="4" />
+                  <Label text="Email" GridPane.columnIndex="5" />
+                  <Label text="Description" GridPane.columnIndex="6" />
+                  <TextField fx:id="filterNom" GridPane.rowIndex="1" />
+                  <TextField fx:id="filterPrenom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="filterRue" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="filterEmail" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                  <TextField fx:id="filterDscp" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                  <Button fx:id="filterComite" mnemonicParsing="false" onAction="#selectFamily" text="Sélectionner la famille" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <ComboBox fx:id="comiteFilterComboBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </ComboBox>
+                  <ComboBox fx:id="affiliationFilterComboBox" prefWidth="150.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#resetFilter" text="Reset Filters" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowSpan="2147483647" GridPane.valignment="CENTER" />
+               </children>
+            </GridPane>
+                <TableView fx:id="mainTableView" onMouseClicked="#rowselected" GridPane.rowIndex="1">
                     <columns>
                         <TableColumn prefWidth="100.0" text="Nom">
                             <cellValueFactory>
@@ -114,7 +156,7 @@
                                 <PropertyValueFactory property="num" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="50.0" text="Code Postal">
+                        <TableColumn prefWidth="75.0" text="Code Postal">
                             <cellValueFactory>
                                 <PropertyValueFactory property="codePostal" />
                             </cellValueFactory>
@@ -124,12 +166,12 @@
                                 <PropertyValueFactory property="localite" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="75.0" text="Téléphone">
+                        <TableColumn prefWidth="150.0" text="Téléphone">
                             <cellValueFactory>
                                 <PropertyValueFactory property="telephone" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="75.0" text="GSM">
+                        <TableColumn prefWidth="150.0" text="GSM">
                             <cellValueFactory>
                                 <PropertyValueFactory property="gsm" />
                             </cellValueFactory>
@@ -144,22 +186,22 @@
                                 <PropertyValueFactory property="dateDeNaissance" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="35.0" text="Pays">
+                        <TableColumn prefWidth="50.0" text="Pays">
                             <cellValueFactory>
                                 <PropertyValueFactory property="codePays" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="25.0" text="Langue">
+                        <TableColumn prefWidth="50.0" text="Langue">
                             <cellValueFactory>
                                 <PropertyValueFactory property="langue" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="140.0" text="Licence">
+                        <TableColumn prefWidth="175.0" text="Licence">
                             <cellValueFactory>
                                 <PropertyValueFactory property="licence" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="75.0" text="Affiliation">
+                        <TableColumn prefWidth="100.0" text="Affiliation">
                             <cellValueFactory>
                                 <PropertyValueFactory property="affiliation" />
                             </cellValueFactory>
@@ -171,7 +213,7 @@
                         </TableColumn>
                     </columns>
                 </TableView>
-                <GridPane BorderPane.alignment="CENTER" GridPane.rowIndex="1">
+                <GridPane BorderPane.alignment="CENTER" GridPane.rowIndex="2">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="140.0" />
