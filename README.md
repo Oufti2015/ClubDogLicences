@@ -19,6 +19,7 @@ BE71 0689 0687 6669 - GKCCBEBB
 ## To do
 - Filtres case unsensitive
 - Modification appliquée à toute la famille en cas de modification de champ identique à la famille (adresse et affiliation).
+- Rapport d'affiliation et de carte de cours
 
 ## Technologies
 - Java
