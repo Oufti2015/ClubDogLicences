@@ -26,4 +26,4 @@ data/
 target/
 .idea/
 membres.json
-*.iml
+report.html

@@ -224,10 +224,23 @@ public class MainController {
         membre.setAccountId(accountText.getText());
         membre.setDescription(dscpTextArea.getText());
 
+        updateFamily(membre);
+
         selectedItem.init(membre);
 
         LicencesContainer.me().save();
         reset();
+    }
+
+    private void updateFamily(Membre membre) {
+        List<Membre> family = LicencesContainer.me().compositionFamily(membre);
+        for (Membre m : family) {
+            m.setRue(membre.getRue());
+            m.setNum(membre.getNum());
+            m.setCodePostal(membre.getCodePostal());
+            m.setLocalite(membre.getLocalite());
+            m.setDescription(membre.getDescription());
+        }
     }
 
     @FXML
@@ -335,6 +348,8 @@ public class MainController {
         techIdLabel.clear();
         comiteCheck.setSelected(false);
         affiliationDatePicker.setValue(null);
+
+        filter();
     }
 
     public void exportFileForMYKKUSH(ActionEvent actionEvent) {
