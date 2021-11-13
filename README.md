@@ -15,10 +15,10 @@ BE71 0689 0687 6669 - GKCCBEBB
 - Eportation du fichier à uploader vers https://www.mykkush.be/fr
 - Importation du fichier des extraits de comptes venant de https://www.belfius.be/retail/fr
 - Envoi d'email pour la réaffiliation
+- Modification appliquée à toute la famille en cas de modification de champ identique à la famille (adresse et affiliation).
+- Filtres case unsensitive
 
 ## To do
-- Filtres case unsensitive
-- Modification appliquée à toute la famille en cas de modification de champ identique à la famille (adresse et affiliation).
 - Rapport d'affiliation et de carte de cours
 
 ## Technologies

@@ -28,6 +28,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -123,19 +124,19 @@ public class MainController {
     private void filter(ObservableList<SimpleMembre> data) {
         Stream<Membre> stream = LicencesContainer.me().membres().stream();
         if (!filterNom.getText().isEmpty()) {
-            stream = stream.filter(m -> m.getNom().contains(filterNom.getText()));
+            stream = stream.filter(m -> m.getNom().toUpperCase(Locale.ROOT).contains(filterNom.getText().toUpperCase(Locale.ROOT)));
         }
         if (!filterPrenom.getText().isEmpty()) {
-            stream = stream.filter(m -> m.getPrenom().contains(filterPrenom.getText()));
+            stream = stream.filter(m -> m.getPrenom().toUpperCase(Locale.ROOT).contains(filterPrenom.getText().toUpperCase(Locale.ROOT)));
         }
         if (!filterRue.getText().isEmpty()) {
-            stream = stream.filter(m -> m.getRue().contains(filterRue.getText()));
+            stream = stream.filter(m -> m.getRue().toUpperCase(Locale.ROOT).contains(filterRue.getText().toUpperCase(Locale.ROOT)));
         }
         if (!filterEmail.getText().isEmpty()) {
-            stream = stream.filter(m -> m.getEmail().getAdresse().contains(filterEmail.getText()));
+            stream = stream.filter(m -> m.getEmail().getAdresse().toUpperCase(Locale.ROOT).contains(filterEmail.getText().toUpperCase(Locale.ROOT)));
         }
         if (!filterDscp.getText().isEmpty()) {
-            stream = stream.filter(m -> m.getDescription() != null && m.getDescription().contains(filterDscp.getText()));
+            stream = stream.filter(m -> m.getDescription() != null && m.getDescription().toUpperCase(Locale.ROOT).contains(filterDscp.getText().toUpperCase(Locale.ROOT)));
         }
         if (comiteFilterComboBox.getSelectionModel().getSelectedItem().equals(ComiteFilter.COMITE)) {
             stream = stream.filter(Membre::isComite);
