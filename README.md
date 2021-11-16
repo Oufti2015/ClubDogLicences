@@ -25,4 +25,5 @@ BE71 0689 0687 6669 - GKCCBEBB
 - Java
 - JavaFX
 
-
+## Tips
+- https://stackoverflow.com/questions/11037831/filename-timestamp-in-windows-cmd-batch-script-getting-truncated
