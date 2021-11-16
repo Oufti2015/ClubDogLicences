@@ -3,8 +3,12 @@ package sst.licences.control;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
@@ -26,10 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Log4j2
@@ -391,7 +392,7 @@ public class MainController {
     }
 
     public void emailForAffiliationSelected(ActionEvent actionEvent) {
-        SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
+        SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         envoyerEmails(new EnvoyerUnEmail(selectedItem.getMembre()));
     }
 
@@ -400,11 +401,14 @@ public class MainController {
                 ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         alert.showAndWait();
 
-        if (alert.getResult() == ButtonType.YES) {
-            envoi.envoyerAffiliation();
-            alert = new Alert(Alert.AlertType.INFORMATION, envoi.eligibleMembresSize() + " e-mail envoyés !",
-                    ButtonType.OK);
-            alert.showAndWait();
+        if (Objects.equals(alert.getResult(), ButtonType.YES)) {
+            Optional<String> enterAPassword = enterAPassword();
+            if (enterAPassword.isPresent()) {
+                envoi.envoyerAffiliation(enterAPassword.get());
+                alert = new Alert(Alert.AlertType.INFORMATION, envoi.eligibleMembresSize() + " e-mail envoyés !",
+                        ButtonType.OK);
+                alert.showAndWait();
+            }
         }
     }
 
@@ -444,5 +448,32 @@ public class MainController {
             LicencesContainer.me().compositionFamily(selectedItem.getMembre()).forEach(m -> data.add(new SimpleMembre(m)));
             reset(true);
         }
+    }
+
+    private Optional<String> enterAPassword() {
+        String password = System.getenv(LicencesConstants.ENV_MAIL_PWD);
+        if (password == null) {
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Send an email");
+            dialog.setHeaderText("We need a password to send emails...");
+            //dialog.setGraphic(new Circle(15, Color.RED)); // Custom graphic
+            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+            PasswordField pwd = new PasswordField();
+            HBox content = new HBox();
+            content.setAlignment(Pos.CENTER_LEFT);
+            content.setSpacing(10);
+            content.getChildren().addAll(new Label("Please enter your email password :"), pwd);
+            dialog.getDialogPane().setContent(content);
+            dialog.setResultConverter(dialogButton -> {
+                if (Objects.equals(dialogButton, ButtonType.OK)) {
+                    return pwd.getText();
+                }
+                return null;
+            });
+
+            return dialog.showAndWait();
+        }
+        return Optional.of(password);
     }
 }

@@ -33,8 +33,7 @@ public class EnvoyerUnEmail {
         this.selectedMembre = Optional.of(membre);
     }
 
-    public void envoyerAffiliation() {
-        final String password = System.getenv(LicencesConstants.ENV_MAIL_PWD);
+    public void envoyerAffiliation(String password) {
         Properties props;
         String testMode = System.getenv(LicencesConstants.ENV_TEST_MODE);
         if (testMode == null || testMode.equalsIgnoreCase("True")) {
