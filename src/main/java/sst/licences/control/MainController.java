@@ -37,7 +37,7 @@ public class MainController {
 
     private Stage primaryStage;
     @FXML
-    private TableView mainTableView;
+    private TableView<SimpleMembre> mainTableView;
     @FXML
     private TextField licenceText;
     @FXML
@@ -329,6 +329,10 @@ public class MainController {
 
     @FXML
     private void reset() {
+        reset(false);
+    }
+
+    private void reset(boolean justCleanForm) {
         licenceText.clear();
         dateDeNaissancePicker.setValue(null);
         nomText.clear();
@@ -350,7 +354,9 @@ public class MainController {
         comiteCheck.setSelected(false);
         affiliationDatePicker.setValue(null);
 
-        filter();
+        if (!justCleanForm) {
+            filter();
+        }
     }
 
     public void exportFileForMYKKUSH(ActionEvent actionEvent) {
@@ -430,12 +436,13 @@ public class MainController {
     @FXML
     private void selectFamily() {
         log.info("Select Family");
-        SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
+        SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             resetFilter();
             ObservableList<SimpleMembre> data = mainTableView.getItems();
             data.clear();
             LicencesContainer.me().compositionFamily(selectedItem.getMembre()).forEach(m -> data.add(new SimpleMembre(m)));
+            reset(true);
         }
     }
 }

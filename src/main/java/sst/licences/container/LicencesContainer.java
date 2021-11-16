@@ -13,6 +13,7 @@ import sst.licences.model.Payment;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -81,8 +82,8 @@ public class LicencesContainer {
             // create Gson instance
             Gson gson = new Gson();
             // create a reader
-            try (Reader reader = Files.newBufferedReader(Paths.get(LicencesConstants.MEMBRES_JSON_FILE))) {
-                // convert JSON string to Book object
+            try (Reader reader = Files.newBufferedReader(Paths.get(LicencesConstants.MEMBRES_JSON_FILE), StandardCharsets.ISO_8859_1)) {
+                // convert JSON string to LicencesContainer object
                 me = gson.fromJson(reader, LicencesContainer.class);
                 log.info(String.format("...%5d membres chargés.", me().membres.size()));
                 log.info(String.format("...%5d payements chargés.", me().payments.size()));

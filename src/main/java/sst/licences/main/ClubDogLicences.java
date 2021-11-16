@@ -24,7 +24,10 @@ public class ClubDogLicences extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        log.info("---------------------------------------------------------------------------------------------------");
         log.info("Starting ...");
+        checkEnvironmentVariable(LicencesConstants.ENV_MAIL_PWD, false);
+        checkEnvironmentVariable(LicencesConstants.ENV_TEST_MODE, true);
         LicencesContainer.load();
 
         FXMLLoader loader = new FXMLLoader();
@@ -45,20 +48,33 @@ public class ClubDogLicences extends Application {
         primaryStage.show();
     }
 
+    private void checkEnvironmentVariable(String variable, boolean showValue) {
+        String value = System.getenv(variable);
+        String result = "OK";
+        if (value == null) {
+            result = "Not OK";
+            log.info(String.format("Env. variable %30s : %6s", variable, result));
+        } else {
+            log.info(String.format("Env. variable %30s : %6s (Value = %s)", variable, result,
+                    showValue ? value : "*****"));
+
+        }
+    }
+
     private void onClose() {
         String report = new PaymentsReport()
                 .input(LicencesContainer.me().membres()
                         .stream()
-                        .filter(m-> Strings.isNotEmpty(LicencesContainer.me().payments(m)))
+                        .filter(m -> Strings.isNotEmpty(LicencesContainer.me().payments(m)))
                         .collect(Collectors.toList()))
-                        .format()
-                                .output();
+                .format()
+                .output();
 
         String filename = "report.html";
-        try(OutputFile outputFile = new OutputFile(filename)) {
+        try (OutputFile outputFile = new OutputFile(filename)) {
             outputFile.print(report);
         } catch (IOException e) {
-            log.error("Cannot open "+ filename, e);
+            log.error("Cannot open " + filename, e);
         }
         log.info("... Leaving");
     }

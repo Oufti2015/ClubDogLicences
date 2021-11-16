@@ -2,6 +2,7 @@ package sst.licences.mail;
 
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
 import javax.mail.*;
@@ -33,9 +34,9 @@ public class EnvoyerUnEmail {
     }
 
     public void envoyerAffiliation() {
-        final String password = System.getenv("MAIL_PWD");
+        final String password = System.getenv(LicencesConstants.ENV_MAIL_PWD);
         Properties props;
-        String testMode = System.getenv("TEST_MODE");
+        String testMode = System.getenv(LicencesConstants.ENV_TEST_MODE);
         if (testMode == null || testMode.equalsIgnoreCase("True")) {
             props = mailProperties();
         } else {
