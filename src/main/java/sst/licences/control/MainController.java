@@ -7,8 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
@@ -230,7 +228,7 @@ public class MainController {
 
         selectedItem.init(membre);
 
-        LicencesContainer.me().save();
+        LicencesContainer.me().saveJSON();
         reset();
     }
 
@@ -419,7 +417,7 @@ public class MainController {
         BelfiusFile bf = new BelfiusFile();
         if (files != null) {
             bf.parseFiles(files);
-            LicencesContainer.me().save();
+            LicencesContainer.me().saveJSON();
         }
     }
 

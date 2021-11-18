@@ -11,7 +11,7 @@ import java.util.List;
 public class DuplicateCheck {
     public static void main(String[] args) {
         log.trace("Starting...");
-        LicencesContainer.load();
+        LicencesContainer.loadJSON();
         List<Membre> duplicates = new ArrayList<>();
         List<Membre> membres = LicencesContainer.me().membres();
         for (Membre m : membres) {
@@ -29,6 +29,6 @@ public class DuplicateCheck {
         membres.removeAll(duplicates);
         membres.addAll(duplicates);
         log.info("members = " + membres.size());
-        LicencesContainer.me().save();
+        LicencesContainer.me().saveJSON();
     }
 }

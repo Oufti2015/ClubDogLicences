@@ -15,7 +15,7 @@ public class AttachTechId {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public static void main(String[] args) {
-        LicencesContainer.load();
+        LicencesContainer.loadJSON();
         LocalDate start = LocalDate.of(1982, Month.DECEMBER, 31);
         Map<String, String> addressMap = new HashMap<>();
         for (Membre m : LicencesContainer.me().membres()) {
@@ -24,7 +24,7 @@ public class AttachTechId {
                 String bankId = addressMap.get(addressId);
                 if (bankId == null) {
                     String id = start.format(formatter) + "01";
-                    LicencesContainer.me().setLastBankIdentiferGenerated(id);
+                    LicencesContainer.me().getConfig().setLastBankIdentifierGenerated(id);
                     long longId = Long.parseLong(id);
                     long modulo = longId % 97;
                     bankId = String.format("%s/%s/%s%02d", id.substring(0, 3), id.substring(3, 7), id.substring(7), modulo);
@@ -36,6 +36,6 @@ public class AttachTechId {
             }
         }
 
-        LicencesContainer.me().save();
+        LicencesContainer.me().saveJSON();
     }
 }

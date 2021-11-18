@@ -28,7 +28,7 @@ public class ClubDogLicences extends Application {
         log.info("Starting ...");
         checkEnvironmentVariable(LicencesConstants.ENV_MAIL_PWD, false);
         checkEnvironmentVariable(LicencesConstants.ENV_TEST_MODE, true);
-        LicencesContainer.load();
+        LicencesContainer.loadJSON();
 
         FXMLLoader loader = new FXMLLoader();
         URL fxml = ClubDogLicences.class.getResource("/licenses.fxml");

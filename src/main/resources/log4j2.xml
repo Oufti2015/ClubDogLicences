@@ -22,6 +22,7 @@
         </Logger>
         <Root level="info">
             <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="LogToConsole"/>
         </Root>
     </Loggers>
 </Configuration>
