@@ -117,12 +117,14 @@ public class LicencesContainer {
         if (Strings.isNotEmpty(membre.getAccountId())) {
             result = payments.stream()
                     .filter(p -> p.getCompte().equals(membre.getAccountId()))
+                    .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
                     .map(Payment::toString)
                     .collect(Collectors.joining("\n"));
         } else {
             result = payments.stream()
                     .filter(p -> p.getNom().toLowerCase(Locale.ROOT).contains(membre.getNom().toLowerCase(Locale.ROOT))
                             && LicencesContainer.me.membres().stream().map(Membre::getAccountId).filter(a -> a != null && a.equals(p.getCompte())).count() == 0)
+                    .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
                     .map(Payment::toFullString)
                     .collect(Collectors.joining("\n"));
         }
