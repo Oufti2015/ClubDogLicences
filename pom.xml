@@ -6,7 +6,7 @@
 
     <groupId>sst.licences</groupId>
     <artifactId>ClubDogLicences</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -124,5 +124,11 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 </project>

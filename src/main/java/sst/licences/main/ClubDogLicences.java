@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -25,6 +26,10 @@ public class ClubDogLicences extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         log.info("---------------------------------------------------------------------------------------------------");
+        final Properties properties = new Properties();
+        properties.load(ClubDogLicences.class.getResourceAsStream("/licences.properties"));
+        log.info("application.version = " + properties.getProperty("application.version"));
+        log.info("project.name        = " + properties.getProperty("project.name"));
         log.info("Starting ...");
         checkEnvironmentVariable(LicencesConstants.ENV_MAIL_PWD, false);
         checkEnvironmentVariable(LicencesConstants.ENV_TEST_MODE, true);
@@ -37,7 +42,7 @@ public class ClubDogLicences extends Application {
         Parent root = loader.load();
         MainController controller = loader.getController();
         controller.setPrimaryStage(primaryStage);
-        primaryStage.setTitle(LicencesConstants.APPLICATION_TITLE);
+        primaryStage.setTitle(LicencesConstants.APPLICATION_TITLE + " " + properties.getProperty("application.version"));
         primaryStage.setScene(new Scene(root, 1920, 1080));
         primaryStage.setMaximized(true);
         InputStream icon = ClubDogLicences.class.getResourceAsStream("/icon.png");
