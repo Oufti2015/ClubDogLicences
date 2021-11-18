@@ -10,12 +10,9 @@ import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 import sst.licences.model.Payment;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -82,8 +79,10 @@ public class LicencesContainer {
             // create Gson instance
             Gson gson = new Gson();
             // create a reader
-            try (Reader reader = Files.newBufferedReader(Paths.get(LicencesConstants.MEMBRES_JSON_FILE), StandardCharsets.ISO_8859_1)) {
-                // convert JSON string to LicencesContainer object
+            try (InputStreamReader reader = new InputStreamReader(
+                    new FileInputStream(LicencesConstants.MEMBRES_JSON_FILE),
+                    StandardCharsets.UTF_8.newDecoder())) {
+                // convert JSON string to Book object
                 me = gson.fromJson(reader, LicencesContainer.class);
                 log.info(String.format("...%5d membres chargés.", me().membres.size()));
                 log.info(String.format("...%5d payements chargés.", me().payments.size()));
@@ -101,8 +100,10 @@ public class LicencesContainer {
             // convert book object to JSON
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String json = gson.toJson(LicencesContainer.me());
-            try (FileWriter myWriter = new FileWriter(LicencesConstants.MEMBRES_JSON_FILE)) {
-                myWriter.write(json);
+            try (OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream(LicencesConstants.MEMBRES_JSON_FILE),
+                    StandardCharsets.UTF_8.newEncoder())) {
+                writer.write(json);
             }
         } catch (IOException e) {
             log.fatal("Cannot write JSON file " + LicencesConstants.MEMBRES_JSON_FILE, e);
