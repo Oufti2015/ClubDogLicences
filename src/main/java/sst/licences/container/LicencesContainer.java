@@ -84,8 +84,8 @@ public class LicencesContainer {
                     StandardCharsets.UTF_8.newDecoder())) {
                 // convert JSON string to Book object
                 me = gson.fromJson(reader, LicencesContainer.class);
-                log.info(String.format("...%5d membres chargés.", me().membres.size()));
-                log.info(String.format("...%5d payements chargés.", me().payments.size()));
+                log.info(String.format("...%5d members loaded.", me().membres.size()));
+                log.info(String.format("...%5d payements loaded.", me().payments.size()));
             }
         } catch (Exception ex) {
             log.fatal("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE, ex);

@@ -3,13 +3,13 @@ package sst.licences.mail;
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.main.LicencesConstants;
+import sst.licences.model.Email;
 import sst.licences.model.Membre;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.swing.text.html.Option;
-import java.io.*;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
@@ -49,13 +49,13 @@ public class EnvoyerUnEmail {
                         return new PasswordAuthentication(BCARLONAIS_GMAIL_COM, password);
                     }
                 });
-        List<String> emailSent = new ArrayList<>();
+        List<Email> emailSent = new ArrayList<>();
 
         List<Membre> errors = new ArrayList<>();
 
         List<Membre> membres = eligibleMembres();
         for (Membre membre : membres) {
-            if (!emailSent.contains(membre.getEmail()) || emailExceptions.contains(membre.getEmail())) {
+            if (!emailSent.contains(membre.getEmail()) || emailExceptions.contains(membre.getEmail().getAdresse())) {
                 String msg = String.format("%s %s (%s) : ", membre.getPrenom(), membre.getNom(), membre.getEmail());
                 try {
                     affiliation(membre, session);
@@ -66,7 +66,7 @@ public class EnvoyerUnEmail {
                 }
             }
 
-            emailSent.add(membre.getEmail().getAdresse());
+            emailSent.add(membre.getEmail());
         }
         if (!errors.isEmpty()) {
             log.error("--- Errors List ---");

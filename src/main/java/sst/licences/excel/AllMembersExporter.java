@@ -23,6 +23,7 @@ public class AllMembersExporter extends ExportToExcel {
 
     @Override
     public void updateMembre(Membre membre) {
+        // No update needed
     }
 
     @Override

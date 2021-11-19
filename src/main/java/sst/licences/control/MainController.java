@@ -179,7 +179,7 @@ public class MainController {
 
     @FXML
     public void rowselected(MouseEvent mouseEvent) {
-        SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
+        SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             licenceText.setText(selectedItem.getLicence());
             dateDeNaissancePicker.setValue(selectedItem.getMembre().getDateDeNaissance());
@@ -207,7 +207,7 @@ public class MainController {
 
     @FXML
     public void updateAction(javafx.event.ActionEvent actionEvent) {
-        SimpleMembre selectedItem = (SimpleMembre) mainTableView.getSelectionModel().getSelectedItem();
+        SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         Membre membre = selectedItem.getMembre();
         membre.setNom(nomText.getText());
         membre.setPrenom(prenomText.getText());
@@ -317,8 +317,8 @@ public class MainController {
 
     private String message(String message) {
         String result = message;
-        for (String key : fields.keySet()) {
-            result = result.replace(key, fields.get(key));
+        for (Map.Entry<String, String> entry : fields.entrySet()) {
+            result = result.replace(entry.getKey(), fields.get(entry.getValue()));
         }
         return result;
     }

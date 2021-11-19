@@ -38,36 +38,39 @@ public class BelfiusFile {
                          .build()) {
                 List<String[]> lines = reader.readAll();
 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
                 for (String[] data : lines) {
-                    Double montant = Double.parseDouble(data[10].replace(",", "."));
-
-                    if (montant.compareTo(0.00) > 0) {
-                        Payment vd = new Payment();
-
-                        vd.setValueDate(data[1]);
-                        vd.setExtractnNumber(data[2]);
-                        vd.setPaymentNumber(data[3]);
-                        vd.setDate(LocalDate.parse(data[1], formatter));
-                        vd.setCompte(data[4]);
-                        vd.setNom(data[5]);
-                        vd.setMontant(montant);
-                        vd.setCommunications(data[14]);
-
-                        if (vd.isComplete()) {
-                            if (!LicencesContainer.me().payments().contains(vd)) {
-                                LicencesContainer.me().payments().add(vd);
-                            }
-                        } else {
-                            incompletePayments.add(vd);
-                        }
-                    }
+                    processLine(incompletePayments, data);
                 }
                 updateMembres(LicencesContainer.me().payments());
                 updateMembres(incompletePayments);
             } catch (IOException | CsvException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private void processLine(List<Payment> incompletePayments, String[] data) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Double montant = Double.parseDouble(data[10].replace(",", "."));
+        LocalDate parse = LocalDate.parse(data[1], formatter);
+        if (montant.compareTo(0.00) > 0) {
+            Payment vd = new Payment();
+
+            vd.setValueDate(data[1]);
+            vd.setExtractnNumber(data[2]);
+            vd.setPaymentNumber(data[3]);
+            vd.setDate(parse);
+            vd.setCompte(data[4]);
+            vd.setNom(data[5]);
+            vd.setMontant(montant);
+            vd.setCommunications(data[14]);
+
+            if (vd.isComplete()) {
+                if (!LicencesContainer.me().payments().contains(vd)) {
+                    LicencesContainer.me().payments().add(vd);
+                }
+            } else {
+                incompletePayments.add(vd);
             }
         }
     }

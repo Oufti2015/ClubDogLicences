@@ -31,7 +31,6 @@ public class CreateJsonFile {
     public static void main(String[] args) {
         List<Membre> list = new ArrayList<>();
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-        //FileReader reader1 = new FileReader("data//leden-membres-template.csv");
 
         try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(LicencesConstants.DATA_LEDEN_MEMBRES_TEMPLATE_CSV), CHARSET);
              CSVReader reader = new CSVReaderBuilder(inputStreamReader)
