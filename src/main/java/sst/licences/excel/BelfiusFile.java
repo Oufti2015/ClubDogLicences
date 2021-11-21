@@ -19,19 +19,26 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Log4j2
 public class BelfiusFile {
-    public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
+    public static final Charset CHARSET = StandardCharsets.UTF_8;
 
-    public void parseFiles(List<File> files) {
+    public int parseFiles(List<File> files) {
+        int size = files.size();
+        log.info("Parsing " + size + " Belfius files...");
+        log.info("Actual payments count : " + LicencesContainer.me().payments().size());
+
         List<Payment> incompletePayments = new ArrayList<>();
 
-        for (File file : files) {
+        List<File> fileList = files.stream().sorted(Comparator.comparing(File::getAbsolutePath)).collect(Collectors.toList());
+        for (File file : fileList) {
+            log.info("Importing Belfius file : " + file.getAbsolutePath() + "...");
             CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-            try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), CHARSET);
+            try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), "Cp1252");
                  CSVReader reader = new CSVReaderBuilder(inputStreamReader)
                          .withCSVParser(csvParser)   // custom CSV parser
                          .withSkipLines(13)           // skip the first line, header info
@@ -47,6 +54,10 @@ public class BelfiusFile {
                 e.printStackTrace();
             }
         }
+        log.info("Actual payments count : " + LicencesContainer.me().payments().size());
+        log.info("Belfius files import done.");
+
+        return size;
     }
 
     private void processLine(List<Payment> incompletePayments, String[] data) {

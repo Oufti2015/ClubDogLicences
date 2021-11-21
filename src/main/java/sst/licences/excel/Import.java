@@ -25,14 +25,13 @@ import java.util.List;
 @Log4j2
 public class Import {
 
-    public void importFromCsv(File file) {
+    public Boolean importFromCsv(File file) {
         log.info("Importing file " + file + "...");
 
         List<Membre> list = new ArrayList<>();
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
 
         LicencesContainer.me().membres().forEach(m -> m.setSentToMyKKusch(false));
-
         try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), CHARSET);
              CSVReader reader = new CSVReaderBuilder(inputStreamReader)
                      .withCSVParser(csvParser)   // custom CSV parser
@@ -64,7 +63,9 @@ public class Import {
             log.info("... done.");
         } catch (IOException | CsvException e) {
             log.error("Error parsing file " + file, e);
+            return false;
         }
+        return true;
     }
 
     private Membre member(String[] x) {

@@ -7,8 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
@@ -31,6 +29,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Stream;
 
 @Log4j2
@@ -367,6 +366,8 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        messageDialog("Export File For MYKKUSH", "Export done.");
     }
 
     public void exportCompleteFile(ActionEvent actionEvent) {
@@ -376,6 +377,8 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        messageDialog("Export Complete File", "Export done.");
     }
 
     public void importFileFromMYKKUSH(ActionEvent actionEvent) {
@@ -383,8 +386,24 @@ public class MainController {
         File file = fileChooser.showOpenDialog(this.primaryStage);
         if (file != null) {
             log.debug("file selected = " + file);
-            new Import().importFromCsv(file);
+            Callable<Boolean> task = () -> new Import().importFromCsv(file);
+            ExecutorService executor = Executors.newFixedThreadPool(1);
+            Future<Boolean> future = executor.submit(task);
+
+            System.out.println("future done? " + future.isDone());
+
+            Boolean result = null;
+            try {
+                result = future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("future done? " + future.isDone());
+            System.out.print("result: " + result);
         }
+
+        messageDialog("Import File From MYKKUSH", "MYKKUSH file imported.");
     }
 
     public void emailForAffiliation(ActionEvent actionEvent) {
@@ -405,22 +424,30 @@ public class MainController {
             Optional<String> enterAPassword = enterAPassword();
             if (enterAPassword.isPresent()) {
                 envoi.envoyerAffiliation(enterAPassword.get());
-                alert = new Alert(Alert.AlertType.INFORMATION, envoi.eligibleMembresSize() + " e-mail envoyés !",
-                        ButtonType.OK);
-                alert.showAndWait();
+                messageDialog("Email sending", String.format("%d e-mail envoyés !.", envoi.eligibleMembresSize()));
             }
         }
     }
 
 
     public void parseBelfius(ActionEvent actionEvent) {
+        int fileCount = 0;
         FileChooser fileChooser = csvFileChooser("Choisir le fichier Belfius");
         List<File> files = fileChooser.showOpenMultipleDialog(primaryStage);
         BelfiusFile bf = new BelfiusFile();
         if (files != null) {
-            bf.parseFiles(files);
+            fileCount = bf.parseFiles(files);
             LicencesContainer.me().save();
         }
+
+        messageDialog("Belfius file import", String.format("%d Belfius file(s) processed.", fileCount));
+    }
+
+    private void messageDialog(String headerText, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
+        alert.setTitle("You have a message!");
+        alert.setHeaderText(headerText);
+        alert.showAndWait();
     }
 
     private FileChooser csvFileChooser(String title) {
