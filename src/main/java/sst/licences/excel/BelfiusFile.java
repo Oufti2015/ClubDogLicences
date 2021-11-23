@@ -7,6 +7,7 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 import sst.licences.model.Payment;
 
@@ -25,8 +26,6 @@ import java.util.stream.Collectors;
 
 @Log4j2
 public class BelfiusFile {
-    public static final Charset CHARSET = StandardCharsets.UTF_8;
-
     public int parseFiles(List<File> files) {
         int size = files.size();
         log.info("Parsing " + size + " Belfius files...");
@@ -38,7 +37,7 @@ public class BelfiusFile {
         for (File file : fileList) {
             log.info("Importing Belfius file : " + file.getAbsolutePath() + "...");
             CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-            try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), "Cp1252");
+            try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), LicencesConstants.CHARSET_ANSI_CP_1252);
                  CSVReader reader = new CSVReaderBuilder(inputStreamReader)
                          .withCSVParser(csvParser)   // custom CSV parser
                          .withSkipLines(13)           // skip the first line, header info

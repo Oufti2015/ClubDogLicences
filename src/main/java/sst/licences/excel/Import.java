@@ -7,6 +7,7 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Comite;
 import sst.licences.model.Membre;
 
@@ -25,14 +26,14 @@ import java.util.List;
 @Log4j2
 public class Import {
 
-    public Boolean importFromCsv(File file) {
+    public void importFromCsv(File file) {
         log.info("Importing file " + file + "...");
 
         List<Membre> list = new ArrayList<>();
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
 
         LicencesContainer.me().membres().forEach(m -> m.setSentToMyKKusch(false));
-        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), CHARSET);
+        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), LicencesConstants.CHARSET_ANSI_CP_1252);
              CSVReader reader = new CSVReaderBuilder(inputStreamReader)
                      .withCSVParser(csvParser)   // custom CSV parser
                      .withSkipLines(1)           // skip the first line, header info
@@ -63,9 +64,7 @@ public class Import {
             log.info("... done.");
         } catch (IOException | CsvException e) {
             log.error("Error parsing file " + file, e);
-            return false;
         }
-        return true;
     }
 
     private Membre member(String[] x) {

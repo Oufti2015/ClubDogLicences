@@ -75,6 +75,7 @@
                       <MenuItem mnemonicParsing="false" onAction="#emailForAffiliationSelected" text="Membre sélectionné" />
                     </items>
                   </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#signalticCheck" text="Verification" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

@@ -18,7 +18,9 @@ import sst.licences.container.SimpleMembre;
 import sst.licences.control.filters.AffiliationFilter;
 import sst.licences.control.filters.ComiteFilter;
 import sst.licences.excel.*;
-import sst.licences.mail.EnvoyerUnEmail;
+import sst.licences.mail.SendAReafiliationEmail;
+import sst.licences.mail.SendASignaleticCheckEmail;
+import sst.licences.mail.SendAnEmail;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Country;
 import sst.licences.model.CountryList;
@@ -29,7 +31,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.stream.Stream;
 
 @Log4j2
@@ -385,37 +386,27 @@ public class MainController {
         final FileChooser fileChooser = csvFileChooser("Choisir le fichier de MyKKUSH");
         File file = fileChooser.showOpenDialog(this.primaryStage);
         if (file != null) {
-            log.debug("file selected = " + file);
-            Callable<Boolean> task = () -> new Import().importFromCsv(file);
-            ExecutorService executor = Executors.newFixedThreadPool(1);
-            Future<Boolean> future = executor.submit(task);
-
-            System.out.println("future done? " + future.isDone());
-
-            Boolean result = null;
-            try {
-                result = future.get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println("future done? " + future.isDone());
-            System.out.print("result: " + result);
+           new Import().importFromCsv(file);
         }
 
         messageDialog("Import File From MYKKUSH", "MYKKUSH file imported.");
     }
 
+    public void signalticCheck(ActionEvent actionEvent) {
+        SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
+        envoyerEmails(new SendASignaleticCheckEmail(Collections.singletonList(selectedItem.getMembre())));
+    }
+
     public void emailForAffiliation(ActionEvent actionEvent) {
-        envoyerEmails(new EnvoyerUnEmail());
+        envoyerEmails(new SendAReafiliationEmail(SendAReafiliationEmail.eligibleMembres()));
     }
 
     public void emailForAffiliationSelected(ActionEvent actionEvent) {
         SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
-        envoyerEmails(new EnvoyerUnEmail(selectedItem.getMembre()));
+        envoyerEmails(new SendAReafiliationEmail(Collections.singletonList(selectedItem.getMembre())));
     }
 
-    private void envoyerEmails(EnvoyerUnEmail envoi) {
+    private void envoyerEmails(SendAnEmail envoi) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Êtes-vous sûr de vouloir envoyer " + envoi.eligibleMembresSize() + " e-mail ?",
                 ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         alert.showAndWait();
@@ -423,7 +414,7 @@ public class MainController {
         if (Objects.equals(alert.getResult(), ButtonType.YES)) {
             Optional<String> enterAPassword = enterAPassword();
             if (enterAPassword.isPresent()) {
-                envoi.envoyerAffiliation(enterAPassword.get());
+                envoi.sendAnEmail(enterAPassword.get());
                 messageDialog("Email sending", String.format("%d e-mail envoyés !.", envoi.eligibleMembresSize()));
             }
         }
