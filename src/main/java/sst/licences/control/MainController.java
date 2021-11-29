@@ -242,6 +242,8 @@ public class MainController {
             m.setCodePostal(membre.getCodePostal());
             m.setLocalite(membre.getLocalite());
             m.setDescription(membre.getDescription());
+            m.setAccountId(membre.getAccountId());
+            m.setAffiliation(membre.getAffiliation());
         }
     }
 
