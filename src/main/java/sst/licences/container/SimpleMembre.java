@@ -26,6 +26,7 @@ public class SimpleMembre {
     private final SimpleStringProperty affiliation = new SimpleStringProperty("");
     private final SimpleStringProperty accountId = new SimpleStringProperty("");
     private final SimpleStringProperty description = new SimpleStringProperty("");
+    private final SimpleBooleanProperty active = new SimpleBooleanProperty(true);
 
     @Getter
     private Membre membre;
@@ -56,6 +57,7 @@ public class SimpleMembre {
             this.affiliation.set(membre.getAffiliation().toString());
         }
         this.description.set(membre.getDescription());
+        this.active.set(membre.isActive());
     }
 
     public String getNom() {
@@ -200,5 +202,13 @@ public class SimpleMembre {
 
     public SimpleStringProperty description() {
         return description;
+    }
+
+    public boolean isActive() {
+        return active.get();
+    }
+
+    public SimpleBooleanProperty activeProperty() {
+        return active;
     }
 }

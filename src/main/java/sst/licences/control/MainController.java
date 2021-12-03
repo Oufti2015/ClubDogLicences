@@ -93,6 +93,8 @@ public class MainController {
     private ComboBox<ComiteFilter> comiteFilterComboBox;
     @FXML
     private ComboBox<AffiliationFilter> affiliationFilterComboBox;
+    @FXML
+    private CheckBox activeCheck;
 
     @FXML
     public void initialize() {
@@ -202,6 +204,7 @@ public class MainController {
             dscpTextArea.setText(selectedItem.getDescription());
             paymentsTextArea.setText(LicencesContainer.me().payments(selectedItem.getMembre()));
             techIdLabel.setText(selectedItem.getMembre().getTechnicalIdentifer());
+            activeCheck.setSelected(selectedItem.isActive());
         }
     }
 
@@ -225,6 +228,7 @@ public class MainController {
         membre.setAffiliation(affiliationDatePicker.getValue());
         membre.setAccountId(accountText.getText());
         membre.setDescription(dscpTextArea.getText());
+        membre.setActive(activeCheck.isSelected());
 
         updateFamily(membre);
 
@@ -356,6 +360,7 @@ public class MainController {
         techIdLabel.clear();
         comiteCheck.setSelected(false);
         affiliationDatePicker.setValue(null);
+        activeCheck.setSelected(true);
 
         if (!justCleanForm) {
             filter();
@@ -388,7 +393,7 @@ public class MainController {
         final FileChooser fileChooser = csvFileChooser("Choisir le fichier de MyKKUSH");
         File file = fileChooser.showOpenDialog(this.primaryStage);
         if (file != null) {
-           new Import().importFromCsv(file);
+            new Import().importFromCsv(file);
         }
 
         messageDialog("Import File From MYKKUSH", "MYKKUSH file imported.");

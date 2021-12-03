@@ -66,6 +66,18 @@ public class LicencesContainer {
     }
 
     public List<Membre> membres() {
+        return activeMembers();
+    }
+
+    public List<Membre> activeMembers() {
+        return membres.stream().filter(Membre::isActive).collect(Collectors.toList());
+    }
+
+    public List<Membre> inactiveMembers() {
+        return membres.stream().filter(m -> !m.isActive()).collect(Collectors.toList());
+    }
+
+    public List<Membre> allMembers() {
         return membres;
     }
 

@@ -86,7 +86,7 @@ public class BelfiusFile {
     }
 
     private void updateMembres(List<Payment> belfius) {
-        for (Membre membre : LicencesContainer.me().membres()) {
+        for (Membre membre : LicencesContainer.me().allMembers()) {
             List<Payment> vds = belfius.stream()
                     .filter(vd -> membre.getTechnicalIdentifer() != null
                             && vd.getCommunications() != null
@@ -96,7 +96,7 @@ public class BelfiusFile {
                 if (membre.getAffiliation() == null || membre.getAffiliation().isBefore(vd.getDate())) {
                     membre.setAffiliation(vd.getDate());
                     membre.setAccountId(vd.getCompte());
-
+                    membre.setActive(true);
                     log.info(membre.getPrenom() + " " + membre.getNom() + " est réaffilié " + vd.getDate());
                 }
             }

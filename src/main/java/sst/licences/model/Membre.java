@@ -50,6 +50,7 @@ public class Membre implements Comparable<Membre> {
     private String accountId;
     private String technicalIdentifer;
     private String description;
+    private boolean active = true;
 
     public void setEmailAddress(String address) {
         email = new Email(address);
