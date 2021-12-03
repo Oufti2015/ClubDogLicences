@@ -11,8 +11,8 @@ import sst.licences.model.Membre;
 import sst.licences.model.Payment;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -144,9 +144,25 @@ public class LicencesContainer {
     }
 
     public List<Membre> compositionFamily(Membre membre) {
-        return LicencesContainer.me().membres()
+        return LicencesContainer.me().allMembers()
                 .stream()
                 .filter(m -> Membre.addressId(m).equals(Membre.addressId(membre)))
                 .collect(Collectors.toList());
+    }
+
+    public List<Membre> thisYearMembers() {
+        return MemberEligibility.eligibleMembres(LocalDate.now().getYear());
+    }
+
+    public List<Membre> nextYearMembers() {
+        return MemberEligibility.eligibleMembres(LocalDate.now().getYear() + 1);
+    }
+
+    public List<Membre> unpaidMembers() {
+        return MemberEligibility.unpaid(LocalDate.now().getYear());
+    }
+
+    public List<Membre> comityMembers() {
+        return membres().stream().filter(Membre::isComite).collect(Collectors.toList());
     }
 }

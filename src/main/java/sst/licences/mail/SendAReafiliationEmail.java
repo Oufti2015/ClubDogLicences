@@ -60,26 +60,4 @@ public class SendAReafiliationEmail extends SendAnEmail {
     protected Boolean isEligible(String emailAddress) {
         return true;
     }
-
-    public static List<Membre> eligibleMembres() {
-        LocalDate dateStart = dateStart();
-        LocalDate dateEnd = dateEnd();
-        List<Membre> collect = LicencesContainer.me().membres()
-                .stream()
-                .filter(m -> !m.isComite() && (m.getAffiliation() == null ||
-                        (m.getAffiliation().isAfter(dateStart) && m.getAffiliation().isBefore(dateEnd))))
-                .collect(Collectors.toList());
-        log.debug("" + collect.size() + " membres éligibles pour email ! ");
-        return collect;
-    }
-
-    private static LocalDate dateEnd() {
-        LocalDate now = LocalDate.now();
-        return LocalDate.of(now.getYear(), Month.SEPTEMBER, 1);
-    }
-
-    private static LocalDate dateStart() {
-        LocalDate now = LocalDate.now();
-        return LocalDate.of(now.getYear() - 1, Month.SEPTEMBER, 1);
-    }
 }

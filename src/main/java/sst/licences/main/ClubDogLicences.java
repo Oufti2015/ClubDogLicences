@@ -11,6 +11,7 @@ import org.apache.logging.log4j.util.Strings;
 import sst.common.file.output.OutputFile;
 import sst.licences.container.LicencesContainer;
 import sst.licences.control.MainController;
+import sst.licences.report.AllMembersReport;
 import sst.licences.report.PaymentsReport;
 
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class ClubDogLicences extends Application {
 
     private void onClose() {
         String report = new PaymentsReport()
-                .input(LicencesContainer.me().membres()
+                .input(LicencesContainer.me().allMembers()
                         .stream()
                         .filter(m -> Strings.isNotEmpty(LicencesContainer.me().payments(m)))
                         .collect(Collectors.toList()))
@@ -81,6 +82,9 @@ public class ClubDogLicences extends Application {
         } catch (IOException e) {
             log.error("Cannot open " + filename, e);
         }
+
+        String output = new AllMembersReport().input(LicencesContainer.me().allMembers()).format().output();
+        log.info("output = " + output);
         log.info("... Leaving");
     }
 

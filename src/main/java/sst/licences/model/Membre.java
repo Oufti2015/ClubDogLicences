@@ -114,4 +114,8 @@ public class Membre implements Comparable<Membre> {
     public String fullName() {
         return prenom + " " + nom;
     }
+
+    public String fullAddress() {
+        return rue + ", " + num + " " + codePostal + " " + localite + " (" + codePays + ")";
+    }
 }

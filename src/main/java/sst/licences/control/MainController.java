@@ -14,6 +14,7 @@ import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 import sst.licences.bank.BankIdentifierGenerator;
 import sst.licences.container.LicencesContainer;
+import sst.licences.container.MemberEligibility;
 import sst.licences.container.SimpleMembre;
 import sst.licences.control.filters.AffiliationFilter;
 import sst.licences.control.filters.ComiteFilter;
@@ -405,7 +406,7 @@ public class MainController {
     }
 
     public void emailForAffiliation(ActionEvent actionEvent) {
-        envoyerEmails(new SendAReafiliationEmail(SendAReafiliationEmail.eligibleMembres()));
+        envoyerEmails(new SendAReafiliationEmail(MemberEligibility.eligibleMembres()));
     }
 
     public void emailForAffiliationSelected(ActionEvent actionEvent) {
