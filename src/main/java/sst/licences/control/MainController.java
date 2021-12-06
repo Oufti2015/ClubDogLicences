@@ -96,6 +96,10 @@ public class MainController {
     private ComboBox<AffiliationFilter> affiliationFilterComboBox;
     @FXML
     private CheckBox activeCheck;
+    @FXML
+    private Button currentYearButton;
+    @FXML
+    private Button yearPlusOneButton;
 
     @FXML
     public void initialize() {
@@ -117,6 +121,9 @@ public class MainController {
         filterDscp.textProperty().addListener((observable, oldValue, newValue) -> filter());
         comiteFilterComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> filter());
         affiliationFilterComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> filter());
+
+        currentYearButton.setText("" + LocalDate.now().getYear());
+        yearPlusOneButton.setText("" + (LocalDate.now().getYear() + 1));
     }
 
     private void filter() {
@@ -204,8 +211,23 @@ public class MainController {
             affiliationDatePicker.setDisable(selectedItem.isComite());
             dscpTextArea.setText(selectedItem.getDescription());
             paymentsTextArea.setText(LicencesContainer.me().payments(selectedItem.getMembre()));
-            techIdLabel.setText(selectedItem.getMembre().getTechnicalIdentifer());
+            techIdLabel.setText(selectedItem.getMembre().getTechnicalIdentifier());
             activeCheck.setSelected(selectedItem.isActive());
+            colorButton(selectedItem);
+        }
+    }
+
+    private void colorButton(SimpleMembre selectedItem) {
+        Membre member = selectedItem.getMembre();
+        if (member.isComite() || MemberEligibility.isCurrentYearAffiliated(member)) {
+            setGreenButton(currentYearButton);
+        } else {
+            setRedButton(currentYearButton);
+        }
+        if (member.isComite() || MemberEligibility.isNextYearAffiliated(member)) {
+            setGreenButton(yearPlusOneButton);
+        } else {
+            setRedButton(yearPlusOneButton);
         }
     }
 
@@ -275,7 +297,7 @@ public class MainController {
 
         membre.setLicence(null);
         membre.setSentToMyKKusch(false);
-        membre.setTechnicalIdentifer(BankIdentifierGenerator.newId(membre));
+        membre.setTechnicalIdentifier(BankIdentifierGenerator.newId(membre));
 
         if (validate(membre)) {
             LicencesContainer.me().addMembre(membre);
@@ -362,6 +384,8 @@ public class MainController {
         comiteCheck.setSelected(false);
         affiliationDatePicker.setValue(null);
         activeCheck.setSelected(true);
+        resetButton(currentYearButton);
+        resetButton(yearPlusOneButton);
 
         if (!justCleanForm) {
             filter();
@@ -501,5 +525,33 @@ public class MainController {
             return dialog.showAndWait();
         }
         return Optional.of(password);
+    }
+
+    private String defaultButtonStyle = null;
+
+    private void setGreenButton(Button button) {
+        if (defaultButtonStyle == null) {
+            defaultButtonStyle = button.getStyle();
+        }
+        button.setStyle("-fx-background-color: linear-gradient(#3fc135, #a9ff00);\n" +
+                "    -fx-background-radius: 30;\n" +
+                "    -fx-background-insets: 0;\n" +
+                "    -fx-text-fill: black;");
+    }
+
+    private void setRedButton(Button button) {
+        if (defaultButtonStyle == null) {
+            defaultButtonStyle = button.getStyle();
+        }
+        button.setStyle("-fx-background-color: linear-gradient(#ff5400, #be1d00);\n" +
+                "    -fx-background-radius: 30;\n" +
+                "    -fx-background-insets: 0;\n" +
+                "    -fx-text-fill: white;");
+    }
+
+    private void resetButton(Button button) {
+        if (defaultButtonStyle != null) {
+            button.setStyle(defaultButtonStyle);
+        }
     }
 }

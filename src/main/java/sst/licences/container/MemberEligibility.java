@@ -48,4 +48,17 @@ public class MemberEligibility {
                 .filter(m -> !m.isComite() && (m.getAffiliation() == null || m.getAffiliation().isBefore(dateStart)))
                 .collect(Collectors.toList());
     }
+
+    public static boolean isAffiliated(Membre membre, int year) {
+        LocalDate dateStart = LocalDate.of(year - 1, Month.SEPTEMBER, 1);
+        return !membre.isComite() && (membre.getAffiliation() == null || membre.getAffiliation().isAfter(dateStart));
+    }
+
+    public static boolean isCurrentYearAffiliated(Membre membre) {
+        return isAffiliated(membre, LocalDate.now().getYear());
+    }
+
+    public static boolean isNextYearAffiliated(Membre membre) {
+        return isAffiliated(membre, LocalDate.now().getYear() + 1);
+    }
 }

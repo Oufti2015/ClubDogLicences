@@ -41,7 +41,7 @@ public class BankIdentifierGenerator {
 
     private static void initAddresses() {
         for (Membre membre : LicencesContainer.me().membres()) {
-            addressesMap.put(Membre.addressId(membre), membre.getTechnicalIdentifer());
+            addressesMap.put(Membre.addressId(membre), membre.getTechnicalIdentifier());
         }
     }
 

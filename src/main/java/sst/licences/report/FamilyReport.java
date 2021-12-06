@@ -64,7 +64,7 @@ public class FamilyReport implements Report {
         table.newRow().newHead("Compte");
         table.row().newCell(MoreObjects.firstNonNull(member.getAccountId(), AllMembersReport.NBSP));
         table.newRow().newHead("Comm. struct.");
-        table.row().newCell(member.getTechnicalIdentifer());
+        table.row().newCell(member.getTechnicalIdentifier());
         table.newRow().newHead("Affilié depuis");
         table.row().newCell(affiliation(member));
         table.newRow().newHead("Actif");

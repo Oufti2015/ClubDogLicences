@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -88,9 +86,9 @@ public class BelfiusFile {
     private void updateMembres(List<Payment> belfius) {
         for (Membre membre : LicencesContainer.me().allMembers()) {
             List<Payment> vds = belfius.stream()
-                    .filter(vd -> membre.getTechnicalIdentifer() != null
+                    .filter(vd -> membre.getTechnicalIdentifier() != null
                             && vd.getCommunications() != null
-                            && vd.getCommunications().contains(membre.getTechnicalIdentifer()))
+                            && vd.getCommunications().contains(membre.getTechnicalIdentifier()))
                     .collect(Collectors.toList());
             for (Payment vd : vds) {
                 if (membre.getAffiliation() == null || membre.getAffiliation().isBefore(vd.getDate())) {

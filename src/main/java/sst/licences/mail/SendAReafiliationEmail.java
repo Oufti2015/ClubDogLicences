@@ -4,10 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Membre;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Log4j2
 public class SendAReafiliationEmail extends SendAnEmail {
@@ -42,7 +39,7 @@ public class SendAReafiliationEmail extends SendAnEmail {
         sb.append("\n");
         sb.append(typeOfAffiliation(composition));
         sb.append("\n");
-        sb.append(String.format("IBAN: BE71 0689 0687 6669 - BIC: GKCCBEBB - avec la communication : *** %s ***%n", membre.getTechnicalIdentifer()));
+        sb.append(String.format("IBAN: BE71 0689 0687 6669 - BIC: GKCCBEBB - avec la communication : *** %s ***%n", membre.getTechnicalIdentifier()));
         sb.append("\n");
         SendASignaleticCheckEmail.signaleticData(membre, composition, sb);
         sb.append("Si vos informations sont incorrectes ou incomplètes,\nSi vous avez déjà payé l'affiliation 2022,\nmerci de prendre contact avec moi en répondant à ce mail.\n");

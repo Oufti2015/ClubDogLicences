@@ -53,7 +53,6 @@ public class AllMembersReport implements Report {
                         .collect(Collectors.toList());
                 String filename = familyFileName(member);
                 String report = new FamilyReport().input(family).format().output();
-                log.info("\n" + report + "\n");
                 alreadyDone.addAll(family);
                 try (OutputFile output = new OutputFile(filename)) {
                     output.println(report);
@@ -63,11 +62,11 @@ public class AllMembersReport implements Report {
     }
 
     public static String familyFileName(Membre member) {
-        String technicalIdentifer = member.getTechnicalIdentifer();
+        String technicalIdentifer = member.getTechnicalIdentifier();
         if (technicalIdentifer == null) {
             technicalIdentifer = BankIdentifierGenerator.newId(member);
             for (Membre m : LicencesContainer.me().compositionFamily(member)) {
-                m.setTechnicalIdentifer(technicalIdentifer);
+                m.setTechnicalIdentifier(technicalIdentifer);
             }
             LicencesContainer.me().save();
         }
