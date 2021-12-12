@@ -105,6 +105,28 @@ public class LicencesContainer {
         }
     }
 
+
+    public static LicencesContainer load(File file) {
+        log.info("Loading JSON file...");
+        LicencesContainer result = null;
+        try {
+            // create Gson instance
+            Gson gson = new Gson();
+            // create a reader
+            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file),
+                    StandardCharsets.UTF_8.newDecoder())) {
+                // convert JSON string to Book object
+                result = gson.fromJson(reader, LicencesContainer.class);
+                log.info(String.format("...%5d members loaded.", me().membres.size()));
+                log.info(String.format("...%5d payements loaded.", me().payments.size()));
+            }
+        } catch (Exception ex) {
+            log.fatal("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE, ex);
+            System.exit(-1);
+        }
+        return result;
+    }
+
     public void save() {
         log.info("Saving JSON file...");
         log.debug("Saving JSON file...", new Throwable());

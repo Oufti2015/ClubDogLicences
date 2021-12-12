@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import net.sf.oval.constraint.NotEmpty;
 import net.sf.oval.constraint.NotNull;
+import sst.licences.exceptions.InvalidOperationException;
 import sst.licences.history.History;
 
 import java.time.LocalDate;
@@ -121,7 +122,7 @@ public class Membre implements Comparable<Membre> {
         Membre membre = (Membre) o;
         return Objects.equal(nom, membre.nom)
                 && Objects.equal(prenom, membre.prenom)
-                && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
+             //   && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
                 && Objects.equal(codePays, membre.codePays)
                 && Objects.equal(langue, membre.langue)
                 && Objects.equal(rue, membre.rue)
@@ -258,6 +259,9 @@ public class Membre implements Comparable<Membre> {
     }
 
     public void setTechnicalIdentifier(String technicalIdentifier) {
+        if (this.technicalIdentifier != null) {
+            throw new InvalidOperationException(String.format("Cannot change technicalId from %s to %s on %s", this.technicalIdentifier, technicalIdentifier, fullName()));
+        }
         History.history(this, FIELD_TECHNICAL_ID, this.technicalIdentifier, technicalIdentifier);
         this.technicalIdentifier = technicalIdentifier;
     }
