@@ -51,7 +51,7 @@ public class MemberEligibility {
 
     public static boolean isAffiliated(Membre membre, int year) {
         LocalDate dateStart = LocalDate.of(year - 1, Month.SEPTEMBER, 1);
-        return !membre.isComite() && (membre.getAffiliation() == null || membre.getAffiliation().isAfter(dateStart));
+        return membre.isComite() || (membre.getAffiliation() != null && membre.getAffiliation().isAfter(dateStart));
     }
 
     public static boolean isCurrentYearAffiliated(Membre membre) {
