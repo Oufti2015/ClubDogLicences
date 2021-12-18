@@ -9,6 +9,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import jfxtras.scene.control.gauge.linear.BasicRoundDailGauge;
+import jfxtras.scene.control.gauge.linear.elements.PercentSegment;
+import jfxtras.scene.control.gauge.linear.elements.Segment;
 import lombok.extern.log4j.Log4j2;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
@@ -100,6 +103,20 @@ public class MainController {
     private Button currentYearButton;
     @FXML
     private Button yearPlusOneButton;
+    @FXML
+    private TextField membersCount;
+    @FXML
+    private TextField activeMembers;
+    @FXML
+    private TextField inactiveMembers;
+    @FXML
+    private TextField membersAffiliated;
+    @FXML
+    private TextField membersAffiliatedNextYear;
+    @FXML
+    private HBox tachiBox;
+    private final BasicRoundDailGauge roundDailGauge = new BasicRoundDailGauge();
+    private final BasicRoundDailGauge roundDailGaugeNY = new BasicRoundDailGauge();
 
     @FXML
     public void initialize() {
@@ -124,6 +141,39 @@ public class MainController {
 
         currentYearButton.setText("" + LocalDate.now().getYear());
         yearPlusOneButton.setText("" + (LocalDate.now().getYear() + 1));
+
+        membersCount();
+
+        //roundDailGauge.getStyleClass().add("colorscheme-red-to-blue-5");
+        tachiBox.getChildren().add(roundDailGauge);
+        //roundDailGaugeNY.getStyleClass().add("colorscheme-red-to-blue-5");
+        tachiBox.getChildren().add(roundDailGaugeNY);
+/*        for (int i = 0; i < 5; i++) {
+            Segment lSegment = new PercentSegment(roundDailGauge, i * 20.0, (i + 1) * 20.0);
+            roundDailGauge.segments().add(lSegment);
+        }*/
+    }
+
+    private void membersCount() {
+        membersCount.setText(LicencesContainer.me().allMembers().size() + " membres");
+        int members = LicencesContainer.me().activeMembers().size();
+        activeMembers.setText(members + " membres actifs");
+        inactiveMembers.setText(LicencesContainer.me().inactiveMembers().size() + " membres inactifs");
+        long affiliated = LicencesContainer.me().membres()
+                .stream()
+                .filter(MemberEligibility::isCurrentYearAffiliated)
+                .count();
+        membersAffiliated.setText(affiliated + " membres affiliés en " + (LocalDate.now().getYear()));
+        long affiliatedNY = LicencesContainer.me().membres()
+                .stream()
+                .filter(MemberEligibility::isNextYearAffiliated)
+                .count();
+        membersAffiliatedNextYear.setText(affiliatedNY + " membres affiliés en " + (LocalDate.now().getYear() + 1));
+
+        roundDailGauge.setMaxValue(members);
+        roundDailGauge.setValue(affiliated);
+        roundDailGaugeNY.setMaxValue(members);
+        roundDailGaugeNY.setValue(affiliatedNY);
     }
 
     private void filter() {
