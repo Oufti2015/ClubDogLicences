@@ -75,6 +75,15 @@ public class History {
         membre.history(historyData);
     }
 
+    public static void emailAffiliation(Membre membre) {
+        HistoryData historyData = new HistoryData()
+                .action(HistoryData.ActionType.EMAIL_AFFILIATION)
+                .fieldName(null)
+                .initVal(null)
+                .changedVal(null);
+        membre.history(historyData);
+    }
+
     private static String yesNo(@NotNull @NotEmpty boolean value) {
         return value ? "Yes" : "No";
     }

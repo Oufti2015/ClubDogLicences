@@ -1,6 +1,7 @@
 package sst.licences.mail;
 
 import lombok.extern.log4j.Log4j2;
+import sst.licences.container.LicencesContainer;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Email;
 import sst.licences.model.Membre;
@@ -64,6 +65,7 @@ public abstract class SendAnEmail {
                     log.error(msg + "ERROR : " + e.getMessage(), e);
                     errors.add(membre);
                 }
+                createHistoricData(membre);
             }
 
             emailSent.add(membre.getEmail());
@@ -75,6 +77,7 @@ public abstract class SendAnEmail {
             }
             log.error("--- ----------- ---");
         }
+        LicencesContainer.me().save();
     }
 
     private void createAndSendEmail(Membre membre, Session session) throws UnsupportedEncodingException, MessagingException {
@@ -113,6 +116,8 @@ public abstract class SendAnEmail {
     protected abstract String messageSubject();
 
     protected abstract Boolean isEligible(String emailAddress);
+
+    protected abstract void createHistoricData(Membre membre);
 
     public long eligibleMembresSize() {
         return selectedMembers.size();

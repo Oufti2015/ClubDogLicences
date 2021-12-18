@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class HistoryData {
 
     public enum ActionType {
-        CREATE, UPDATE, AFFILIATION, INACTIVATION
+        CREATE, UPDATE, AFFILIATION, INACTIVATION, EMAIL_AFFILIATION
     }
 
     public HistoryData() {

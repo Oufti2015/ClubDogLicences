@@ -2,6 +2,7 @@ package sst.licences.mail;
 
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
+import sst.licences.history.History;
 import sst.licences.model.Membre;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class SendAReafiliationEmail extends SendAnEmail {
         sb.append("\n");
         SendASignaleticCheckEmail.signaleticData(membre, composition, sb);
         sb.append("Si vos informations sont incorrectes ou incomplètes,\nSi vous avez déjà payé l'affiliation 2022,\nmerci de prendre contact avec moi en répondant à ce mail.\n");
-        //sb.append("Toute l'équipe du Berger Club Arlonais vous souhaite une très bonne année 2022 à vous et à votre famille.\n");
+        sb.append("Toute l'équipe du Berger Club Arlonais vous souhaite une très bonne année 2022 à vous et à votre famille.\n");
         signature(sb);
         return sb.toString();
     }
@@ -56,5 +57,10 @@ public class SendAReafiliationEmail extends SendAnEmail {
     @Override
     protected Boolean isEligible(String emailAddress) {
         return true;
+    }
+
+    @Override
+    protected void createHistoricData(Membre membre) {
+        History.emailAffiliation(membre);
     }
 }

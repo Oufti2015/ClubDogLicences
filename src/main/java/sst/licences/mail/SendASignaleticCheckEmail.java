@@ -64,4 +64,9 @@ public class SendASignaleticCheckEmail extends SendAnEmail {
     protected Boolean isEligible(String emailAddress) {
         return true;
     }
+
+    @Override
+    protected void createHistoricData(Membre membre) {
+
+    }
 }

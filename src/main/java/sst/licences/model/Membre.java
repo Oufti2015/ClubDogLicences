@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import net.sf.oval.constraint.NotEmpty;
 import net.sf.oval.constraint.NotNull;
+import sst.licences.container.LicencesContainer;
 import sst.licences.exceptions.InvalidOperationException;
 import sst.licences.history.History;
 
@@ -101,6 +102,24 @@ public class Membre implements Comparable<Membre> {
     private boolean active = true;
     @Getter
     private final List<HistoryData> history = new ArrayList<>();
+
+    public Membre() {
+    }
+
+    /* For JUnit tests */
+    public Membre(String nom, String prenom, LocalDate affiliation) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.affiliation = affiliation;
+        this.comite = false;
+    }
+
+    public Membre(String nom, String prenom, LocalDate affiliation, boolean comite) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.comite = comite;
+        this.affiliation = affiliation;
+    }
 
     public void setEmailAddress(String address) {
         email = new Email(address);

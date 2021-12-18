@@ -1,5 +1,6 @@
 package sst.licences.main.tools;
 
+import com.google.common.base.MoreObjects;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.HistoryData;
 import sst.licences.model.Membre;
@@ -20,12 +21,12 @@ public class ShowHistory {
                 System.out.println("-------- ");
                 List<HistoryData> history = membre.getHistory().stream().sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime())).collect(Collectors.toList());
                 for (HistoryData data : history) {
-                    System.out.printf("%25s %-12s %-20s %-30s %-30s%n",
+                    System.out.printf("%25s %-20s %-20s %-30s %-30s%n",
                             data.getTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)),
                             data.getAction(),
-                            data.getFieldName(),
-                            data.getInitVal(),
-                            data.getChangedVal());
+                            MoreObjects.firstNonNull(data.getFieldName(), "---"),
+                            MoreObjects.firstNonNull(data.getInitVal(), "---"),
+                            MoreObjects.firstNonNull(data.getChangedVal(), "---"));
                 }
             }
         }

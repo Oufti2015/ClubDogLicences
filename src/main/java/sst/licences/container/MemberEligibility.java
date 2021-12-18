@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 @Log4j2
 public class MemberEligibility {
 
+    private MemberEligibility() {
+    }
+
     public static List<Membre> eligibleMembres() {
         LocalDate dateStart = dateStart();
         LocalDate dateEnd = dateEnd();
@@ -23,14 +26,21 @@ public class MemberEligibility {
         return collect;
     }
 
-    private static LocalDate dateEnd() {
-        LocalDate now = LocalDate.now();
-        return LocalDate.of(now.getYear(), Month.SEPTEMBER, 1);
+    private static LocalDate dateStart() {
+        return LocalDate.of(refYear() - 1, Month.SEPTEMBER, 1);
     }
 
-    private static LocalDate dateStart() {
+    private static LocalDate dateEnd() {
+        return LocalDate.of(refYear(), Month.SEPTEMBER, 1);
+    }
+
+    private static int refYear() {
         LocalDate now = LocalDate.now();
-        return LocalDate.of(now.getYear() - 1, Month.SEPTEMBER, 1);
+        int result = now.getYear();
+        if (now.isBefore(LocalDate.of(now.getYear(), Month.SEPTEMBER, 1))) {
+            result -= 1;
+        }
+        return result;
     }
 
     public static List<Membre> eligibleMembres(int year) {
