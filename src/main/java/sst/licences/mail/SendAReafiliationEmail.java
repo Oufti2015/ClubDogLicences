@@ -62,5 +62,6 @@ public class SendAReafiliationEmail extends SendAnEmail {
     @Override
     protected void createHistoricData(Membre membre) {
         History.emailAffiliation(membre);
+        LicencesContainer.me().save();
     }
 }

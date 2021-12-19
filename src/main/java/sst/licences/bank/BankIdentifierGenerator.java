@@ -16,6 +16,13 @@ public class BankIdentifierGenerator {
 
     }
 
+    public static void reset(Membre membre) {
+        if (addressesMap.size() == 0) {
+            initAddresses();
+        }
+        addressesMap.remove(Membre.addressId(membre));
+    }
+
     public static String newId(Membre membre) {
         if (addressesMap.size() == 0) {
             initAddresses();

@@ -14,13 +14,14 @@ public class MemberEligibility {
     private MemberEligibility() {
     }
 
-    public static List<Membre> eligibleMembres() {
+    public static List<Membre> eligibleMembresForAffiliationEmail() {
         LocalDate dateStart = dateStart();
         LocalDate dateEnd = dateEnd();
         List<Membre> collect = LicencesContainer.me().membres()
                 .stream()
                 .filter(m -> !m.isComite() && (m.getAffiliation() == null ||
                         (m.getAffiliation().isAfter(dateStart) && m.getAffiliation().isBefore(dateEnd))))
+                .filter(m -> m.daysFromLastAffiliationEmail() > 30)
                 .collect(Collectors.toList());
         log.debug("" + collect.size() + " membres éligibles pour email ! ");
         return collect;

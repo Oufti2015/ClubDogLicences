@@ -10,8 +10,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import jfxtras.scene.control.gauge.linear.BasicRoundDailGauge;
-import jfxtras.scene.control.gauge.linear.elements.PercentSegment;
-import jfxtras.scene.control.gauge.linear.elements.Segment;
 import lombok.extern.log4j.Log4j2;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
@@ -480,7 +478,7 @@ public class MainController {
     }
 
     public void emailForAffiliation(ActionEvent actionEvent) {
-        envoyerEmails(new SendAReafiliationEmail(MemberEligibility.eligibleMembres()));
+        envoyerEmails(new SendAReafiliationEmail(MemberEligibility.eligibleMembresForAffiliationEmail()));
     }
 
     public void emailForAffiliationSelected(ActionEvent actionEvent) {

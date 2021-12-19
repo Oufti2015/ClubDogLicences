@@ -1,6 +1,5 @@
 package sst.licences.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 

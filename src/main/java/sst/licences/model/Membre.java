@@ -12,8 +12,12 @@ import sst.licences.exceptions.InvalidOperationException;
 import sst.licences.history.History;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @ToString
@@ -141,7 +145,7 @@ public class Membre implements Comparable<Membre> {
         Membre membre = (Membre) o;
         return Objects.equal(nom, membre.nom)
                 && Objects.equal(prenom, membre.prenom)
-             //   && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
+                //   && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
                 && Objects.equal(codePays, membre.codePays)
                 && Objects.equal(langue, membre.langue)
                 && Objects.equal(rue, membre.rue)
@@ -278,7 +282,11 @@ public class Membre implements Comparable<Membre> {
     }
 
     public void setTechnicalIdentifier(String technicalIdentifier) {
-        if (this.technicalIdentifier != null) {
+        setTechnicalIdentifier(technicalIdentifier, false);
+    }
+
+    public void setTechnicalIdentifier(String technicalIdentifier, boolean force) {
+        if (!force && this.technicalIdentifier != null) {
             throw new InvalidOperationException(String.format("Cannot change technicalId from %s to %s on %s", this.technicalIdentifier, technicalIdentifier, fullName()));
         }
         History.history(this, FIELD_TECHNICAL_ID, this.technicalIdentifier, technicalIdentifier);
@@ -307,5 +315,14 @@ public class Membre implements Comparable<Membre> {
         log.warn("Clearing Historic Data");
         history.forEach(log::warn);
         history.clear();
+    }
+
+    public long daysFromLastAffiliationEmail() {
+        Optional<HistoryData> first = history
+                .stream()
+                .filter(h -> HistoryData.ActionType.EMAIL_AFFILIATION.equals(h.getAction()))
+                .max(Comparator.comparing(HistoryData::getTime));
+        return first.map(historyData -> ChronoUnit.DAYS.between(historyData.getTime(), LocalDateTime.now()))
+                .orElse(9999L);
     }
 }
