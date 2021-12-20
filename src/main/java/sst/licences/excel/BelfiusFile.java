@@ -31,6 +31,11 @@ public class BelfiusFile {
 
         List<Payment> incompletePayments = new ArrayList<>();
 
+        List<Payment> paymentList = LicencesContainer.me().payments().stream()
+                .filter(Payment::isComplete)
+                .collect(Collectors.toList());
+        LicencesContainer.me().setPaymentsList(paymentList);
+
         List<File> fileList = files.stream().sorted(Comparator.comparing(File::getAbsolutePath)).collect(Collectors.toList());
         for (File file : fileList) {
             log.info("Importing Belfius file : " + file.getAbsolutePath() + "...");
@@ -78,7 +83,7 @@ public class BelfiusFile {
                     LicencesContainer.me().payments().add(vd);
                 }
             } else {
-                incompletePayments.add(vd);
+                LicencesContainer.me().payments().add(vd);
             }
         }
     }

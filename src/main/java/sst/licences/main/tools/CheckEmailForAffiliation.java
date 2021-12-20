@@ -13,7 +13,11 @@ public class CheckEmailForAffiliation {
 
         List<Membre> membres = MemberEligibility.eligibleMembresForAffiliationEmail();
         for (Membre membre : membres) {
-            System.out.printf("%-30s %4d %s%n", membre.fullName(), membre.daysFromLastAffiliationEmail(), MoreObjects.firstNonNull(membre.getAffiliation(), "null"));
+            System.out.printf("%-30s %4d %s %s%n",
+                    membre.fullName(),
+                    membre.daysFromLastAffiliationEmail(),
+                    MoreObjects.firstNonNull(membre.getAffiliation(), "null"),
+                    membre.getEmail().getAdresse());
         }
     }
 }
