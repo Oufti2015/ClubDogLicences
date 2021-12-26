@@ -156,9 +156,14 @@
                                 <PropertyValueFactory property="rue" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="50.0" text="Numéro">
+                        <TableColumn prefWidth="50.0" text="Num">
                             <cellValueFactory>
                                 <PropertyValueFactory property="num" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="50.0" text="BP" >
+                            <cellValueFactory>
+                                <PropertyValueFactory property="box" />
                             </cellValueFactory>
                         </TableColumn>
                         <TableColumn prefWidth="75.0" text="Code Postal">
