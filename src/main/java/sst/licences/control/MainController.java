@@ -115,6 +115,8 @@ public class MainController {
     private HBox tachiBox;
     private final BasicRoundDailGauge roundDailGauge = new BasicRoundDailGauge();
     private final BasicRoundDailGauge roundDailGaugeNY = new BasicRoundDailGauge();
+    @FXML
+    private TextField boxText;
 
     @FXML
     public void initialize() {
@@ -245,6 +247,7 @@ public class MainController {
             prenomText.setText(selectedItem.getPrenom());
             rueText.setText(selectedItem.getRue());
             numText.setText(selectedItem.getNum());
+            boxText.setText(selectedItem.getBox());
             codePostalText.setText(selectedItem.getCodePostal());
             localiteText.setText(selectedItem.getLocalite());
             telephoneText.setText(selectedItem.getTelephone());
@@ -288,6 +291,7 @@ public class MainController {
         membre.setDateDeNaissance(dateDeNaissancePicker.getValue());
         membre.setRue(rueText.getText());
         membre.setNum(numText.getText());
+        membre.setBox(boxText.getText());
         membre.setCodePostal(codePostalText.getText());
         membre.setLocalite(localiteText.getText());
         membre.setTelephone(telephoneText.getText());
@@ -314,6 +318,7 @@ public class MainController {
         for (Membre m : family) {
             m.setRue(membre.getRue());
             m.setNum(membre.getNum());
+            m.setBox(membre.getBox());
             m.setCodePostal(membre.getCodePostal());
             m.setLocalite(membre.getLocalite());
             m.setDescription(membre.getDescription());
@@ -331,6 +336,7 @@ public class MainController {
         membre.setDateDeNaissance(dateDeNaissancePicker.getValue());
         membre.setRue(rueText.getText());
         membre.setNum(numText.getText());
+        membre.setBox(boxText.getText());
         membre.setCodePostal(codePostalText.getText());
         membre.setLocalite(localiteText.getText());
         membre.setTelephone(telephoneText.getText());
@@ -417,6 +423,7 @@ public class MainController {
         prenomText.clear();
         rueText.clear();
         numText.clear();
+        boxText.clear();
         codePostalText.clear();
         localiteText.clear();
         telephoneText.clear();
@@ -499,7 +506,6 @@ public class MainController {
             }
         }
     }
-
 
     public void parseBelfius(ActionEvent actionEvent) {
         int fileCount = 0;

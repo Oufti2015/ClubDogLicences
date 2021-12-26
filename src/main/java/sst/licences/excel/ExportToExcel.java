@@ -53,6 +53,9 @@ public abstract class ExportToExcel implements ExcelExporter {
             // Numéro
             cell = row.createCell(i++, CellType.STRING);
             cell.setCellValue(membre.getNum());
+            // Boîte Postale
+            cell = row.createCell(i++, CellType.STRING);
+            cell.setCellValue(membre.getBox());
             // Code Postal
             cell = row.createCell(i++, CellType.STRING);
             cell.setCellValue(membre.getCodePostal());
@@ -121,6 +124,10 @@ public abstract class ExportToExcel implements ExcelExporter {
         // Numéro
         cell = row.createCell(i++, CellType.STRING);
         cell.setCellValue("nummer");
+        cell.setCellStyle(style);
+        // Boîte Postale
+        cell = row.createCell(i++, CellType.STRING);
+        cell.setCellValue("bus");
         cell.setCellStyle(style);
         // Code Postal
         cell = row.createCell(i++, CellType.STRING);

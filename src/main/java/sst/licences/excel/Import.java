@@ -42,7 +42,7 @@ public class Import {
             r.forEach(x -> {
                 if (!x[0].equals("Nom") && !x[0].equals("Rue")) {
                     Membre member = member(x);
-                    if (!LicencesContainer.me().membres().contains(member)) {
+                    if (!LicencesContainer.me().allMembers().contains(member)) {
                         list.add(member);
                     } else {
                         List<Membre> membres = LicencesContainer.me().membres();
@@ -76,6 +76,7 @@ public class Import {
         membre.setPrenom(x[i++]);
         membre.setRue(x[i++]);
         membre.setNum(x[i++]);
+        membre.setBox(x[i++]);
         membre.setCodePostal(x[i++]);
         membre.setLocalite(x[i++]);
         membre.setTelephone(x[i++]);
@@ -87,9 +88,9 @@ public class Import {
         membre.setLangue(x[i++]);
         membre.setLicence(x[i]);
 
-        membre.setComite(comite.isMembreDuComite(membre));
+        //membre.setComite(comite.isMembreDuComite(membre));
         membre.setSentToMyKKusch(true);
-        membre.setAffiliation(LocalDate.of(LocalDate.now().getYear(), Month.JANUARY, 1));
+        //membre.setAffiliation(LocalDate.of(LocalDate.now().getYear(), Month.JANUARY, 1));
 
         return membre;
     }

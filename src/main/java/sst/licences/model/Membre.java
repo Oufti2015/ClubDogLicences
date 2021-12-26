@@ -7,7 +7,6 @@ import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 import net.sf.oval.constraint.NotEmpty;
 import net.sf.oval.constraint.NotNull;
-import sst.licences.container.LicencesContainer;
 import sst.licences.exceptions.InvalidOperationException;
 import sst.licences.history.History;
 
@@ -38,6 +37,7 @@ public class Membre implements Comparable<Membre> {
     public static final String FIELD_ADDRESS_CITY = "Address city";
     public static final String FIELD_ADDRESS_POST_CODE = "Address post code";
     public static final String FIELD_ADDRESS_STREET_NUMBER = "Address street number";
+    public static final String FIELD_ADDRESS_POSTAL_BOX = "Address postal box";
     public static final String FIELD_ADDRESS_STREET = "Address street";
     public static final String FIELD_FIRSTNAME = "Firstname";
     public static final String FIELD_NAME = "Name";
@@ -59,6 +59,8 @@ public class Membre implements Comparable<Membre> {
     @NotEmpty
     @Getter
     private String num;
+    @Getter
+    private String box;
     @NotNull
     @NotEmpty
     @Getter
@@ -150,6 +152,7 @@ public class Membre implements Comparable<Membre> {
                 && Objects.equal(langue, membre.langue)
                 && Objects.equal(rue, membre.rue)
                 && Objects.equal(num, membre.num)
+                && Objects.equal(box, membre.box)
                 && Objects.equal(codePostal, membre.codePostal)
                 && Objects.equal(localite, membre.localite);
     }
@@ -158,7 +161,6 @@ public class Membre implements Comparable<Membre> {
     public int hashCode() {
         return Objects.hashCode(nom, prenom, dateDeNaissance, codePays, langue);
     }
-
 
     @Override
     public int compareTo(Membre o) {
@@ -189,7 +191,7 @@ public class Membre implements Comparable<Membre> {
     }
 
     public String fullAddress() {
-        return rue + ", " + num + " " + codePostal + " " + localite + " (" + codePays + ")";
+        return rue + ", " + num + " " + box + " " + codePostal + " " + localite + " (" + codePays + ")";
     }
 
     public void setNom(String nom) {
@@ -210,6 +212,11 @@ public class Membre implements Comparable<Membre> {
     public void setNum(String num) {
         History.history(this, FIELD_ADDRESS_STREET_NUMBER, this.num, num);
         this.num = num;
+    }
+
+    public void setBox(String box) {
+        History.history(this, FIELD_ADDRESS_POSTAL_BOX, this.box, box);
+        this.box = box;
     }
 
     public void setCodePostal(String codePostal) {

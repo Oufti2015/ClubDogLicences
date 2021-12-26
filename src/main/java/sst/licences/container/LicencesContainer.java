@@ -1,11 +1,11 @@
 package sst.licences.container;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.util.Strings;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 import sst.licences.model.Payment;
@@ -148,7 +148,7 @@ public class LicencesContainer {
 
     public String payments(Membre membre) {
         String result = "";
-        if (Strings.isNotEmpty(membre.getAccountId())) {
+        if (!Strings.isNullOrEmpty(membre.getAccountId())) {
             result = payments.stream()
                     .filter(p -> p.getCompte().equals(membre.getAccountId()))
                     .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))

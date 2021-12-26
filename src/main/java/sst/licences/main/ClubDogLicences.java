@@ -1,5 +1,6 @@
 package sst.licences.main;
 
+import com.google.common.base.Strings;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.util.Strings;
 import sst.common.file.output.OutputFile;
 import sst.licences.container.LicencesContainer;
 import sst.licences.control.MainController;
@@ -71,7 +71,7 @@ public class ClubDogLicences extends Application {
         String report = new PaymentsReport()
                 .input(LicencesContainer.me().allMembers()
                         .stream()
-                        .filter(m -> Strings.isNotEmpty(LicencesContainer.me().payments(m)))
+                        .filter(m -> !Strings.isNullOrEmpty(LicencesContainer.me().payments(m)))
                         .collect(Collectors.toList()))
                 .format()
                 .output();
