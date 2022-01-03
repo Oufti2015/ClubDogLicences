@@ -169,6 +169,7 @@ public class LicencesContainer {
         return LicencesContainer.me().allMembers()
                 .stream()
                 .filter(m -> Membre.addressId(m).equals(Membre.addressId(membre)))
+                .filter(Membre::isActive)
                 .collect(Collectors.toList());
     }
 
