@@ -82,6 +82,11 @@
                   <MenuItem mnemonicParsing="false" onAction="#signalticCheck" text="Verification" />
                     </items>
                 </Menu>
+            <Menu mnemonicParsing="false" text="Copy">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#copyTCSInfos" text="TCS Infos" />
+              </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
@@ -161,7 +166,7 @@
                                 <PropertyValueFactory property="num" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="50.0" text="BP" >
+                        <TableColumn prefWidth="50.0" text="BP">
                             <cellValueFactory>
                                 <PropertyValueFactory property="box" />
                             </cellValueFactory>

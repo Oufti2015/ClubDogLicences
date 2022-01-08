@@ -19,6 +19,7 @@ import sst.licences.container.MemberEligibility;
 import sst.licences.container.SimpleMembre;
 import sst.licences.control.filters.AffiliationFilter;
 import sst.licences.control.filters.ComiteFilter;
+import sst.licences.copy.TCSInfos;
 import sst.licences.excel.*;
 import sst.licences.mail.SendAReafiliationEmail;
 import sst.licences.mail.SendASignaleticCheckEmail;
@@ -607,5 +608,11 @@ public class MainController {
         if (defaultButtonStyle != null) {
             button.setStyle(defaultButtonStyle);
         }
+
+    }
+
+    public void copyTCSInfos() {
+        SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
+        new TCSInfos(selectedItem.getMembre()).process();
     }
 }

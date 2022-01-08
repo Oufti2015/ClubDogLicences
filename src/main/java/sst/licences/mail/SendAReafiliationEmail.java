@@ -36,7 +36,7 @@ public class SendAReafiliationEmail extends SendAnEmail {
             SendASignaleticCheckEmail.helloWorld(sb, m);
         }
         sb.append("\n");
-        sb.append("L'année 2022 arrivant à grand pas, il va être temps de renouveler votre affiliation à votre club canin préféré: le Berger Club Arlonais.\n");
+        sb.append("Nous sommes en 2022, il va être temps de renouveler votre affiliation à votre club canin préféré: le Berger Club Arlonais.\n");
         sb.append("\n");
         sb.append(typeOfAffiliation(composition));
         sb.append("\n");

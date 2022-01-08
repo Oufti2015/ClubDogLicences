@@ -7,7 +7,8 @@ public class LicencesConstants {
 
     public static final Country DEFAULT_PAYS_CODE = CountryList.belgium;
     public static final String DEFAULT_LANGUE = "FR";
-    public static final String APPLICATION_TITLE = "Berger Club Arlonais - Licences";
+    public static final String BERGER_CLUB_ARLONAIS = "Berger Club Arlonais";
+    public static final String APPLICATION_TITLE = BERGER_CLUB_ARLONAIS + " - Licences";
     public static final String ENV_TEST_MODE = "TEST_MODE";
     public static final String ENV_MAIL_PWD = "MAIL_PWD";
     public static final String CHARSET_ANSI_CP_1252 = "Cp1252";
