@@ -7,8 +7,11 @@ public class TCSInfos extends CopyToCliboard {
     public static final String A_COMPLETER = "<!!! A COMPLETER !!!>";
 
     public TCSInfos(Membre membre) {
-        String pattern = "A propos du chien :\n" +
-                "Nom du chien: %s\n" +
+        String pattern = "Bonjour %s,\n" +
+                "\n" +
+                "Pouvez-vous vérifier que ces infos sont correctes ?\n" +
+                "\nA propos du chien :\n" +
+                "Nom du chien: <b>%s</b>\n" +
                 "Race: %s\n" +
                 "Date de naissance: %s\n" +
                 "Sexe: %s\n" +
@@ -24,9 +27,13 @@ public class TCSInfos extends CopyToCliboard {
                 "Commune: %s\n" +
                 "Pays: %s\n" +
                 "Téléphone: %s\n" +
-                "Email: %s\n";
+                "Email: %s\n" +
+                "\n" +
+                "Bien à vous,\n" +
+                "Stéphane\n";
 
         this.setStringContent(String.format(pattern,
+                membre.getPrenom(),
                 membre.getDescription(),
                 A_COMPLETER, /* Race */
                 A_COMPLETER, /* Date de naissance */
