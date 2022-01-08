@@ -11,7 +11,7 @@ public class TCSInfos extends CopyToCliboard {
                 "\n" +
                 "Pouvez-vous vérifier que ces infos sont correctes ?\n" +
                 "\nA propos du chien :\n" +
-                "Nom du chien: <b>%s</b>\n" +
+                "Nom du chien: %s\n" +
                 "Race: %s\n" +
                 "Date de naissance: %s\n" +
                 "Sexe: %s\n" +
