@@ -448,26 +448,31 @@ public class MainController {
         }
     }
 
-    public void exportFileForMYKKUSH(ActionEvent actionEvent) {
-        ExcelExporter excel = new NewMembersExporter();
+    private void export(ExcelExporter exporter) {
         try {
-            excel.export();
+            exporter.export();
         } catch (IOException e) {
             e.printStackTrace();
+            errorDialog(e.getClass().getSimpleName(), e.getMessage());
         }
 
-        messageDialog("Export File For MYKKUSH", "Export done.");
+        messageDialog("L'export des " + exporter.exportName(), "L'Export est fini.");
+    }
+
+    public void exportNewMembers(ActionEvent actionEvent) {
+        export(new NewMembersExporter());
     }
 
     public void exportCompleteFile(ActionEvent actionEvent) {
-        ExcelExporter excel = new AllMembersExporter();
-        try {
-            excel.export();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        export(new AllMembersExporter());
+    }
 
-        messageDialog("Export Complete File", "Export done.");
+    public void exportAffiliateMembers(ActionEvent actionEvent) {
+        export(new AffiliateMembersExporter());
+    }
+
+    public void exportNonAffiliateMembers(ActionEvent actionEvent) {
+        export(new NonAffiliateMembersExporter());
     }
 
     public void importFileFromMYKKUSH(ActionEvent actionEvent) {
@@ -509,16 +514,28 @@ public class MainController {
     }
 
     public void parseBelfius(ActionEvent actionEvent) {
-        int fileCount = 0;
-        FileChooser fileChooser = csvFileChooser("Choisir le fichier Belfius");
-        List<File> files = fileChooser.showOpenMultipleDialog(primaryStage);
-        BelfiusFile bf = new BelfiusFile();
-        if (files != null) {
-            fileCount = bf.parseFiles(files);
-            LicencesContainer.me().save();
-        }
+        try {
+            int fileCount = 0;
+            FileChooser fileChooser = csvFileChooser("Choisir le fichier Belfius");
+            List<File> files = fileChooser.showOpenMultipleDialog(primaryStage);
+            BelfiusFile bf = new BelfiusFile();
+            if (files != null) {
+                fileCount = bf.parseFiles(files);
+                LicencesContainer.me().save();
+            }
 
-        messageDialog("Belfius file import", String.format("%d Belfius file(s) processed.", fileCount));
+            messageDialog("Belfius file import", String.format("%d Belfius file(s) processed.", fileCount));
+        } catch (Exception e) {
+            e.printStackTrace();
+            errorDialog(e.getClass().getSimpleName(), e.getMessage());
+        }
+    }
+
+    private void errorDialog(String headerText, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+        alert.setTitle("Error occured ! Please check log files");
+        alert.setHeaderText(headerText);
+        alert.showAndWait();
     }
 
     private void messageDialog(String headerText, String message) {

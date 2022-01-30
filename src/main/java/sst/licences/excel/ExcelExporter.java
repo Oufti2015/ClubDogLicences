@@ -16,4 +16,6 @@ public interface ExcelExporter {
     void updateMembre(Membre membre);
 
     boolean saveMembres();
+
+    String exportName();
 }

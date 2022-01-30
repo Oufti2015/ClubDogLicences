@@ -30,4 +30,9 @@ public class AllMembersExporter extends ExportToExcel {
     public boolean saveMembres() {
         return false;
     }
+
+    @Override
+    public String exportName() {
+        return "Tous les Membres";
+    }
 }

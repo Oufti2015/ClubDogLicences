@@ -64,11 +64,21 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#exportFileForMYKKUSH" text="Create File for Mykkush" />
-                  <MenuItem mnemonicParsing="false" onAction="#exportCompleteFile" text="Create Full File" />
+                  <Menu mnemonicParsing="false" text="Import">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#importFileFromMYKKUSH" text="Import from Mykkush" />
+                        <MenuItem mnemonicParsing="false" onAction="#parseBelfius" text="Parse Belfius Csv" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Export">
+                    <items>
+                              <MenuItem mnemonicParsing="false" onAction="#exportNewMembers" text="Nouveaux Membres" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportCompleteFile" text="Liste Complète" />
+                      <MenuItem mnemonicParsing="false" onAction="#exportAffiliateMembers" text="Membres Affiliés" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportNonAffiliateMembers" text="Membres Non Affiliés" />
+                    </items>
+                  </Menu>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#importFileFromMYKKUSH" text="Import from Mykkush" />
-                  <MenuItem mnemonicParsing="false" onAction="#parseBelfius" text="Parse Belfius Csv" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Email">

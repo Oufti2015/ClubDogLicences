@@ -23,6 +23,10 @@ public class LicencesConstants {
 
     public static final String REPORT_FOLDER = WORKING_FOLDER + "Reports";
 
-    public static final String NEW_MEMBRES_XLSX = WORKING_FOLDER + "new-membres{date}.xlsx";
-    public static final String ALL_MEMBRES_XLSX = WORKING_FOLDER + "all-membres{date}.xlsx";
+    public static final String EXPORT_FOLDER = WORKING_FOLDER + "\\export\\";
+
+    public static final String NEW_MEMBRES_XLSX = EXPORT_FOLDER + "new-membres{date}.xlsx";
+    public static final String ALL_MEMBRES_XLSX = EXPORT_FOLDER + "all-membres{date}.xlsx";
+    public static final String AFFILIATE_MEMBRES_XLSX = EXPORT_FOLDER + "affiliate-membres{date}.xlsx";
+    public static final String NON_AFFILIATE_MEMBRES_XLSX = EXPORT_FOLDER + "non-affiliate-membres{date}.xlsx";
 }
