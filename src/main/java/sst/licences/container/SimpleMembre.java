@@ -12,6 +12,7 @@ public class SimpleMembre {
     private final SimpleStringProperty prenom = new SimpleStringProperty("");
     private final SimpleStringProperty rue = new SimpleStringProperty("");
     private final SimpleStringProperty num = new SimpleStringProperty("");
+    private final SimpleStringProperty box = new SimpleStringProperty("");
     private final SimpleStringProperty codePostal = new SimpleStringProperty("");
     private final SimpleStringProperty localite = new SimpleStringProperty("");
     private final SimpleStringProperty telephone = new SimpleStringProperty("");
@@ -26,6 +27,7 @@ public class SimpleMembre {
     private final SimpleStringProperty affiliation = new SimpleStringProperty("");
     private final SimpleStringProperty accountId = new SimpleStringProperty("");
     private final SimpleStringProperty description = new SimpleStringProperty("");
+    private final SimpleBooleanProperty active = new SimpleBooleanProperty(true);
 
     @Getter
     private Membre membre;
@@ -40,6 +42,7 @@ public class SimpleMembre {
         this.prenom.set(membre.getPrenom());
         this.rue.set(membre.getRue());
         this.num.set(membre.getNum());
+        this.box.set(membre.getBox());
         this.codePostal.set(membre.getCodePostal());
         this.localite.set(membre.getLocalite());
         this.telephone.set(membre.getTelephone());
@@ -56,6 +59,7 @@ public class SimpleMembre {
             this.affiliation.set(membre.getAffiliation().toString());
         }
         this.description.set(membre.getDescription());
+        this.active.set(membre.isActive());
     }
 
     public String getNom() {
@@ -88,6 +92,14 @@ public class SimpleMembre {
 
     public SimpleStringProperty numProperty() {
         return num;
+    }
+
+    public String getBox() {
+        return box.get();
+    }
+
+    public SimpleStringProperty boxProperty() {
+        return box;
     }
 
     public String getCodePostal() {
@@ -200,5 +212,13 @@ public class SimpleMembre {
 
     public SimpleStringProperty description() {
         return description;
+    }
+
+    public boolean isActive() {
+        return active.get();
+    }
+
+    public SimpleBooleanProperty activeProperty() {
+        return active;
     }
 }

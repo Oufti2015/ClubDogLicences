@@ -1,9 +1,9 @@
 package sst.licences.model;
 
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.logging.log4j.util.Strings;
 
 import java.time.LocalDate;
 
@@ -36,9 +36,9 @@ public class Payment {
     private String communications;
 
     public boolean isComplete() {
-        return Strings.isNotEmpty(valueDate)
-                && Strings.isNotEmpty(extractnNumber)
-                && Strings.isNotEmpty(paymentNumber);
+        return !Strings.isNullOrEmpty(valueDate)
+                && !Strings.isNullOrEmpty(extractnNumber)
+                && !Strings.isNullOrEmpty(paymentNumber);
     }
 
     public String toString() {

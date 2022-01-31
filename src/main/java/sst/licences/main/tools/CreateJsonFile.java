@@ -24,6 +24,7 @@ import java.util.List;
 
 @Log4j2
 public class CreateJsonFile {
+    public static final String DATA_LEDEN_MEMBRES_TEMPLATE_CSV = LicencesConstants.WORKING_FOLDER + "leden-membres-template.csv";
 
     public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
     private static final Comite comite = Comite.load();
@@ -31,9 +32,8 @@ public class CreateJsonFile {
     public static void main(String[] args) {
         List<Membre> list = new ArrayList<>();
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-        //FileReader reader1 = new FileReader("data//leden-membres-template.csv");
 
-        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(LicencesConstants.DATA_LEDEN_MEMBRES_TEMPLATE_CSV), CHARSET);
+        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(DATA_LEDEN_MEMBRES_TEMPLATE_CSV), CHARSET);
              CSVReader reader = new CSVReaderBuilder(inputStreamReader)
                      .withCSVParser(csvParser)   // custom CSV parser
                      .withSkipLines(1)           // skip the first line, header info

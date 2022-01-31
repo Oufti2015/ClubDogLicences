@@ -7,6 +7,7 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 import sst.licences.model.Payment;
 
@@ -14,55 +15,40 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Log4j2
 public class BelfiusFile {
-    public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
+    public int parseFiles(List<File> files) {
+        int size = files.size();
+        log.info("Parsing " + size + " Belfius files...");
+        log.info("Actual payments count : " + LicencesContainer.me().payments().size());
 
-    public void parseFiles(List<File> files) {
         List<Payment> incompletePayments = new ArrayList<>();
 
-        for (File file : files) {
+        List<Payment> paymentList = LicencesContainer.me().payments().stream()
+                .filter(Payment::isComplete)
+                .collect(Collectors.toList());
+        LicencesContainer.me().setPaymentsList(paymentList);
+
+        List<File> fileList = files.stream().sorted(Comparator.comparing(File::getAbsolutePath)).collect(Collectors.toList());
+        for (File file : fileList) {
+            log.info("Importing Belfius file : " + file.getAbsolutePath() + "...");
             CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-            try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), CHARSET);
+            try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), LicencesConstants.CHARSET_ANSI_CP_1252);
                  CSVReader reader = new CSVReaderBuilder(inputStreamReader)
                          .withCSVParser(csvParser)   // custom CSV parser
                          .withSkipLines(13)           // skip the first line, header info
                          .build()) {
                 List<String[]> lines = reader.readAll();
 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
                 for (String[] data : lines) {
-                    Double montant = Double.parseDouble(data[10].replace(",", "."));
-
-                    if (montant.compareTo(0.00) > 0) {
-                        Payment vd = new Payment();
-
-                        vd.setValueDate(data[1]);
-                        vd.setExtractnNumber(data[2]);
-                        vd.setPaymentNumber(data[3]);
-                        vd.setDate(LocalDate.parse(data[1], formatter));
-                        vd.setCompte(data[4]);
-                        vd.setNom(data[5]);
-                        vd.setMontant(montant);
-                        vd.setCommunications(data[14]);
-
-                        if (vd.isComplete()) {
-                            if (!LicencesContainer.me().payments().contains(vd)) {
-                                LicencesContainer.me().payments().add(vd);
-                            }
-                        } else {
-                            incompletePayments.add(vd);
-                        }
-                    }
+                    processLine(incompletePayments, data);
                 }
                 updateMembres(LicencesContainer.me().payments());
                 updateMembres(incompletePayments);
@@ -70,20 +56,50 @@ public class BelfiusFile {
                 e.printStackTrace();
             }
         }
+        log.info("Actual payments count : " + LicencesContainer.me().payments().size());
+        log.info("Belfius files import done.");
+
+        return size;
+    }
+
+    private void processLine(List<Payment> incompletePayments, String[] data) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Double montant = Double.parseDouble(data[10].replace(",", "."));
+        LocalDate parse = LocalDate.parse(data[1], formatter);
+        if (montant.compareTo(0.00) > 0) {
+            Payment vd = new Payment();
+
+            vd.setValueDate(data[1]);
+            vd.setExtractnNumber(data[2]);
+            vd.setPaymentNumber(data[3]);
+            vd.setDate(parse);
+            vd.setCompte(data[4]);
+            vd.setNom(data[5]);
+            vd.setMontant(montant);
+            vd.setCommunications(data[14]);
+
+            if (vd.isComplete()) {
+                if (!LicencesContainer.me().payments().contains(vd)) {
+                    LicencesContainer.me().payments().add(vd);
+                }
+            } else {
+                LicencesContainer.me().payments().add(vd);
+            }
+        }
     }
 
     private void updateMembres(List<Payment> belfius) {
-        for (Membre membre : LicencesContainer.me().membres()) {
+        for (Membre membre : LicencesContainer.me().allMembers()) {
             List<Payment> vds = belfius.stream()
-                    .filter(vd -> membre.getTechnicalIdentifer() != null
+                    .filter(vd -> membre.getTechnicalIdentifier() != null
                             && vd.getCommunications() != null
-                            && vd.getCommunications().contains(membre.getTechnicalIdentifer()))
+                            && vd.getCommunications().contains(membre.getTechnicalIdentifier()))
                     .collect(Collectors.toList());
             for (Payment vd : vds) {
                 if (membre.getAffiliation() == null || membre.getAffiliation().isBefore(vd.getDate())) {
                     membre.setAffiliation(vd.getDate());
                     membre.setAccountId(vd.getCompte());
-
+                    membre.setActive(true);
                     log.info(membre.getPrenom() + " " + membre.getNom() + " est réaffilié " + vd.getDate());
                 }
             }

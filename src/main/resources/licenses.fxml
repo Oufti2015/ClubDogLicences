@@ -48,23 +48,37 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="1080.0" prefWidth="1920.0" stylesheets="@Licences.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
+<VBox prefHeight="1080.0" prefWidth="1920.0" stylesheets="@Licences.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#exportFileForMYKKUSH" text="Create File for Mykkush" />
-                  <MenuItem mnemonicParsing="false" onAction="#exportCompleteFile" text="Create Full File" />
+                  <Menu mnemonicParsing="false" text="Import">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#importFileFromMYKKUSH" text="Import from Mykkush" />
+                        <MenuItem mnemonicParsing="false" onAction="#parseBelfius" text="Parse Belfius Csv" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Export">
+                    <items>
+                              <MenuItem mnemonicParsing="false" onAction="#exportNewMembers" text="Nouveaux Membres" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportCompleteFile" text="Liste Complète" />
+                      <MenuItem mnemonicParsing="false" onAction="#exportAffiliateMembers" text="Membres Affiliés" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportNonAffiliateMembers" text="Membres Non Affiliés" />
+                    </items>
+                  </Menu>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#importFileFromMYKKUSH" text="Import from Mykkush" />
-                  <MenuItem mnemonicParsing="false" onAction="#parseBelfius" text="Parse Belfius Csv" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Email">
@@ -75,8 +89,14 @@
                       <MenuItem mnemonicParsing="false" onAction="#emailForAffiliationSelected" text="Membre sélectionné" />
                     </items>
                   </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#signalticCheck" text="Verification" />
                     </items>
                 </Menu>
+            <Menu mnemonicParsing="false" text="Copy">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#copyTCSInfos" text="TCS Infos" />
+              </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
@@ -151,9 +171,14 @@
                                 <PropertyValueFactory property="rue" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="50.0" text="Numéro">
+                        <TableColumn prefWidth="50.0" text="Num">
                             <cellValueFactory>
                                 <PropertyValueFactory property="num" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="50.0" text="BP">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="box" />
                             </cellValueFactory>
                         </TableColumn>
                         <TableColumn prefWidth="75.0" text="Code Postal">
@@ -219,7 +244,9 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="140.0" />
                         <ColumnConstraints hgrow="SOMETIMES" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="140.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="5.0" prefWidth="15.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="5.0" prefWidth="15.0" />
                     </columnConstraints>
                     <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -253,8 +280,23 @@
 
                         <Label text="Rue" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                         <TextField fx:id="rueText" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label text="Numéro" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                        <TextField fx:id="numText" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <GridPane GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                              <Label text="Numéro" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                              <TextField fx:id="numText" GridPane.columnIndex="1" />
+                        <Label text="Boîte" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <TextField fx:id="boxText" GridPane.columnIndex="3" />
+                     </children>
+                  </GridPane>
 
                         <Label text="Code Postal" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
                         <TextField fx:id="codePostalText" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -288,9 +330,44 @@
                   <Label alignment="TOP_CENTER" text="Numéro de compte" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
                   <TextField fx:id="accountText" GridPane.columnIndex="3" GridPane.rowIndex="7" />
                   <Label text="Affilié le" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
-                  <DatePicker fx:id="affiliationDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                        <Label text="Comité ?" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
-                  <CheckBox fx:id="comiteCheck" mnemonicParsing="false" text="fait partie du comité" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                  <GridPane GridPane.columnIndex="1" GridPane.rowIndex="8">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <DatePicker fx:id="affiliationDatePicker" />
+                        <Button fx:id="currentYearButton" focusTraversable="false" mnemonicParsing="false" text="2020" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <effect>
+                              <Lighting>
+                                 <bumpInput>
+                                    <Shadow />
+                                 </bumpInput>
+                                 <light>
+                                    <Light.Distant />
+                                 </light>
+                              </Lighting>
+                           </effect>
+                        </Button>
+                        <Button fx:id="yearPlusOneButton" mnemonicParsing="false" text="2022" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <effect>
+                              <Lighting>
+                                 <bumpInput>
+                                    <Shadow />
+                                 </bumpInput>
+                                 <light>
+                                    <Light.Distant />
+                                 </light>
+                              </Lighting>
+                           </effect>
+                        </Button>
+                     </children>
+                  </GridPane>
+                  <CheckBox fx:id="comiteCheck" mnemonicParsing="false" text="fait partie du comité" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
                   <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
                   <TextArea fx:id="dscpTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.rowSpan="2" />
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="10">
@@ -303,6 +380,13 @@
                   <TextArea fx:id="paymentsTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="12" GridPane.rowSpan="4" />
                   <Label text="Payments" GridPane.halignment="CENTER" GridPane.rowIndex="12" GridPane.valignment="CENTER" />
                   <TextField fx:id="techIdLabel" editable="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="CENTER" />
+                  <CheckBox fx:id="activeCheck" mnemonicParsing="false" text="Actif" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
+                  <HBox fx:id="tachiBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="5" GridPane.rowIndex="7" GridPane.rowSpan="9" />
+                  <TextField fx:id="membersCount" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                  <TextField fx:id="activeMembers" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                  <TextField fx:id="inactiveMembers" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                  <TextField fx:id="membersAffiliated" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                  <TextField fx:id="membersAffiliatedNextYear" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="5" />
                     </children>
                 </GridPane>
             </children>

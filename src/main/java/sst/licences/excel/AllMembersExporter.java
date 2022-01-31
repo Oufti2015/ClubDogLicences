@@ -23,10 +23,16 @@ public class AllMembersExporter extends ExportToExcel {
 
     @Override
     public void updateMembre(Membre membre) {
+        // No update needed
     }
 
     @Override
     public boolean saveMembres() {
         return false;
+    }
+
+    @Override
+    public String exportName() {
+        return "Tous les Membres";
     }
 }

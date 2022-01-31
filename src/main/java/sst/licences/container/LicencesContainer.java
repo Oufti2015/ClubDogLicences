@@ -1,19 +1,18 @@
 package sst.licences.container;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.util.Strings;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 import sst.licences.model.Payment;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -76,6 +75,18 @@ public class LicencesContainer {
     }
 
     public List<Membre> membres() {
+        return activeMembers();
+    }
+
+    public List<Membre> activeMembers() {
+        return membres.stream().filter(Membre::isActive).collect(Collectors.toList());
+    }
+
+    public List<Membre> inactiveMembers() {
+        return membres.stream().filter(m -> !m.isActive()).collect(Collectors.toList());
+    }
+
+    public List<Membre> allMembers() {
         return membres;
     }
 
@@ -93,11 +104,13 @@ public class LicencesContainer {
             // create Gson instance
             Gson gson = new Gson();
             // create a reader
-            try (Reader reader = Files.newBufferedReader(Paths.get(LicencesConstants.MEMBRES_JSON_FILE), StandardCharsets.ISO_8859_1)) {
-                // convert JSON string to LicencesContainer object
+            try (InputStreamReader reader = new InputStreamReader(
+                    new FileInputStream(LicencesConstants.MEMBRES_JSON_FILE),
+                    StandardCharsets.UTF_8.newDecoder())) {
+                // convert JSON string to Book object
                 me = gson.fromJson(reader, LicencesContainer.class);
-                log.info(String.format("...%5d membres chargés.", me().membres.size()));
-                log.info(String.format("...%5d payements chargés.", me().payments.size()));
+                log.info(String.format("...%5d members loaded.", me().membres.size()));
+                log.info(String.format("...%5d payements loaded.", me().payments.size()));
             }
         } catch (Exception ex) {
             log.fatal("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE, ex);
@@ -177,6 +190,28 @@ public class LicencesContainer {
         }
     }
 
+
+    public static LicencesContainer load(File file) {
+        log.info("Loading JSON file...");
+        LicencesContainer result = null;
+        try {
+            // create Gson instance
+            Gson gson = new Gson();
+            // create a reader
+            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file),
+                    StandardCharsets.UTF_8.newDecoder())) {
+                // convert JSON string to Book object
+                result = gson.fromJson(reader, LicencesContainer.class);
+                log.info(String.format("...%5d members loaded.", me().membres.size()));
+                log.info(String.format("...%5d payements loaded.", me().payments.size()));
+            }
+        } catch (Exception ex) {
+            log.fatal("Cannot read JSON file " + LicencesConstants.MEMBRES_JSON_FILE, ex);
+            System.exit(-1);
+        }
+        return result;
+    }
+
     public void save() {
         saveJSON();
     }
@@ -188,8 +223,10 @@ public class LicencesContainer {
             // convert book object to JSON
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String json = gson.toJson(LicencesContainer.me());
-            try (FileWriter myWriter = new BufferedWriter(Paths.get(LicencesConstants.MEMBRES_JSON_FILE))) {
-                myWriter.write(json);
+            try (OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream(LicencesConstants.MEMBRES_JSON_FILE),
+                    StandardCharsets.UTF_8.newEncoder())) {
+                writer.write(json);
             }
         } catch (IOException e) {
             log.fatal("Cannot write JSON file " + LicencesConstants.MEMBRES_JSON_FILE, e);
@@ -245,15 +282,17 @@ public class LicencesContainer {
 
     public String payments(Membre membre) {
         String result = "";
-        if (Strings.isNotEmpty(membre.getAccountId())) {
+        if (!Strings.isNullOrEmpty(membre.getAccountId())) {
             result = payments.stream()
                     .filter(p -> p.getCompte().equals(membre.getAccountId()))
+                    .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
                     .map(Payment::toString)
                     .collect(Collectors.joining("\n"));
         } else {
             result = payments.stream()
                     .filter(p -> p.getNom().toLowerCase(Locale.ROOT).contains(membre.getNom().toLowerCase(Locale.ROOT))
                             && LicencesContainer.me.membres().stream().map(Membre::getAccountId).filter(a -> a != null && a.equals(p.getCompte())).count() == 0)
+                    .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
                     .map(Payment::toFullString)
                     .collect(Collectors.joining("\n"));
         }
@@ -261,9 +300,26 @@ public class LicencesContainer {
     }
 
     public List<Membre> compositionFamily(Membre membre) {
-        return LicencesContainer.me().membres()
+        return LicencesContainer.me().allMembers()
                 .stream()
                 .filter(m -> Membre.addressId(m).equals(Membre.addressId(membre)))
+                .filter(Membre::isActive)
                 .collect(Collectors.toList());
+    }
+
+    public List<Membre> thisYearMembers() {
+        return MemberEligibility.eligibleMembres(LocalDate.now().getYear());
+    }
+
+    public List<Membre> nextYearMembers() {
+        return MemberEligibility.eligibleMembres(LocalDate.now().getYear() + 1);
+    }
+
+    public List<Membre> unpaidMembers() {
+        return MemberEligibility.unpaid(LocalDate.now().getYear());
+    }
+
+    public List<Membre> comityMembers() {
+        return membres().stream().filter(Membre::isComite).collect(Collectors.toList());
     }
 }

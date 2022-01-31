@@ -16,6 +16,13 @@ public class BankIdentifierGenerator {
 
     }
 
+    public static void reset(Membre membre) {
+        if (addressesMap.size() == 0) {
+            initAddresses();
+        }
+        addressesMap.remove(Membre.addressId(membre));
+    }
+
     public static String newId(Membre membre) {
         if (addressesMap.size() == 0) {
             initAddresses();
@@ -41,7 +48,7 @@ public class BankIdentifierGenerator {
 
     private static void initAddresses() {
         for (Membre membre : LicencesContainer.me().membres()) {
-            addressesMap.put(Membre.addressId(membre), membre.getTechnicalIdentifer());
+            addressesMap.put(Membre.addressId(membre), membre.getTechnicalIdentifier());
         }
     }
 

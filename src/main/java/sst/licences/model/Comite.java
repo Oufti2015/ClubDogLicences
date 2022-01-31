@@ -1,6 +1,7 @@
 package sst.licences.model;
 
 import com.google.gson.Gson;
+import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
 import sst.licences.main.LicencesConstants;
 
@@ -11,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Log4j2
 public class Comite {
@@ -31,7 +33,15 @@ public class Comite {
                 return this.nom.equals(membre.getNom()) && this.prenom.equals(membre.getPrenom());
             }
             MembreDuComite membre = (MembreDuComite) obj;
-            return this.nom.equals(membre.nom) && this.prenom.equals(membre.prenom);
+            if (membre != null) {
+                return this.nom.equals(membre.nom) && this.prenom.equals(membre.prenom);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(nom, prenom);
         }
     }
 

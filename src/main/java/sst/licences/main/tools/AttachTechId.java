@@ -32,7 +32,7 @@ public class AttachTechId {
                     start = start.plusDays(1);
                 }
                 log.info("%s %s %s%n", m.getPrenom(), m.getNom(), bankId);
-                m.setTechnicalIdentifer(bankId);
+                m.setTechnicalIdentifier(bankId);
             }
         }
 

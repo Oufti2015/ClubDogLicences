@@ -5,34 +5,30 @@ import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class NewMembersExporter extends ExportToExcel {
+public class NonAffiliateMembersExporter extends ExportToExcel {
     @Override
     public String fileBaseName() {
-        return LicencesConstants.NEW_MEMBRES_XLSX;
+        return LicencesConstants.NON_AFFILIATE_MEMBRES_XLSX;
     }
 
     @Override
     public List<Membre> membres() {
-        return LicencesContainer.me().membres()
-                .stream()
-                .filter(m -> (m.getLicence() == null || m.getLicence().isEmpty()) && !m.isSentToMyKKusch())
-                .collect(Collectors.toList());
+        return LicencesContainer.me().unpaidMembers();
     }
 
     @Override
     public void updateMembre(Membre membre) {
-        membre.setSentToMyKKusch(true);
+        // No update needed
     }
 
     @Override
     public boolean saveMembres() {
-        return true;
+        return false;
     }
 
     @Override
     public String exportName() {
-        return "Nouveaux Membres";
+        return "Membres Non Affiliés";
     }
 }
