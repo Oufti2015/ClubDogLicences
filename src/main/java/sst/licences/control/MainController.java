@@ -14,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 import sst.licences.bank.BankIdentifierGenerator;
+import sst.licences.config.ConfigUtil;
 import sst.licences.container.LicencesContainer;
 import sst.licences.container.MemberEligibility;
 import sst.licences.container.SimpleMembre;
@@ -145,14 +146,8 @@ public class MainController {
 
         membersCount();
 
-        //roundDailGauge.getStyleClass().add("colorscheme-red-to-blue-5");
         tachiBox.getChildren().add(roundDailGauge);
-        //roundDailGaugeNY.getStyleClass().add("colorscheme-red-to-blue-5");
         tachiBox.getChildren().add(roundDailGaugeNY);
-/*        for (int i = 0; i < 5; i++) {
-            Segment lSegment = new PercentSegment(roundDailGauge, i * 20.0, (i + 1) * 20.0);
-            roundDailGauge.segments().add(lSegment);
-        }*/
     }
 
     private void membersCount() {
@@ -548,7 +543,7 @@ public class MainController {
     private FileChooser csvFileChooser(String title) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
-        fileChooser.setInitialDirectory(new File(LicencesConstants.WORKING_FOLDER));
+        fileChooser.setInitialDirectory(new File(ConfigUtil.me().directoriesDownload()));
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("CSV Files", "*.csv");
         fileChooser.getExtensionFilters().add(filter);
 
