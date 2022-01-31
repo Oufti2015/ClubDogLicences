@@ -39,7 +39,7 @@ public class CheckTechId {
     public static void oldmain(String[] args) {
         LicencesContainer.load();
 
-        String filename = LicencesConstants.WORKING_FOLDER + File.separator + "membres.old.json";
+        String filename = LicencesConstants.WORKING_FOLDER + "membres.old.json";
         LicencesContainer oldCont = LicencesContainer.load(new File(filename));
 
         List<Membre> membres = LicencesContainer.me().allMembers();
