@@ -1,5 +1,6 @@
 package sst.licences.bank;
 
+import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Membre;
 
@@ -8,12 +9,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Log4j2
 public class BankIdentifierGenerator {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final Map<String, String> addressesMap = new HashMap<>();
 
     private BankIdentifierGenerator() {
-
     }
 
     public static void reset(Membre membre) {
@@ -52,4 +53,38 @@ public class BankIdentifierGenerator {
         }
     }
 
+    public static String techId(Membre membre) {
+        if (addressesMap.size() == 0) {
+            initAddresses();
+        }
+        return addressesMap.get(Membre.addressId(membre));
+    }
+
+    public static boolean correctTechId(String techId) {
+        return addressesMap.values().stream().filter(v -> v.equals(techId)).count() <= 1;
+    }
+
+    public static void checkTechnicalId() {
+        boolean errorFound = false;
+        for (Membre m : LicencesContainer.me().membres()) {
+            if (m.isComite()) {
+                if (m.getTechnicalIdentifier() != null) {
+                    log.warn(m.fullName() + " " + m.getTechnicalIdentifier() + " est dans le comité...");
+                    BankIdentifierGenerator.reset(m);
+                    m.setTechnicalIdentifier(null, true);
+                    errorFound = true;
+                }
+            } else {
+                if (!BankIdentifierGenerator.correctTechId(m.getTechnicalIdentifier())) {
+                    log.warn(m.fullName() + " " + m.getTechnicalIdentifier());
+                    BankIdentifierGenerator.reset(m);
+                    m.setTechnicalIdentifier(BankIdentifierGenerator.newId(m), true);
+                    errorFound = true;
+                }
+            }
+        }
+        if (errorFound) {
+            LicencesContainer.me().save();
+        }
+    }
 }

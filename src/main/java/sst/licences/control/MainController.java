@@ -148,6 +148,8 @@ public class MainController {
 
         tachiBox.getChildren().add(roundDailGauge);
         tachiBox.getChildren().add(roundDailGaugeNY);
+
+        BankIdentifierGenerator.checkTechnicalId();
     }
 
     private void membersCount() {
@@ -410,6 +412,8 @@ public class MainController {
     @FXML
     private void reset() {
         reset(false);
+        BankIdentifierGenerator.checkTechnicalId();
+        membersCount();
     }
 
     private void reset(boolean justCleanForm) {
