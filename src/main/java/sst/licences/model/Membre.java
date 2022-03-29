@@ -13,10 +13,7 @@ import sst.licences.history.History;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Log4j2
 @ToString
@@ -145,16 +142,16 @@ public class Membre implements Comparable<Membre> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Membre membre = (Membre) o;
-        return Objects.equal(nom, membre.nom)
-                && Objects.equal(prenom, membre.prenom)
+        return Objects.equal(nom.toUpperCase(Locale.ROOT), membre.nom.toUpperCase(Locale.ROOT))
+                && Objects.equal(prenom.toUpperCase(Locale.ROOT), membre.prenom.toUpperCase(Locale.ROOT))
                 //   && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
-                && Objects.equal(codePays, membre.codePays)
-                && Objects.equal(langue, membre.langue)
-                && Objects.equal(rue, membre.rue)
-                && Objects.equal(num, membre.num)
-                && Objects.equal(box, membre.box)
-                && Objects.equal(codePostal, membre.codePostal)
-                && Objects.equal(localite, membre.localite);
+//                && Objects.equal(codePays, membre.codePays)
+//                && Objects.equal(langue, membre.langue)
+//                && Objects.equal(rue.toUpperCase(Locale.ROOT), membre.rue.toUpperCase(Locale.ROOT))
+//                && Objects.equal(num.toUpperCase(Locale.ROOT), membre.num.toUpperCase(Locale.ROOT))
+                //   && Objects.equal(box, membre.box)
+                /*&& Objects.equal(codePostal, membre.codePostal)
+                && Objects.equal(localite.toUpperCase(Locale.ROOT), membre.localite.toUpperCase(Locale.ROOT))*/;
     }
 
     @Override
@@ -195,77 +192,107 @@ public class Membre implements Comparable<Membre> {
     }
 
     public void setNom(String nom) {
-        History.history(this, FIELD_NAME, this.nom, nom);
+        if (this.nom != null) {
+            History.history(this, FIELD_NAME, this.nom, nom);
+        }
         this.nom = nom;
     }
 
     public void setPrenom(String prenom) {
-        History.history(this, FIELD_FIRSTNAME, this.prenom, prenom);
+        if (this.prenom != null) {
+            History.history(this, FIELD_FIRSTNAME, this.prenom, prenom);
+        }
         this.prenom = prenom;
     }
 
     public void setRue(String rue) {
-        History.history(this, FIELD_ADDRESS_STREET, this.rue, rue);
+        if (this.rue != null) {
+            History.history(this, FIELD_ADDRESS_STREET, this.rue, rue);
+        }
         this.rue = rue;
     }
 
     public void setNum(String num) {
-        History.history(this, FIELD_ADDRESS_STREET_NUMBER, this.num, num);
+        if (this.num != null) {
+            History.history(this, FIELD_ADDRESS_STREET_NUMBER, this.num, num);
+        }
         this.num = num;
     }
 
     public void setBox(String box) {
-        History.history(this, FIELD_ADDRESS_POSTAL_BOX, this.box, box);
+        if (this.box != null) {
+            History.history(this, FIELD_ADDRESS_POSTAL_BOX, this.box, box);
+        }
         this.box = box;
     }
 
     public void setCodePostal(String codePostal) {
-        History.history(this, FIELD_ADDRESS_POST_CODE, this.codePostal, codePostal);
+        if (this.codePostal != null) {
+            History.history(this, FIELD_ADDRESS_POST_CODE, this.codePostal, codePostal);
+        }
         this.codePostal = codePostal;
     }
 
     public void setLocalite(String localite) {
-        History.history(this, FIELD_ADDRESS_CITY, this.localite, localite);
+        if (this.localite != null) {
+            History.history(this, FIELD_ADDRESS_CITY, this.localite, localite);
+        }
         this.localite = localite;
     }
 
     public void setTelephone(String telephone) {
-        History.history(this, FIELD_TELEPHONE, this.telephone, telephone);
+        if (this.telephone != null) {
+            History.history(this, FIELD_TELEPHONE, this.telephone, telephone);
+        }
         this.telephone = telephone;
     }
 
     public void setGsm(String gsm) {
-        History.history(this, FIELD_GSM, this.gsm, gsm);
+        if (this.gsm != null) {
+            History.history(this, FIELD_GSM, this.gsm, gsm);
+        }
         this.gsm = gsm;
     }
 
     public void setEmail(Email email) {
-        History.history(this, FIELD_EMAIL, this.email, email);
+        if (this.email != null) {
+            History.history(this, FIELD_EMAIL, this.email, email);
+        }
         this.email = email;
     }
 
     public void setDateDeNaissance(LocalDate dateDeNaissance) {
-        History.history(this, FIELD_BIRTH_DATE, this.dateDeNaissance, dateDeNaissance);
+        if (this.dateDeNaissance != null) {
+            History.history(this, FIELD_BIRTH_DATE, this.dateDeNaissance, dateDeNaissance);
+        }
         this.dateDeNaissance = dateDeNaissance;
     }
 
     public void setCodePays(String codePays) {
-        History.history(this, FIELD_COUNTRY, this.codePays, codePays);
+        if (this.codePays != null) {
+            History.history(this, FIELD_COUNTRY, this.codePays, codePays);
+        }
         this.codePays = codePays;
     }
 
     public void setLangue(String langue) {
-        History.history(this, FIELD_LANGUAGE, this.langue, langue);
+        if (this.langue != null) {
+            History.history(this, FIELD_LANGUAGE, this.langue, langue);
+        }
         this.langue = langue;
     }
 
     public void setLicence(String licence) {
-        History.history(this, FIELD_LICENSE, this.licence, licence);
+        if (this.licence != null) {
+            History.history(this, FIELD_LICENSE, this.licence, licence);
+        }
         this.licence = licence;
     }
 
     public void setComite(boolean comite) {
-        History.history(this, FIELD_COMITY, this.comite, comite);
+        if (this.comite != comite) {
+            History.history(this, FIELD_COMITY, this.comite, comite);
+        }
         this.comite = comite;
     }
 
@@ -331,5 +358,45 @@ public class Membre implements Comparable<Membre> {
                 .max(Comparator.comparing(HistoryData::getTime));
         return first.map(historyData -> ChronoUnit.DAYS.between(historyData.getTime(), LocalDateTime.now()))
                 .orElse(9999L);
+    }
+
+    public static boolean memberCompare(Membre membre1, Membre membre2) {
+        if (membre2 == membre1) return true;
+        if (membre1 == null || membre2 == null) return false;
+        boolean result = true;
+
+        if (!Objects.equal(membre1.dateDeNaissance, membre2.dateDeNaissance)) {
+            log.warn("{} has different birth date [{}] != [{}]", membre1.fullName(), membre1.dateDeNaissance, membre2.dateDeNaissance);
+            result = false;
+        }
+        if (!Objects.equal(membre1.codePays, membre2.codePays)) {
+            log.warn("{} has different country [{}] != [{}]", membre1.fullName(), membre1.codePays, membre2.codePays);
+            result = false;
+        }
+        if (!Objects.equal(membre1.langue, membre2.langue)) {
+            log.warn("{} has different language [{}] != [{}]", membre1.fullName(), membre1.langue, membre2.langue);
+            result = false;
+        }
+        if (!Objects.equal(membre1.rue, membre2.rue)) {
+            log.warn("{} has different street [{}] != [{}]", membre1.fullName(), membre1.rue, membre2.rue);
+            result = false;
+        }
+        if (!Objects.equal(membre1.num, membre2.num)) {
+            log.warn("{} has different street number [{}] != [{}]", membre1.fullName(), membre1.num, membre2.num);
+            result = false;
+        }
+        if (!Objects.equal(MoreObjects.firstNonNull(membre1.box, ""), membre2.box)) {
+            log.warn("{} has different box [{}] != [{}]", membre1.fullName(), membre1.box, membre2.box);
+            result = false;
+        }
+        if (!Objects.equal(membre1.codePostal, membre2.codePostal)) {
+            log.warn("{} has different postal code [{}] != [{}]", membre1.fullName(), membre1.codePostal, membre2.codePostal);
+            result = false;
+        }
+        if (!Objects.equal(membre1.localite, membre2.localite)) {
+            log.warn("{} has different city [{}] != [{}]", membre1.fullName(), membre1.localite, membre2.localite);
+            result = false;
+        }
+        return result;
     }
 }

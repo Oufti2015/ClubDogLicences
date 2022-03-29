@@ -6,7 +6,7 @@
 
     <groupId>sst.licences</groupId>
     <artifactId>ClubDogLicences</artifactId>
-    <version>2022.006</version>
+    <version>2022.007</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -103,11 +103,6 @@
             <groupId>org.xhtmlrenderer</groupId>
             <artifactId>flying-saucer-pdf-openpdf</artifactId>
             <version>9.1.22</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>2.13.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

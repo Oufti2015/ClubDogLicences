@@ -1,5 +1,7 @@
 package sst.licences.container;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,14 +15,8 @@ import sst.licences.model.Payment;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 @Log4j2
 public class LicencesContainer {
@@ -321,5 +317,20 @@ public class LicencesContainer {
 
     public List<Membre> comityMembers() {
         return membres().stream().filter(Membre::isComite).collect(Collectors.toList());
+    }
+
+    public Optional<Membre> membre(Membre membre) {
+        Membre result = null;
+        for (Membre m : allMembers()) {
+            if (m.getNom() == null) {
+                log.warn("Membre " + m + " has no name");
+                continue;
+            }
+            if (m.equals(membre)) {
+                result = m;
+                break;
+            }
+        }
+        return Optional.ofNullable(result);
     }
 }

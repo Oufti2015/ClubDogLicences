@@ -22,7 +22,7 @@ public class History {
         initValue = MoreObjects.firstNonNull(initValue, "");
         changedValue = MoreObjects.firstNonNull(changedValue, "");
         if (!initValue.equals(changedValue)) {
-            HistoryData.ActionType actionType = (LicencesContainer.me().allMembers().contains(membre)) ? HistoryData.ActionType.UPDATE : HistoryData.ActionType.CREATE;
+            HistoryData.ActionType actionType = (LicencesContainer.me().membre(membre).isPresent()) ? HistoryData.ActionType.UPDATE : HistoryData.ActionType.CREATE;
             if (historicalDataCutover) {
                 actionType = HistoryData.ActionType.CREATE;
             }

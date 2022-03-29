@@ -1,5 +1,6 @@
 package sst.licences.excel;
 
+import com.google.common.base.MoreObjects;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
@@ -7,6 +8,7 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
+import sst.licences.container.MemberEligibility;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Comite;
 import sst.licences.model.Membre;
@@ -18,10 +20,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 public class Import {
@@ -42,12 +44,19 @@ public class Import {
             r.forEach(x -> {
                 if (!x[0].equals("Nom") && !x[0].equals("Rue")) {
                     Membre member = member(x);
-                    if (!LicencesContainer.me().allMembers().contains(member)) {
-                        list.add(member);
+                    Optional<Membre> optionalMembre = LicencesContainer.me().membre(member);
+                    if (!optionalMembre.isPresent()) {
+                        //list.add(member);
+
+                        log.warn("Member " + member.fullName() + " not found in database");
                     } else {
-                        List<Membre> membres = LicencesContainer.me().membres();
-                        Membre membre = membres.get(membres.indexOf(member));
+                        Membre membre = optionalMembre.get();
+                        Membre.memberCompare(membre, member);
                         membre.update(member);
+                        if (!MemberEligibility.isCurrentYearAffiliated(membre)) {
+                            log.warn("Member " + membre.fullName() + " is not affiliated to current year");
+                        }
+                        //log.info("Member " + membre.fullName() + " updated");
                     }
                 }
             });
@@ -76,7 +85,7 @@ public class Import {
         membre.setPrenom(x[i++]);
         membre.setRue(x[i++]);
         membre.setNum(x[i++]);
-        membre.setBox(x[i++]);
+        membre.setBox(MoreObjects.firstNonNull(x[i++], ""));
         membre.setCodePostal(x[i++]);
         membre.setLocalite(x[i++]);
         membre.setTelephone(x[i++]);
