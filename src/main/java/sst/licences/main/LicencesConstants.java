@@ -19,6 +19,10 @@ public class LicencesConstants {
     public static final String WORKING_FOLDER = ConfigUtil.me().directoriesWorking();
     public static final String MEMBRES_JSON_FILE = ConfigUtil.me().dataFilesMembers();
     public static final String COMITE_JSON_FILE = ConfigUtil.me().dataFilesComite();
+    public static final String CONFIG_YAML_FILE = WORKING_FOLDER + "config.yaml";
+    public static final String MEMBRES_YAML_FILE = WORKING_FOLDER + "membres.yaml";
+    public static final String PAYMENTS_YAML_FILE = WORKING_FOLDER + "payments.yaml";
+    public static final String COMITE_YAML_FILE = WORKING_FOLDER + "comite.yaml";
 
     public static final String REPORT_FOLDER = ConfigUtil.me().directoriesReport();
 

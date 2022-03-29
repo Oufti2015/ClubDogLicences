@@ -307,7 +307,7 @@ public class MainController {
 
         selectedItem.init(membre);
 
-        LicencesContainer.me().save();
+        LicencesContainer.me().saveJSON();
         reset();
     }
 

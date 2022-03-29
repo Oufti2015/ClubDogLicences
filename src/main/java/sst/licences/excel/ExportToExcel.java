@@ -97,7 +97,7 @@ public abstract class ExportToExcel implements ExcelExporter {
         log.info("Created file: " + file.getAbsolutePath());
 
         if (saveMembres()) {
-            LicencesContainer.me().save();
+            LicencesContainer.me().saveJSON();
         }
     }
 

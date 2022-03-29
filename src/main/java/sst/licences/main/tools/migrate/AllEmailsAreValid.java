@@ -10,7 +10,7 @@ public class AllEmailsAreValid {
         System.exit(-1);
         OldLicencesContainer.load();
 
-        LicencesContainer.me().setLastBankIdentiferGenerated(OldLicencesContainer.me().getLastBankIdentiferGenerated());
+        LicencesContainer.me().getConfig().setLastBankIdentifierGenerated(OldLicencesContainer.me().getLastBankIdentiferGenerated());
         LicencesContainer.me().setPaymentsList(OldLicencesContainer.me().payments());
 
         for (OldMembre m : OldLicencesContainer.me().membres()) {
@@ -18,6 +18,6 @@ public class AllEmailsAreValid {
             LicencesContainer.me().addMembre(membre);
         }
 
-        LicencesContainer.me().save();
+        LicencesContainer.me().saveJSON();
     }
 }
