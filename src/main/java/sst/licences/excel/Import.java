@@ -14,16 +14,17 @@ import sst.licences.model.Comite;
 import sst.licences.model.Membre;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j2
 public class Import {
@@ -35,7 +36,7 @@ public class Import {
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
 
         LicencesContainer.me().membres().forEach(m -> m.setSentToMyKKusch(false));
-        try (InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), LicencesConstants.CHARSET_ANSI_CP_1252);
+        try (InputStreamReader inputStreamReader = new InputStreamReader(Files.newInputStream(file.toPath()), LicencesConstants.CHARSET_ANSI_CP_1252);
              CSVReader reader = new CSVReaderBuilder(inputStreamReader)
                      .withCSVParser(csvParser)   // custom CSV parser
                      .withSkipLines(1)           // skip the first line, header info
@@ -46,8 +47,6 @@ public class Import {
                     Membre member = member(x);
                     Optional<Membre> optionalMembre = LicencesContainer.me().membre(member);
                     if (!optionalMembre.isPresent()) {
-                        //list.add(member);
-
                         log.warn("Member " + member.fullName() + " not found in database");
                     } else {
                         Membre membre = optionalMembre.get();
@@ -56,10 +55,17 @@ public class Import {
                         if (!MemberEligibility.isCurrentYearAffiliated(membre)) {
                             log.warn("Member " + membre.fullName() + " is not affiliated to current year");
                         }
-                        //log.info("Member " + membre.fullName() + " updated");
                     }
                 }
             });
+
+            List<Membre> notSent = LicencesContainer.me().membres().stream()
+                    .filter(MemberEligibility::isCurrentYearAffiliated)
+                    .filter(m -> !m.isSentToMyKKusch())
+                    .collect(Collectors.toList());
+            for (Membre membre : notSent) {
+                log.warn("Not Sent {}", membre);
+            }
 
             log.info("Adding " + list.size() + " members...");
             for (Membre membre : list) {
@@ -97,9 +103,7 @@ public class Import {
         membre.setLangue(x[i++]);
         membre.setLicence(x[i]);
 
-        //membre.setComite(comite.isMembreDuComite(membre));
         membre.setSentToMyKKusch(true);
-        //membre.setAffiliation(LocalDate.of(LocalDate.now().getYear(), Month.JANUARY, 1));
 
         return membre;
     }

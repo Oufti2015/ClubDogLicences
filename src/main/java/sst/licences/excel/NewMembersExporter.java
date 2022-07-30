@@ -1,6 +1,7 @@
 package sst.licences.excel;
 
 import sst.licences.container.LicencesContainer;
+import sst.licences.container.MemberEligibility;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
@@ -17,7 +18,10 @@ public class NewMembersExporter extends ExportToExcel {
     public List<Membre> membres() {
         return LicencesContainer.me().membres()
                 .stream()
-                .filter(m -> (m.getLicence() == null || m.getLicence().isEmpty()) && !m.isSentToMyKKusch())
+                .filter(m -> (m.getLicence() == null
+                        || m.getLicence().isEmpty()
+                        || MemberEligibility.isCurrentYearAffiliated(m))
+                        && !m.isSentToMyKKusch())
                 .collect(Collectors.toList());
     }
 
