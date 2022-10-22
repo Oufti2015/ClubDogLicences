@@ -206,6 +206,13 @@ public class MainController {
             stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().compareTo(LocalDate.of(LocalDate.now().getYear() - 1, Month.SEPTEMBER, 1)) > 0);
         } else if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.NEXT)) {
             stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().compareTo(LocalDate.of(LocalDate.now().getYear(), Month.SEPTEMBER, 1)) > 0);
+        } else if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.NOPE)) {
+            stream = stream.filter(m -> !m.isComite())
+                    .filter(m -> m.getAffiliation() == null || m.getAffiliation().compareTo(LocalDate.of(LocalDate.now().getYear() - 1, Month.SEPTEMBER, 1)) < 0)
+                    .filter(m -> {
+                        String payments = LicencesContainer.me().payments(m);
+                        return payments.contains("" + LocalDate.now().getYear());
+                    });
         }
         stream.forEach(m -> data.add(new SimpleMembre(m)));
     }

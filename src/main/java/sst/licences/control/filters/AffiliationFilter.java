@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public class AffiliationFilter {
     public static final AffiliationFilter ALL = new AffiliationFilter("Tous");
+    public static final AffiliationFilter NOPE = new AffiliationFilter("Sans");
     public static final AffiliationFilter CURRENT = new AffiliationFilter(Integer.toString(LocalDate.now().getYear()));
     public static final AffiliationFilter NEXT = new AffiliationFilter(Integer.toString(LocalDate.now().getYear()+1));
 
@@ -22,6 +23,6 @@ public class AffiliationFilter {
     }
 
     public static ObservableList<AffiliationFilter> getList() {
-        return FXCollections.observableArrayList(ALL, CURRENT, NEXT);
+        return FXCollections.observableArrayList(ALL, NOPE, CURRENT, NEXT);
     }
 }
