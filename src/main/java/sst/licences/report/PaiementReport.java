@@ -3,13 +3,13 @@ package sst.licences.report;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Membre;
 import sst.licences.model.Payment;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -25,28 +25,6 @@ public class PaiementReport implements IPaymentsReport {
         this.input = input;
 
         return this;
-    }
-
-    public void header(PDPage page) throws IOException {
-
-        // Create a new font object selecting one of the PDF base fonts
-        PDFont font = PDType1Font.HELVETICA_BOLD;
-
-        // Start a new content stream which will "hold" the to be created content
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-        // Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
-        contentStream.beginText();
-        contentStream.setFont(font, 12);
-        contentStream.newLineAtOffset(10, START_OFFSET);
-        contentStream.showText("Nom    Chien    Montant    Normal 37 €    Familiale 50 €");
-        contentStream.lineTo(100, START_OFFSET);
-        contentStream.showText("Cours 25 €");
-        contentStream.endText();
-
-        // Make sure that the content stream is closed:
-        contentStream.close();
-
     }
 
     @Override
@@ -76,7 +54,7 @@ public class PaiementReport implements IPaymentsReport {
 
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String dateString = payement.getDate().format(dateTimeFormatter);  //17-02-2022
-            String line = String.format("%s %4.2f € %-30s",
+            String line = String.format("%s %4.2f EUROS %-30s",
                     dateString,
                     payement.getMontant(),
                     payement.getNom());
@@ -121,8 +99,12 @@ public class PaiementReport implements IPaymentsReport {
         contentStream.endText();
         // Make sure that the content stream is closed:
         contentStream.close();
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmmss");
+        String dateString = LocalDateTime.now().format(dateTimeFormatter);  //17-02-2022
+
         // Save the newly created document
-        document.save("BlankPage.pdf");
+        document.save("Payments" + dateString + ".pdf");
 
         // finally make sure that the document is properly closed.
         document.close();
