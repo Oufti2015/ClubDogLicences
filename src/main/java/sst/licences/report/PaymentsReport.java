@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PaymentsReport implements Report {
+public class PaymentsReport implements IMembreReport {
     private static final String TITLE = "Rapport des derniers payments";
     private final HTML content = new HTML();
 
     @Override
-    public Report input(List<Membre> input) {
+    public IMembreReport input(List<Membre> input) {
         header();
         HTMLBody body = content(input);
         trailer(body);
@@ -28,7 +28,7 @@ public class PaymentsReport implements Report {
     }
 
     @Override
-    public Report format() {
+    public IMembreReport format() {
         return this;
     }
 

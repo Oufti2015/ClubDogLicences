@@ -9,13 +9,12 @@ import sst.common.html.table.HTMLTableRow;
 import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 import sst.licences.report.AllMembersReport;
-import sst.licences.report.Report;
+import sst.licences.report.IMembreReport;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MembersListReport implements Report {
+public class MembersListReport implements IMembreReport {
     private final ListType listType;
     private List<Membre> input;
     private final HTML htmlContent = new HTML();
@@ -25,13 +24,13 @@ public class MembersListReport implements Report {
     }
 
     @Override
-    public Report input(List<Membre> input) {
+    public IMembreReport input(List<Membre> input) {
         this.input = input;
         return this;
     }
 
     @Override
-    public Report format() {
+    public IMembreReport format() {
         htmlContent.head().css("report.css");
         HTMLBody body = htmlContent.body();
         body.addChild(new HTMLHeader(1).textContent(LicencesConstants.APPLICATION_TITLE));

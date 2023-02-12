@@ -15,18 +15,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Log4j2
-public class AllMembersReport implements Report {
+public class AllMembersReport implements IMembreReport {
     protected static final String NBSP = "&nbsp;";
     private List<Membre> input = null;
 
     @Override
-    public Report input(List<Membre> input) {
+    public IMembreReport input(List<Membre> input) {
         this.input = input;
         return this;
     }
 
     @Override
-    public Report format() {
+    public IMembreReport format() {
         try {
             eachFamilyCard(input);
             wholeSite();

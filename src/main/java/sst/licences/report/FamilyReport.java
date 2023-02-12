@@ -14,20 +14,20 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FamilyReport implements Report {
+public class FamilyReport implements IMembreReport {
     public static final String OUI = "Oui";
     public static final String NON = "Non";
     private List<Membre> input = null;
     private final HTML htmlContent = new HTML();
 
     @Override
-    public Report input(List<Membre> input) {
+    public IMembreReport input(List<Membre> input) {
         this.input = input;
         return this;
     }
 
     @Override
-    public Report format() {
+    public IMembreReport format() {
         if (!input.isEmpty()) {
             htmlContent.head().css("report.css");
             HTMLBody body = htmlContent.body();

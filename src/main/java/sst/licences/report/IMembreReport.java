@@ -4,8 +4,10 @@ import sst.licences.model.Membre;
 
 import java.util.List;
 
-public interface Report {
-    Report input(List<Membre> input);
-    Report format();
+public interface IMembreReport {
+    IMembreReport input(List<Membre> input);
+
+    IMembreReport format();
+
     String output();
 }

@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @EqualsAndHashCode
-public class Payment {
+public class Payment implements Comparable<Payment> {
 
     @Setter
     @Getter
@@ -56,5 +56,10 @@ public class Payment {
                 nom,
                 communications,
                 compte);
+    }
+
+    @Override
+    public int compareTo(Payment o) {
+        return o.getDate().compareTo(this.getDate());
     }
 }
