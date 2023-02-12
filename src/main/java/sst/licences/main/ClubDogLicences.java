@@ -1,6 +1,5 @@
 package sst.licences.main;
 
-import com.google.common.base.Strings;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,15 +7,16 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
-import sst.common.file.output.OutputFile;
 import sst.licences.container.LicencesContainer;
 import sst.licences.control.MainController;
-import sst.licences.report.AllMembersReport;
-import sst.licences.report.PaymentsReport;
+import sst.licences.report.PaiementReport;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -67,24 +67,24 @@ public class ClubDogLicences extends Application {
         }
     }
 
-    private void onClose() {
-        String report = new PaymentsReport()
-                .input(LicencesContainer.me().allMembers()
-                        .stream()
-                        .filter(m -> !Strings.isNullOrEmpty(LicencesContainer.me().payments(m)))
-                        .collect(Collectors.toList()))
-                .format()
-                .output();
+    List<Double> anounts = Arrays.asList(25.0, 37.0, 50.0, 62.0, 75.0);
 
-        String filename = "report.html";
-        try (OutputFile outputFile = new OutputFile(filename)) {
-            outputFile.print(report);
+    private void onClose() {
+        LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
+
+        try {
+            new PaiementReport().input(LicencesContainer.me().payments()
+                            .stream()
+                            .filter(p -> p.getDate().compareTo(threeMonthsAgo) > 0)
+                            .filter(p -> anounts.contains(p.getMontant())).sorted()
+                            .collect(Collectors.toList()))
+                    .format();
         } catch (IOException e) {
-            log.error("Cannot open " + filename, e);
+            throw new RuntimeException(e);
         }
 
-        String output = new AllMembersReport().input(LicencesContainer.me().allMembers()).format().output();
-        log.info("output = " + output);
+//        String output = new AllMembersReport().input(LicencesContainer.me().allMembers()).format().output();
+//        log.info("output = " + output);
         log.info("... Leaving");
     }
 
