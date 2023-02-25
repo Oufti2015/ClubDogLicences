@@ -62,7 +62,7 @@ public class PaiementReport implements IPaymentsReport {
             contentStream.showText(line);
             lineOffset += 1;
             contentStream.newLine();
-            if (membreOpt.isPresent()) {
+            if (membreOpt.isPresent() && membreOpt.get().getDescription() != null) {
                 contentStream.showText(membreOpt.get().getDescription().trim());
                 contentStream.newLine();
             } else {
@@ -84,7 +84,6 @@ public class PaiementReport implements IPaymentsReport {
                 // Start a new content stream which will "hold" the to be created content
                 contentStream = new PDPageContentStream(document, page);
                 contentStream.beginText();
-//                contentStream.setFont(font, 12);
 
                 //Setting the font to the Content stream
                 contentStream.setFont(PDType1Font.COURIER, 12);
