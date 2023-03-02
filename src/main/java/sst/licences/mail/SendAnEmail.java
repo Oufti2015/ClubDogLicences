@@ -54,29 +54,29 @@ public abstract class SendAnEmail {
         List<Email> emailSent = new ArrayList<>();
         List<Membre> errors = new ArrayList<>();
 
-        for (Membre membre : selectedMembers) {
-            String emailAddress = membre.getEmail().getAdresse();
-            if (Boolean.TRUE.equals(isEligible(emailAddress)) && (!emailSent.contains(membre.getEmail()) || emailExceptions.contains(emailAddress))) {
-                String msg = String.format("%s %s (%s) : ", membre.getPrenom(), membre.getNom(), membre.getEmail());
-                try {
+        try {
+            for (Membre membre : selectedMembers) {
+                String emailAddress = membre.getEmail().getAdresse();
+                if (Boolean.TRUE.equals(isEligible(emailAddress)) && (!emailSent.contains(membre.getEmail()) || emailExceptions.contains(emailAddress))) {
+                    String msg = String.format("%s %s (%s) : ", membre.getPrenom(), membre.getNom(), membre.getEmail());
                     createAndSendEmail(membre, session);
                     log.info(msg + "Sent.");
-                } catch (MessagingException | UnsupportedEncodingException e) {
-                    log.error(msg + "ERROR : " + e.getMessage(), e);
-                    errors.add(membre);
+                    createHistoricData(membre);
                 }
-                createHistoricData(membre);
-            }
 
-            emailSent.add(membre.getEmail());
+                emailSent.add(membre.getEmail());
+            }
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            log.error("ERROR : " + e.getMessage(), e);
+//            errors.add(membre);
         }
-        if (!errors.isEmpty()) {
+/*        if (!errors.isEmpty()) {
             log.error("--- Errors List ---");
             for (Membre m : errors) {
                 log.error(String.format("%s %s (%s)%n", m.getPrenom(), m.getNom(), m.getEmail()));
             }
             log.error("--- ----------- ---");
-        }
+        }*/
         LicencesContainer.me().save();
     }
 

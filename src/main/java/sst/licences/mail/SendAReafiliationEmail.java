@@ -36,15 +36,15 @@ public class SendAReafiliationEmail extends SendAnEmail {
             SendASignaleticCheckEmail.helloWorld(sb, m);
         }
         sb.append("\n");
-        sb.append("Nous sommes en 2022, il va être temps de renouveler votre affiliation à votre club canin préféré: le Berger Club Arlonais.\n");
+        sb.append("Nous sommes en 2023, il va être temps de renouveler votre affiliation à votre club canin préféré: le Berger Club Arlonais.\n");
         sb.append("\n");
         sb.append(typeOfAffiliation(composition));
         sb.append("\n");
         sb.append(String.format("IBAN: BE71 0689 0687 6669 - BIC: GKCCBEBB - avec la communication : *** %s ***%n", membre.getTechnicalIdentifier()));
         sb.append("\n");
         SendASignaleticCheckEmail.signaleticData(membre, composition, sb);
-        sb.append("Si vos informations sont incorrectes ou incomplètes,\nSi vous avez déjà payé l'affiliation 2022,\nmerci de prendre contact avec moi en répondant à ce mail.\n");
-        sb.append("Toute l'équipe du Berger Club Arlonais vous souhaite une très bonne année 2022 à vous et à votre famille.\n");
+        sb.append("Si vos informations sont incorrectes ou incomplètes,\nSi vous avez déjà payé l'affiliation 2023,\nmerci de prendre contact avec moi en répondant à ce mail.\n");
+//        sb.append("Toute l'équipe du Berger Club Arlonais vous souhaite une très bonne année 2022 à vous et à votre famille.\n");
         signature(sb);
         return sb.toString();
     }
