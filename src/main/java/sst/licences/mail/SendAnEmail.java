@@ -81,13 +81,15 @@ public abstract class SendAnEmail {
     }
 
     private void createAndSendEmail(Membre membre, Session session) throws UnsupportedEncodingException, MessagingException {
-        Message message = new MimeMessage(session);
+        MimeMessage message = new MimeMessage(session);
         InternetAddress bergerClubArlonais = new InternetAddress(BCARLONAIS_GMAIL_COM, BERGER_CLUB_ARLONAIS);
         message.setFrom(bergerClubArlonais);
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(membre.getEmail().getAdresse(), membre.getPrenom() + " " + membre.getNom()));
         message.addRecipient(Message.RecipientType.CC, bergerClubArlonais);
-        message.setSubject(messageSubject());
-        message.setContent(messageBody(membre), "text/plain; charset=\"UTF-8\"");
+        message.setSubject(messageSubject(), "UTF-8");
+        message.setContent(messageBody(membre), "text/plain; charset=UTF-8");
+        //message.setContent(messageBody(membre), "text/html; charset=UTF-8");
+        //message.setContent(messageBody(membre), "UTF-8");
         InternetAddress[] replyTo = {bergerClubArlonais,
                 new InternetAddress("stephane.stiennon@gmail.com", "Stéphane Stiennon")};
         message.setReplyTo(replyTo);
