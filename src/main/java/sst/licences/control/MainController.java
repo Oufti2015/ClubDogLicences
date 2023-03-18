@@ -203,12 +203,12 @@ public class MainController {
             stream = stream.filter(m -> !m.isComite());
         }
         if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.CURRENT)) {
-            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().compareTo(LocalDate.of(LocalDate.now().getYear() - 1, Month.SEPTEMBER, 1)) > 0);
+            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().isAfter(LocalDate.of(LocalDate.now().getYear() - 1, Month.SEPTEMBER, 1)));
         } else if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.NEXT)) {
-            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().compareTo(LocalDate.of(LocalDate.now().getYear(), Month.SEPTEMBER, 1)) > 0);
+            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().isAfter(LocalDate.of(LocalDate.now().getYear(), Month.SEPTEMBER, 1)));
         } else if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.NOPE)) {
             stream = stream.filter(m -> !m.isComite())
-                    .filter(m -> m.getAffiliation() == null || m.getAffiliation().compareTo(LocalDate.of(LocalDate.now().getYear() - 1, Month.SEPTEMBER, 1)) < 0)
+                    .filter(m -> m.getAffiliation() == null || m.getAffiliation().isBefore(LocalDate.of(LocalDate.now().getYear() - 1, Month.SEPTEMBER, 1)))
                     .filter(m -> {
                         String payments = LicencesContainer.me().payments(m);
                         return payments.contains("" + LocalDate.now().getYear());
@@ -243,7 +243,7 @@ public class MainController {
     }
 
     @FXML
-    public void rowselected(MouseEvent mouseEvent) {
+    public void rowselected(MouseEvent ignoredMouseEvent) {
         SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             licenceText.setText(selectedItem.getLicence());
@@ -288,7 +288,7 @@ public class MainController {
     }
 
     @FXML
-    public void updateAction(javafx.event.ActionEvent actionEvent) {
+    public void updateAction(javafx.event.ActionEvent ignoredActionEvent) {
         SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         Membre membre = selectedItem.getMembre();
         membre.setNom(nomText.getText());
@@ -316,6 +316,7 @@ public class MainController {
 
         LicencesContainer.me().saveJSON();
         reset();
+        membersCount();
     }
 
     private void updateFamily(Membre membre) {
@@ -333,7 +334,7 @@ public class MainController {
     }
 
     @FXML
-    public void createAction(ActionEvent actionEvent) {
+    public void createAction(ActionEvent ignoredActionEvent) {
         Membre membre = new Membre();
 
         membre.setNom(nomText.getText());
@@ -364,6 +365,7 @@ public class MainController {
             data.add(new SimpleMembre(membre));
 
             reset();
+            membersCount();
         }
     }
 
@@ -388,7 +390,7 @@ public class MainController {
         return true;
     }
 
-    private static Map<String, String> fields = new HashMap<>();
+    private static final Map<String, String> fields = new HashMap<>();
 
     static {
         fields.put("sst.licences.model.Membre.nom", "Le champ 'Nom'");
@@ -412,7 +414,7 @@ public class MainController {
     }
 
     @FXML
-    public void resetAction(ActionEvent actionEvent) {
+    public void resetAction(ActionEvent ignoredActionEvent) {
         reset();
     }
 
@@ -465,23 +467,23 @@ public class MainController {
         messageDialog("L'export des " + exporter.exportName(), "L'Export est fini.");
     }
 
-    public void exportNewMembers(ActionEvent actionEvent) {
+    public void exportNewMembers(ActionEvent ignoredActionEvent) {
         export(new NewMembersExporter());
     }
 
-    public void exportCompleteFile(ActionEvent actionEvent) {
+    public void exportCompleteFile(ActionEvent ignoredActionEvent) {
         export(new AllMembersExporter());
     }
 
-    public void exportAffiliateMembers(ActionEvent actionEvent) {
+    public void exportAffiliateMembers(ActionEvent ignoredActionEvent) {
         export(new AffiliateMembersExporter());
     }
 
-    public void exportNonAffiliateMembers(ActionEvent actionEvent) {
+    public void exportNonAffiliateMembers(ActionEvent ignoredActionEvent) {
         export(new NonAffiliateMembersExporter());
     }
 
-    public void importFileFromMYKKUSH(ActionEvent actionEvent) {
+    public void importFileFromMYKKUSH(ActionEvent ignoredActionEvent) {
         final FileChooser fileChooser = csvFileChooser("Choisir le fichier de MyKKUSH");
         File file = fileChooser.showOpenDialog(this.primaryStage);
         if (file != null) {
@@ -491,16 +493,16 @@ public class MainController {
         messageDialog("Import File From MYKKUSH", "MYKKUSH file imported.");
     }
 
-    public void signalticCheck(ActionEvent actionEvent) {
+    public void signalticCheck(ActionEvent ignoredActionEvent) {
         SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         envoyerEmails(new SendASignaleticCheckEmail(Collections.singletonList(selectedItem.getMembre())));
     }
 
-    public void emailForAffiliation(ActionEvent actionEvent) {
+    public void emailForAffiliation(ActionEvent ignoredActionEvent) {
         envoyerEmails(new SendAReafiliationEmail(MemberEligibility.eligibleMembresForAffiliationEmail()));
     }
 
-    public void emailForAffiliationSelected(ActionEvent actionEvent) {
+    public void emailForAffiliationSelected(ActionEvent ignoredActionEvent) {
         SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         envoyerEmails(new SendAReafiliationEmail(Collections.singletonList(selectedItem.getMembre())));
     }
@@ -519,7 +521,7 @@ public class MainController {
         }
     }
 
-    public void parseBelfius(ActionEvent actionEvent) {
+    public void parseBelfius(ActionEvent ignoredActionEvent) {
         try {
             int fileCount = 0;
             FileChooser fileChooser = csvFileChooser("Choisir le fichier Belfius");
@@ -530,6 +532,7 @@ public class MainController {
                 LicencesContainer.me().save();
             }
 
+            membersCount();
             messageDialog("Belfius file import", String.format("%d Belfius file(s) processed.", fileCount));
         } catch (Exception e) {
             e.printStackTrace();
