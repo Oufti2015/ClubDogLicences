@@ -121,6 +121,8 @@ public class MainController {
     private final BasicRoundDailGauge roundDailGaugeNY = new BasicRoundDailGauge();
     @FXML
     private TextField boxText;
+    @FXML
+    private ListView accountsList;
 
     @FXML
     public void initialize() {
@@ -271,6 +273,9 @@ public class MainController {
             paymentsTextArea.setText(LicencesContainer.me().payments(selectedItem.getMembre()));
             techIdLabel.setText(selectedItem.getMembre().getTechnicalIdentifier());
             activeCheck.setSelected(selectedItem.isActive());
+            accountsList.getItems().clear();
+            accountsList.getItems().addAll(selectedItem.getMembre().getAccounts());
+
             colorButton(selectedItem);
         }
     }
@@ -308,9 +313,10 @@ public class MainController {
         membre.setLangue(langueText.getText());
         membre.setComite(comiteCheck.isSelected());
         membre.setAffiliation(affiliationDatePicker.getValue());
-        membre.setAccountId(accountText.getText());
         membre.setDescription(dscpTextArea.getText());
         membre.setActive(activeCheck.isSelected());
+        membre.getAccounts().clear();
+        membre.getAccounts().addAll(accountsList.getItems());
 
         updateFamily(membre);
 
@@ -324,14 +330,17 @@ public class MainController {
     private void updateFamily(Membre membre) {
         List<Membre> family = LicencesContainer.me().compositionFamily(membre);
         for (Membre m : family) {
-            m.setRue(membre.getRue());
-            m.setNum(membre.getNum());
-            m.setBox(membre.getBox());
-            m.setCodePostal(membre.getCodePostal());
-            m.setLocalite(membre.getLocalite());
-            m.setDescription(membre.getDescription());
-            m.setAccountId(membre.getAccountId());
-            m.setAffiliation(membre.getAffiliation());
+            if (m != membre) {
+                m.setRue(membre.getRue());
+                m.setNum(membre.getNum());
+                m.setBox(membre.getBox());
+                m.setCodePostal(membre.getCodePostal());
+                m.setLocalite(membre.getLocalite());
+                m.setDescription(membre.getDescription());
+                m.getAccounts().clear();
+                m.getAccounts().addAll(membre.getAccounts());
+                m.setAffiliation(membre.getAffiliation());
+            }
         }
     }
 
@@ -354,7 +363,10 @@ public class MainController {
         membre.setLangue(langueText.getText());
         membre.setComite(comiteCheck.isSelected());
         membre.setAffiliation(affiliationDatePicker.getValue());
-        membre.setAccountId(accountText.getText());
+        ObservableList<String> items = accountsList.getItems();
+        for (String account : items) {
+            membre.addAccount(account);
+        }
         membre.setDescription(dscpTextArea.getText());
 
         membre.setLicence(null);
@@ -661,5 +673,11 @@ public class MainController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    private void addAccount() {
+        accountsList.getItems().add(accountText.getText());
+        accountText.clear();
     }
 }

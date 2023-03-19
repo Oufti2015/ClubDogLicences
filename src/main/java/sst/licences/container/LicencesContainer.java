@@ -2,7 +2,6 @@ package sst.licences.container;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
@@ -278,16 +277,16 @@ public class LicencesContainer {
 
     public String payments(Membre membre) {
         String result = "";
-        if (!Strings.isNullOrEmpty(membre.getAccountId())) {
+        if (!membre.getAccounts().isEmpty()) {
             result = payments.stream()
-                    .filter(p -> p.getCompte().equals(membre.getAccountId()))
+                    .filter(p -> membre.getAccounts().contains(p.getCompte()))
                     .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
                     .map(Payment::toString)
                     .collect(Collectors.joining("\n"));
         } else {
             result = payments.stream()
                     .filter(p -> p.getNom().toLowerCase(Locale.ROOT).contains(membre.getNom().toLowerCase(Locale.ROOT))
-                            && LicencesContainer.me.membres().stream().map(Membre::getAccountId).filter(a -> a != null && a.equals(p.getCompte())).count() == 0)
+                            && LicencesContainer.me.membres().stream().map(Membre::getAccounts).filter(a -> a.contains(p.getCompte())).count() == 0)
                     .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
                     .map(Payment::toFullString)
                     .collect(Collectors.joining("\n"));

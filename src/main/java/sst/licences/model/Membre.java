@@ -96,7 +96,7 @@ public class Membre implements Comparable<Membre> {
     @Getter
     private boolean sentToMyKKusch = false;
     @Getter
-    private String accountId;
+    List<String> accounts = new ArrayList<>();
     @Getter
     private String technicalIdentifier;
     @Getter
@@ -310,9 +310,15 @@ public class Membre implements Comparable<Membre> {
         this.sentToMyKKusch = sentToMyKKusch;
     }
 
-    public void setAccountId(String accountId) {
-        History.history(this, FIELD_ACCOUNT_NUMBER, this.accountId, accountId);
-        this.accountId = accountId;
+    public void addAccount(String accountId) {
+        if (!this.getAccounts().contains(accountId)) {
+            History.history(this, FIELD_ACCOUNT_NUMBER, null, accountId);
+            this.accounts.add(accountId);
+        }
+    }
+
+    public void setAccounts(List<String> accounts) {
+        this.accounts = accounts;
     }
 
     public void setTechnicalIdentifier(String technicalIdentifier) {
@@ -336,7 +342,7 @@ public class Membre implements Comparable<Membre> {
         if (!active && this.active) {
             History.inactivation(this);
         } else if (active && !this.active) {
-            History.history(this, FIELD_ACTIVE_FLAG, this.active, true);
+            History.history(this, FIELD_ACTIVE_FLAG, false, true);
         }
         this.active = active;
     }

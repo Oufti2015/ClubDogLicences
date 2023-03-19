@@ -50,7 +50,7 @@ public class PaiementReport implements IPaymentsReport {
         for (Payment payement : input) {
             Optional<Membre> membreOpt = LicencesContainer.me().allMembers()
                     .stream()
-                    .filter(m -> m.getAccountId() != null && m.getAccountId().equals(payement.getCompte()))
+                    .filter(m -> !m.getAccounts().isEmpty() && m.getAccounts().contains(payement.getCompte()))
                     .findFirst();
 
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

@@ -54,7 +54,7 @@ public class SimpleMembre {
         this.langue.set(membre.getLangue());
         this.licence.set(membre.getLicence());
         this.comite.set(membre.isComite());
-        this.accountId.set(membre.getAccountId());
+//        this.accountId.set(membre.getAccounts().get(0));
         if (membre.getAffiliation() != null) {
             this.affiliation.set(membre.getAffiliation().toString());
         }

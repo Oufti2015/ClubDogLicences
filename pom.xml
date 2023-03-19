@@ -6,7 +6,7 @@
 
     <groupId>sst.licences</groupId>
     <artifactId>ClubDogLicences</artifactId>
-    <version>2023.006</version>
+    <version>2023.007</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

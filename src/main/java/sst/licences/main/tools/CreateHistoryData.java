@@ -32,7 +32,6 @@ public class CreateHistoryData {
                 History.affiliation(membre, null, membre.getAffiliation());
             }
             History.history(membre, Membre.FIELD_MY_K_KUSCH, false, membre.isSentToMyKKusch());
-            History.history(membre, Membre.FIELD_ACCOUNT_NUMBER, null, membre.getAccountId());
             History.history(membre, Membre.FIELD_TECHNICAL_ID, null, membre.getTechnicalIdentifier());
             History.history(membre, Membre.FIELD_NOTES, null, membre.getDescription());
             if (!membre.isActive()) {

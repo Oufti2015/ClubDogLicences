@@ -98,7 +98,7 @@ public class BelfiusFile {
             for (Payment vd : vds) {
                 if (membre.getAffiliation() == null || membre.getAffiliation().isBefore(vd.getDate())) {
                     membre.setAffiliation(vd.getDate());
-                    membre.setAccountId(vd.getCompte());
+                    membre.addAccount(vd.getCompte());
                     membre.setActive(true);
                     log.info(membre.getPrenom() + " " + membre.getNom() + " est réaffilié " + vd.getDate());
                 }

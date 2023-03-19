@@ -62,7 +62,7 @@ public class FamilyReport implements IMembreReport {
         table.newRow().newHead("Licence");
         table.row().newCell(MoreObjects.firstNonNull(member.getLicence(), AllMembersReport.NBSP));
         table.newRow().newHead("Compte");
-        table.row().newCell(MoreObjects.firstNonNull(member.getAccountId(), AllMembersReport.NBSP));
+        table.row().newCell(MoreObjects.firstNonNull(String.join(";", member.getAccounts()), AllMembersReport.NBSP));
         table.newRow().newHead("Comm. struct.");
         table.row().newCell(member.getTechnicalIdentifier());
         table.newRow().newHead("Affilié depuis");

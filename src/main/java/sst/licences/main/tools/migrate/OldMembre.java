@@ -125,7 +125,7 @@ public class OldMembre implements Comparable<OldMembre> {
         membre.setComite(isComite());
         membre.setAffiliation(getAffiliation());
         membre.setSentToMyKKusch(isSentToMyKKusch());
-        membre.setAccountId(getAccountId());
+        membre.addAccount(getAccountId());
         membre.setTechnicalIdentifier(getTechnicalIdentifer());
         membre.setDescription(getDescription());
 
