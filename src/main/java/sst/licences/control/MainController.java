@@ -29,12 +29,14 @@ import sst.licences.main.LicencesConstants;
 import sst.licences.model.Country;
 import sst.licences.model.CountryList;
 import sst.licences.model.Membre;
+import sst.licences.report.PaiementReport;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Log4j2
@@ -640,5 +642,24 @@ public class MainController {
     public void copyTCSInfos() {
         SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         new TCSInfos(selectedItem.getMembre()).process();
+    }
+
+    private static final List<Double> anounts = Arrays.asList(25.0, 37.0, 50.0, 62.0, 75.0);
+
+    public void coursAndAffiliations(ActionEvent ignoredActionEvent) {
+        LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
+
+        try {
+            new PaiementReport().input(LicencesContainer.me().payments()
+                            .stream()
+                            .filter(p -> p.getDate().compareTo(threeMonthsAgo) > 0)
+                            .filter(p -> anounts.contains(p.getMontant())).sorted()
+                            .collect(Collectors.toList()))
+                    .format();
+
+            messageDialog("Cours et Affiliations", "Rapport généré !");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

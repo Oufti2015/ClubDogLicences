@@ -9,17 +9,11 @@ import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.control.MainController;
-import sst.licences.report.PaiementReport;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 @Log4j2
 public class ClubDogLicences extends Application {
@@ -67,24 +61,7 @@ public class ClubDogLicences extends Application {
         }
     }
 
-    List<Double> anounts = Arrays.asList(25.0, 37.0, 50.0, 62.0, 75.0);
-
     private void onClose() {
-        LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
-
-        try {
-            new PaiementReport().input(LicencesContainer.me().payments()
-                            .stream()
-                            .filter(p -> p.getDate().compareTo(threeMonthsAgo) > 0)
-                            .filter(p -> anounts.contains(p.getMontant())).sorted()
-                            .collect(Collectors.toList()))
-                    .format();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-//        String output = new AllMembersReport().input(LicencesContainer.me().allMembers()).format().output();
-//        log.info("output = " + output);
         log.info("... Leaving");
     }
 

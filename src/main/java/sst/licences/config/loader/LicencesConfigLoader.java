@@ -25,6 +25,7 @@ public class LicencesConfigLoader {
             // Printing out the information
             System.out.println(LicencesConfigLoader.load("C:\\Users\\steph\\OneDrive\\Documents\\bca\\membres\\ClubDogLicences.yaml"));
             System.out.println("exportNewMembers=" + ConfigUtil.me().exportNewMembers());
+            System.out.println("exportNewMembers=" + ConfigUtil.me().reportPayments());
         } catch (IOException e) {
             e.printStackTrace();
         }

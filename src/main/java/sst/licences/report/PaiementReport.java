@@ -4,6 +4,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import sst.licences.config.ConfigUtil;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Membre;
 import sst.licences.model.Payment;
@@ -99,15 +100,17 @@ public class PaiementReport implements IPaymentsReport {
         // Make sure that the content stream is closed:
         contentStream.close();
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmmss");
-        String dateString = LocalDateTime.now().format(dateTimeFormatter);  //17-02-2022
-
         // Save the newly created document
-        document.save("Payments" + dateString + ".pdf");
+        document.save(filename(ConfigUtil.me().reportPayments()));
 
         // finally make sure that the document is properly closed.
         document.close();
         return this;
+    }
+
+    private String filename(String baseName) {
+        String formattedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MMM-dd.HH.mm.ss"));
+        return baseName.replace("{date}", formattedDate);
     }
 
     @Override

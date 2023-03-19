@@ -116,4 +116,11 @@ public class ConfigUtil {
     public String variablesMailPwd() {
         return config.getVariables().getMailpwd();
     }
+
+    /*
+     * Report
+     */
+    public String reportPayments() {
+        return directoriesReport() + config.getReport().getPayments();
+    }
 }

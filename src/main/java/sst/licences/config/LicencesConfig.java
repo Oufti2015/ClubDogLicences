@@ -33,6 +33,8 @@ public class LicencesConfig {
     private Export export;
     @Getter
     private Variables variables;
+    @Getter
+    private Report report;
 
     @Override
     public String toString() {
