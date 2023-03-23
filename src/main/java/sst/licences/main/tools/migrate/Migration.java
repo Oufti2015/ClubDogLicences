@@ -10,7 +10,7 @@ public class Migration {
         LicencesContainer.load();
 
         for (Membre m : LicencesContainer.me().membres()) {
-
+            System.out.println(m);
         }
 
         LicencesContainer.me().saveJSON();

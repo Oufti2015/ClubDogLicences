@@ -1,10 +1,10 @@
 package sst.licences.container;
 
 import lombok.extern.log4j.Log4j2;
+import sst.licences.main.LicencesConstants;
 import sst.licences.model.Membre;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,24 +28,24 @@ public class MemberEligibility {
     }
 
     private static LocalDate dateStart() {
-        return LocalDate.of(refYear() - 1, Month.SEPTEMBER, 1);
+        return LocalDate.of(refYear() - 1, LicencesConstants.PIVOT_MONTH, 1);
     }
 
     private static LocalDate dateEnd() {
-        return LocalDate.of(refYear(), Month.SEPTEMBER, 1);
+        return LocalDate.of(refYear(), LicencesConstants.PIVOT_MONTH, 1);
     }
 
     private static int refYear() {
         LocalDate now = LocalDate.now();
         int result = now.getYear();
-        if (now.isBefore(LocalDate.of(now.getYear(), Month.SEPTEMBER, 1))) {
+        if (now.isBefore(LocalDate.of(now.getYear(), LicencesConstants.PIVOT_MONTH, 1))) {
             result -= 1;
         }
         return result;
     }
 
     public static List<Membre> eligibleMembres(int year) {
-        LocalDate dateStart = LocalDate.of(year - 1, Month.SEPTEMBER, 1);
+        LocalDate dateStart = LocalDate.of(year - 1, LicencesConstants.PIVOT_MONTH, 1);
         return LicencesContainer.me().membres()
                 .stream()
                 .filter(m -> m.isComite() || (m.getAffiliation() != null && m.getAffiliation().isAfter(dateStart)))
@@ -53,7 +53,7 @@ public class MemberEligibility {
     }
 
     public static List<Membre> unpaid(int year) {
-        LocalDate dateStart = LocalDate.of(year - 1, Month.SEPTEMBER, 1);
+        LocalDate dateStart = LocalDate.of(year - 1, LicencesConstants.PIVOT_MONTH, 1);
         return LicencesContainer.me().membres()
                 .stream()
                 .filter(m -> !m.isComite() && (m.getAffiliation() == null || m.getAffiliation().isBefore(dateStart)))
@@ -61,7 +61,7 @@ public class MemberEligibility {
     }
 
     public static boolean isAffiliated(Membre membre, int year) {
-        LocalDate dateStart = LocalDate.of(year - 1, Month.SEPTEMBER, 1);
+        LocalDate dateStart = LocalDate.of(year - 1, LicencesConstants.PIVOT_MONTH, 1);
         return membre.isComite() || (membre.getAffiliation() != null && membre.getAffiliation().isAfter(dateStart));
     }
 

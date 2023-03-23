@@ -34,7 +34,6 @@ import sst.licences.report.PaiementReport;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -207,12 +206,12 @@ public class MainController {
             stream = stream.filter(m -> !m.isComite());
         }
         if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.CURRENT)) {
-            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().isAfter(LocalDate.of(LocalDate.now().getYear() - 1, Month.SEPTEMBER, 1)));
+            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().isAfter(LocalDate.of(LocalDate.now().getYear() - 1, LicencesConstants.PIVOT_MONTH, 1)));
         } else if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.NEXT)) {
-            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().isAfter(LocalDate.of(LocalDate.now().getYear(), Month.SEPTEMBER, 1)));
+            stream = stream.filter(m -> m.getAffiliation() != null && m.getAffiliation().isAfter(LocalDate.of(LocalDate.now().getYear(), LicencesConstants.PIVOT_MONTH, 1)));
         } else if (affiliationFilterComboBox.getSelectionModel().getSelectedItem().equals(AffiliationFilter.NOPE)) {
             stream = stream.filter(m -> !m.isComite())
-                    .filter(m -> m.getAffiliation() == null || m.getAffiliation().isBefore(LocalDate.of(LocalDate.now().getYear() - 1, Month.SEPTEMBER, 1)))
+                    .filter(m -> m.getAffiliation() == null || m.getAffiliation().isBefore(LocalDate.of(LocalDate.now().getYear() - 1, LicencesConstants.PIVOT_MONTH, 1)))
                     .filter(m -> {
                         String payments = LicencesContainer.me().payments(m);
                         return payments.contains("" + LocalDate.now().getYear());

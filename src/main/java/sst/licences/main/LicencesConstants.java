@@ -3,8 +3,11 @@ package sst.licences.main;
 import sst.licences.config.ConfigUtil;
 import sst.licences.model.Country;
 
+import java.time.Month;
+
 public class LicencesConstants {
     public static final String CHARSET_ANSI_CP_1252 = "Cp1252";
+    public static final Month PIVOT_MONTH = Month.OCTOBER;
 
     private LicencesConstants() {
     }
