@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j2;
 import sst.licences.container.LicencesContainer;
 import sst.licences.model.Membre;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,9 +11,10 @@ import java.util.stream.Collectors;
 public class CheckMembers {
     public static void main(String[] args) {
         LicencesContainer.load();
-        List<Membre> membres = LicencesContainer.me().thisYearMembers().stream()
-                .filter(m -> m.getAffiliation() != null && !m.isComite() && m.getAffiliation().isAfter(LocalDate.of(2022, 8, 31)))
-                .filter(m -> m.getAffiliation() != null && m.getAffiliation().isBefore(LocalDate.of(2022, 10, 1)))
+        List<Membre> membres = LicencesContainer.me().allMembers().stream()
+                //         .filter(m -> m.getAffiliation() != null && !m.isComite() && m.getAffiliation().isAfter(LocalDate.of(2022, 8, 31)))
+                //         .filter(m -> m.getAffiliation() != null && m.getAffiliation().isBefore(LocalDate.of(2022, 10, 1)))
+                .filter(m -> m.getAffiliation() == null && !m.isComite())
                 .collect(Collectors.toList());
 
         int nb = 0;

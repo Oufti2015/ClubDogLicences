@@ -15,7 +15,11 @@ public class ShowHistory {
         if (args.length == 1) {
             LicencesContainer.load();
             String techId = args[0];
-            List<Membre> collect = LicencesContainer.me().allMembers().stream().filter(m -> m.getTechnicalIdentifier().equals(techId)).collect(Collectors.toList());
+            System.out.println("Searching for " + techId);
+            List<Membre> collect = LicencesContainer.me().allMembers()
+                    .stream()
+                    .filter(m -> m.getTechnicalIdentifier() != null && m.getTechnicalIdentifier().equals(techId))
+                    .collect(Collectors.toList());
             for (Membre membre : collect) {
                 System.out.println("Member : " + membre);
                 System.out.println("-------- ");

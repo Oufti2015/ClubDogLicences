@@ -61,7 +61,7 @@ public class BankIdentifierGenerator {
     }
 
     public static boolean correctTechId(String techId) {
-        return addressesMap.values().stream().filter(v -> v.equals(techId)).count() <= 1;
+        return addressesMap.values().stream().filter(v -> v != null && v.equals(techId)).count() <= 1;
     }
 
     public static void checkTechnicalId() {

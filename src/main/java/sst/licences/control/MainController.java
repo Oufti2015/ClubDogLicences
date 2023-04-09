@@ -463,6 +463,7 @@ public class MainController {
         activeCheck.setSelected(true);
         resetButton(currentYearButton);
         resetButton(yearPlusOneButton);
+        accountsList.getItems().clear();
 
         if (!justCleanForm) {
             filter();
