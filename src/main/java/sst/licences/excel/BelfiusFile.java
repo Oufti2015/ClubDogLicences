@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,6 +89,8 @@ public class BelfiusFile {
         }
     }
 
+    private final List<Double> amountsAffiliation = Arrays.asList(37.00, 50.00, 62.00, 75.00);
+
     private void updateMembres(List<Payment> belfius) {
         for (Membre membre : LicencesContainer.me().allMembers()) {
             List<Payment> vds = belfius.stream()
@@ -96,11 +99,12 @@ public class BelfiusFile {
                             && vd.getCommunications().contains(membre.getTechnicalIdentifier()))
                     .collect(Collectors.toList());
             for (Payment vd : vds) {
-                if (membre.getAffiliation() == null || membre.getAffiliation().isBefore(vd.getDate())) {
+                if (membre.getAffiliation() == null || membre.getAffiliation().isBefore(vd.getDate())
+                        && (amountsAffiliation.contains(vd.getMontant()))) {
                     membre.setAffiliation(vd.getDate());
                     membre.addAccount(vd.getCompte());
                     membre.setActive(true);
-                    log.info(membre.getPrenom() + " " + membre.getNom() + " est réaffilié " + vd.getDate());
+                    log.info(membre.getPrenom() + " " + membre.getNom() + " is reaffiliated (" + vd.getDate() + ")");
                 }
             }
         }
