@@ -144,6 +144,7 @@ public class Membre implements Comparable<Membre> {
         Membre membre = (Membre) o;
         return Objects.equal(nom.toUpperCase(Locale.ROOT), membre.nom.toUpperCase(Locale.ROOT))
                 && Objects.equal(prenom.toUpperCase(Locale.ROOT), membre.prenom.toUpperCase(Locale.ROOT))
+                && Objects.equal(localite.toUpperCase(Locale.ROOT), membre.localite.toUpperCase(Locale.ROOT))
                 //   && Objects.equal(dateDeNaissance, membre.dateDeNaissance)
 //                && Objects.equal(codePays, membre.codePays)
 //                && Objects.equal(langue, membre.langue)
@@ -184,7 +185,7 @@ public class Membre implements Comparable<Membre> {
     }
 
     public String fullName() {
-        return prenom + " " + nom;
+        return prenom + " " + nom + " (" + dateDeNaissance + ")";
     }
 
     public String fullAddress() {
@@ -366,9 +367,9 @@ public class Membre implements Comparable<Membre> {
                 .orElse(9999L);
     }
 
-    public static boolean memberCompare(Membre membre1, Membre membre2) {
-        if (membre2 == membre1) return true;
-        if (membre1 == null || membre2 == null) return false;
+    public static void memberCompare(Membre membre1, Membre membre2) {
+        if (membre2 == membre1) return;
+        if (membre1 == null || membre2 == null) return;
         boolean result = true;
 
         if (!Objects.equal(membre1.dateDeNaissance, membre2.dateDeNaissance)) {
@@ -403,6 +404,5 @@ public class Membre implements Comparable<Membre> {
             log.warn("{} has different city [{}] != [{}]", membre1.fullName(), membre1.localite, membre2.localite);
             result = false;
         }
-        return result;
     }
 }

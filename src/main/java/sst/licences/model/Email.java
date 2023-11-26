@@ -10,7 +10,7 @@ public class Email {
     @NotEmpty
     private String adresse;
     @NotNull
-    @NotEmpty
+    @NotEmpty   
     private Boolean ok;
 
     public Email(String adresse) {

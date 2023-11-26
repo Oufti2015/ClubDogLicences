@@ -31,6 +31,7 @@ public class Import {
 
     public void importFromCsv(File file) {
         log.info("Importing file " + file + "...");
+        final List<Membre> notAffiliated = new ArrayList<>();
 
         List<Membre> list = new ArrayList<>();
         CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
@@ -53,7 +54,7 @@ public class Import {
                         Membre.memberCompare(membre, member);
                         membre.update(member);
                         if (!MemberEligibility.isCurrentYearAffiliated(membre)) {
-                            log.warn("Member " + membre.fullName() + " is not affiliated to current year");
+                            notAffiliated.add(membre);
                         }
                     }
                 }
@@ -64,8 +65,10 @@ public class Import {
                     .filter(m -> !m.isSentToMyKKusch())
                     .collect(Collectors.toList());
             for (Membre membre : notSent) {
-                log.warn("Not Sent {}", membre);
+                log.warn("Not Sent {}", membre.fullName());
             }
+
+            notAffiliated.forEach(membre -> log.warn("Not affiliated {}", membre.fullName()));
 
             log.info("Adding " + list.size() + " members...");
             for (Membre membre : list) {
