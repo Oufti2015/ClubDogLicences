@@ -22,6 +22,7 @@ import sst.licences.control.filters.AffiliationFilter;
 import sst.licences.control.filters.ComiteFilter;
 import sst.licences.copy.TCSInfos;
 import sst.licences.excel.*;
+import sst.licences.mail.SendANewMemberEmail;
 import sst.licences.mail.SendAReafiliationEmail;
 import sst.licences.mail.SendASignaleticCheckEmail;
 import sst.licences.mail.SendAnEmail;
@@ -519,6 +520,11 @@ public class MainController {
     public void emailForAffiliationSelected(ActionEvent ignoredActionEvent) {
         SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
         envoyerEmails(new SendAReafiliationEmail(Collections.singletonList(selectedItem.getMembre())));
+    }
+
+    public void emailForNewMember(ActionEvent ignoredActionEvent) {
+        SimpleMembre selectedItem = mainTableView.getSelectionModel().getSelectedItem();
+        envoyerEmails(new SendANewMemberEmail(Collections.singletonList(selectedItem.getMembre())));
     }
 
     private void envoyerEmails(SendAnEmail envoi) {

@@ -66,8 +66,9 @@
                     <items>
                   <Menu mnemonicParsing="false" text="Reaffiliation">
                     <items>
-                              <MenuItem mnemonicParsing="false" onAction="#emailForAffiliation" text="Tous les membres" />
+                        <MenuItem mnemonicParsing="false" onAction="#emailForAffiliation" text="Tous les membres"/>
                       <MenuItem mnemonicParsing="false" onAction="#emailForAffiliationSelected" text="Membre sélectionné" />
+                        <MenuItem mnemonicParsing="false" onAction="#emailForNewMember" text="Nouveau Membre"/>
                     </items>
                   </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#signalticCheck" text="Verification" />

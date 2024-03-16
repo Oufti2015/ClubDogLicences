@@ -15,7 +15,7 @@ public class SendAReafiliationEmail extends SendAnEmail {
         super(selectedMembers);
     }
 
-    private static String typeOfAffiliation(List<Membre> composition) {
+    protected static String typeOfAffiliation(List<Membre> composition) {
         StringBuilder sb = new StringBuilder();
         boolean simple = composition.size() == 1;
         sb.append("Pourriez-vous verser ");
@@ -36,17 +36,21 @@ public class SendAReafiliationEmail extends SendAnEmail {
             SendASignaleticCheckEmail.helloWorld(sb, m);
         }
         sb.append("\n");
-        sb.append("L'année 2023 se termine, il va être temps de renouveler votre affiliation à votre club canin préféré: le Berger Club Arlonais.\n");
+        sb.append("Nous sommes en 2024, il va être temps de renouveler votre affiliation à votre club canin préféré: le Berger Club Arlonais.\n");
+        body(membre, sb, composition);
+        return sb.toString();
+    }
+
+    protected static void body(Membre membre, StringBuilder sb, List<Membre> composition) {
         sb.append("\n");
+        SendASignaleticCheckEmail.signaleticData(membre, composition, sb);
         sb.append(typeOfAffiliation(composition));
         sb.append("\n");
         sb.append(String.format("IBAN: BE71 0689 0687 6669 - BIC: GKCCBEBB - avec la communication : *** %s ***%n", membre.getTechnicalIdentifier()));
         sb.append("\n");
-        SendASignaleticCheckEmail.signaleticData(membre, composition, sb);
-        sb.append("Si vos informations sont incorrectes ou incomplètes,\nSi vous avez déjà payé l'affiliation 2024,\nmerci de prendre contact avec moi en répondant à ce mail.\n");
+        sb.append("Si vos informations sont incorrectes ou incomplètes,\nSi vous avez déjà payé l'affiliation 2024,\nSi vous ne comptez plus fréquenter notre club,\nmerci de prendre contact avec moi en répondant à ce mail.\n");
 //        sb.append("Toute l'équipe du Berger Club Arlonais vous souhaite une très bonne année 2023 à vous et à votre famille.\n");
         signature(sb);
-        return sb.toString();
     }
 
     @Override
