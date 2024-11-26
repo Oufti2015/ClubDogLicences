@@ -30,7 +30,8 @@ import sst.licences.main.LicencesConstants;
 import sst.licences.model.Country;
 import sst.licences.model.CountryList;
 import sst.licences.model.Membre;
-import sst.licences.report.PaiementReport;
+import sst.licences.report.PaymentReport;
+import sst.licences.report.PaymentReport2;
 
 import java.io.File;
 import java.io.IOException;
@@ -668,7 +669,7 @@ public class MainController {
         LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
 
         try {
-            new PaiementReport().input(LicencesContainer.me().payments()
+            new PaymentReport2().input(LicencesContainer.me().payments()
                             .stream()
                             .filter(p -> p.getDate().compareTo(threeMonthsAgo) > 0)
                             .filter(p -> anounts.contains(p.getMontant())).sorted()

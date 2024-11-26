@@ -4,8 +4,8 @@
         <Console name="LogToConsole" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{dd/MM/yyyy HH:mm:ss.SSS} %-5level %-80logger{36} - %msg%n"/>
         </Console>
-        <RollingFile name="RollingFile" fileName="c:/logs/ClubDogLicences/ClubDogLicences.log"
-                     filePattern="c:/logs/ClubDogLicences/ClubDogLicences-%d{yyyy-dd-MM}-%i.log">
+        <RollingFile name="RollingFile" fileName="D:/Logs/ClubDogLicences/ClubDogLicences.log"
+                     filePattern="D:/Logs/ClubDogLicences/ClubDogLicences-%d{yyyy-dd-MM}-%i.log">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} %m%n</Pattern>
             </PatternLayout>

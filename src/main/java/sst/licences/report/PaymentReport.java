@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
-public class PaiementReport implements IPaymentsReport {
+public class PaymentReport implements IPaymentsReport {
     public static final int START_OFFSET = 750;
     private List<Payment> input = null;
     // Create a new empty document
