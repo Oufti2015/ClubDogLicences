@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class PaymentReport2 implements IPaymentsReport {
-    public static final int START_OFFSET = 750;
     private List<Payment> input = null;
 
     @Override

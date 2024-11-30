@@ -30,7 +30,6 @@ import sst.licences.main.LicencesConstants;
 import sst.licences.model.Country;
 import sst.licences.model.CountryList;
 import sst.licences.model.Membre;
-import sst.licences.report.PaymentReport;
 import sst.licences.report.PaymentReport2;
 
 import java.io.File;
@@ -663,7 +662,7 @@ public class MainController {
         new TCSInfos(selectedItem.getMembre()).process();
     }
 
-    private static final List<Double> anounts = Arrays.asList(25.0, 37.0, 50.0, 62.0, 75.0);
+    private static final List<Double> amounts = Arrays.asList(25.0, 37.0, 50.0, 62.0, 75.0, 100.0);
 
     public void coursAndAffiliations(ActionEvent ignoredActionEvent) {
         LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
@@ -671,8 +670,8 @@ public class MainController {
         try {
             new PaymentReport2().input(LicencesContainer.me().payments()
                             .stream()
-                            .filter(p -> p.getDate().compareTo(threeMonthsAgo) > 0)
-                            .filter(p -> anounts.contains(p.getMontant())).sorted()
+                            .filter(p -> p.getDate().isAfter(threeMonthsAgo))
+                            .filter(p -> amounts.contains(p.getMontant())).sorted()
                             .collect(Collectors.toList()))
                     .format();
 
