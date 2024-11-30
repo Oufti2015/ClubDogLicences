@@ -1,6 +1,6 @@
 package sst.licences.report.members;
 
-import com.google.common.base.MoreObjects;
+import com.google.common.base.*;
 import net.sf.oval.constraint.NotEmpty;
 import net.sf.oval.constraint.NotNull;
 import sst.common.html.*;
@@ -77,15 +77,13 @@ public class MembersListReport implements IMembreReport {
     private AbstractHTMLElement menuList(ListType listType) {
         HTMLUnorderedList ul = new HTMLUnorderedList();
         for (ListType l : ListType.values()) {
+            HTMLListItem item = new HTMLListItem();
             if (l.equals(listType)) {
-                HTMLListItem item = new HTMLListItem();
                 item.textContent("<B>" + l.getLabel() + "</B>");
-                ul.addListItem(item);
             } else {
-                HTMLListItem item = new HTMLListItem();
                 item.addChild(new HTMLHyperlinks().href(l.getFilename()).textContent(l.getLabel()));
-                ul.addListItem(item);
             }
+            ul.addListItem(item);
         }
         return ul;
     }

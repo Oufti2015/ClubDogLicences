@@ -189,7 +189,11 @@ public class Membre implements Comparable<Membre> {
     }
 
     public String fullAddress() {
-        return rue + ", " + num + " " + box + " " + codePostal + " " + localite + " (" + codePays + ")";
+        return rue + ", " + num + box() + " " + codePostal + " " + localite + " (" + codePays + ")";
+    }
+
+    private String box() {
+        return box == null ? "" : " " + box;
     }
 
     public void setNom(String nom) {

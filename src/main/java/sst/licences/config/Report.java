@@ -15,4 +15,7 @@ public class Report {
 
     @Getter
     private String payments;
+
+    @Getter
+    private String members;
 }

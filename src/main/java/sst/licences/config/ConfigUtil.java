@@ -123,4 +123,7 @@ public class ConfigUtil {
     public String reportPayments() {
         return directoriesReport() + config.getReport().getPayments();
     }
+    public String reportMembers() {
+        return directoriesReport() + config.getReport().getMembers();
+    }
 }

@@ -32,11 +32,14 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
-<VBox prefHeight="1080.0" prefWidth="1920.0" stylesheets="@Licences.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
+
+<VBox prefHeight="1080.0" prefWidth="1920.0" stylesheets="@Licences.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sst.licences.control.MainController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -50,13 +53,12 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Export">
                       <items>
-                          <MenuItem mnemonicParsing="false" onAction="#exportNewMembers" text="Nouveaux Membres"/>
-                          <MenuItem mnemonicParsing="false" onAction="#exportCompleteFile" text="Liste Complète"/>
-                          <MenuItem mnemonicParsing="false" onAction="#exportAffiliateMembers" text="Membres Affiliés"/>
-                          <MenuItem mnemonicParsing="false" onAction="#exportNonAffiliateMembers"
-                                    text="Membres Non Affiliés"/>
-                          <MenuItem mnemonicParsing="false" onAction="#coursAndAffiliations"
-                                    text="Cours et Affiliations"/>
+                          <MenuItem mnemonicParsing="false" onAction="#exportNewMembers" text="Nouveaux Membres" />
+                          <MenuItem mnemonicParsing="false" onAction="#exportCompleteFile" text="Liste Complète" />
+                          <MenuItem mnemonicParsing="false" onAction="#exportAffiliateMembers" text="Membres Affiliés" />
+                          <MenuItem mnemonicParsing="false" onAction="#exportNonAffiliateMembers" text="Membres Non Affiliés" />
+                          <MenuItem mnemonicParsing="false" onAction="#coursAndAffiliations" text="Cours et Affiliations" />
+                        <MenuItem mnemonicParsing="false" onAction="#membersReport" text="Membres" />
                       </items>
                   </Menu>
                   <SeparatorMenuItem mnemonicParsing="false" />
@@ -66,9 +68,9 @@
                     <items>
                   <Menu mnemonicParsing="false" text="Reaffiliation">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#emailForAffiliation" text="Tous les membres"/>
+                        <MenuItem mnemonicParsing="false" onAction="#emailForAffiliation" text="Tous les membres" />
                       <MenuItem mnemonicParsing="false" onAction="#emailForAffiliationSelected" text="Membre sélectionné" />
-                        <MenuItem mnemonicParsing="false" onAction="#emailForNewMember" text="Nouveau Membre"/>
+                        <MenuItem mnemonicParsing="false" onAction="#emailForNewMember" text="Nouveau Membre" />
                     </items>
                   </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#signalticCheck" text="Verification" />
@@ -322,16 +324,12 @@
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                       <children>
-                          <DatePicker fx:id="affiliationDatePicker"/>
-                          <Button fx:id="currentYearButton" focusTraversable="false" mnemonicParsing="false" text="2020"
-                                  GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
-                          <Button fx:id="yearPlusOneButton" mnemonicParsing="false" text="2022" GridPane.columnIndex="2"
-                                  GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
+                          <DatePicker fx:id="affiliationDatePicker" />
+                          <Button fx:id="currentYearButton" focusTraversable="false" mnemonicParsing="false" text="2020" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                          <Button fx:id="yearPlusOneButton" mnemonicParsing="false" text="2022" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                       </children>
                   </GridPane>
-                        <CheckBox fx:id="comiteCheck" mnemonicParsing="false" text="fait partie du comité"
-                                  GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9"
-                                  GridPane.valignment="CENTER"/>
+                        <CheckBox fx:id="comiteCheck" mnemonicParsing="false" text="fait partie du comité" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
                   <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
                   <TextArea fx:id="dscpTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.rowSpan="2" />
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="10">
@@ -345,16 +343,14 @@
                   <Label text="Payments" GridPane.halignment="CENTER" GridPane.rowIndex="12" GridPane.valignment="CENTER" />
                   <TextField fx:id="techIdLabel" editable="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="CENTER" />
                   <CheckBox fx:id="activeCheck" mnemonicParsing="false" text="Actif" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
-                        <Button mnemonicParsing="false" onAction="#addAccount" text="+ numéro de compte"
-                                GridPane.columnIndex="5" GridPane.rowIndex="6"/>
+                        <Button mnemonicParsing="false" onAction="#addAccount" text="+ numéro de compte" GridPane.columnIndex="5" GridPane.rowIndex="6" />
                   <HBox fx:id="tachiBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="5" GridPane.rowIndex="7" GridPane.rowSpan="9" />
                   <TextField fx:id="membersCount" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="1" />
                   <TextField fx:id="activeMembers" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="2" />
                   <TextField fx:id="inactiveMembers" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="3" />
                   <TextField fx:id="membersAffiliated" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="4" />
                   <TextField fx:id="membersAffiliatedNextYear" alignment="CENTER" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="5" />
-                        <ListView fx:id="accountsList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3"
-                                  GridPane.rowIndex="8" GridPane.rowSpan="2"/>
+                        <ListView fx:id="accountsList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="8" GridPane.rowSpan="2" />
                     </children>
                 </GridPane>
             </children>

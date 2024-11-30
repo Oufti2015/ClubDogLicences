@@ -30,6 +30,7 @@ import sst.licences.main.LicencesConstants;
 import sst.licences.model.Country;
 import sst.licences.model.CountryList;
 import sst.licences.model.Membre;
+import sst.licences.report.MembersReport;
 import sst.licences.report.PaymentReport2;
 
 import java.io.File;
@@ -676,6 +677,19 @@ public class MainController {
                     .format();
 
             messageDialog("Cours et Affiliations", "Rapport généré !");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void membersReport(ActionEvent ignoredActionEvent) {
+        LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
+
+        try {
+            new MembersReport().input(LicencesContainer.me().thisYearMembers())
+                    .format();
+
+            messageDialog("Tous les membres", "Rapport généré !");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
