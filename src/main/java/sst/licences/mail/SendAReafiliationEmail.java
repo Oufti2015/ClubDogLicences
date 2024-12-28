@@ -49,7 +49,7 @@ public class SendAReafiliationEmail extends SendAnEmail {
         sb.append(String.format("IBAN: BE71 0689 0687 6669 - BIC: GKCCBEBB - avec la communication : *** %s ***%n", membre.getTechnicalIdentifier()));
         sb.append("\n");
         sb.append("Si vos informations sont incorrectes ou incomplètes,\nSi vous avez déjà payé l'affiliation 2025,\nSi vous ne comptez plus fréquenter notre club,\nmerci de prendre contact avec moi en répondant à ce mail.\n");
-//        sb.append("Toute l'équipe du Berger Club Arlonais vous souhaite une très bonne année 2023 à vous et à votre famille.\n");
+        sb.append("Toute l'équipe du Berger Club Arlonais vous souhaite un très joyeux Noël et une très bonne année 2025 à vous et à votre famille.\n");
         signature(sb);
     }
 

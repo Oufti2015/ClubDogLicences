@@ -51,8 +51,9 @@ public abstract class SendAnEmail {
                         return new PasswordAuthentication(BCARLONAIS_GMAIL_COM, password);
                     }
                 });
+        log.info("Session created : {}", session);
+
         List<Email> emailSent = new ArrayList<>();
-        List<Membre> errors = new ArrayList<>();
 
         try {
             for (Membre membre : selectedMembers) {
@@ -60,14 +61,14 @@ public abstract class SendAnEmail {
                 if (Boolean.TRUE.equals(isEligible(emailAddress)) && (!emailSent.contains(membre.getEmail()) || emailExceptions.contains(emailAddress))) {
                     String msg = String.format("%s %s (%s) : ", membre.getPrenom(), membre.getNom(), membre.getEmail());
                     createAndSendEmail(membre, session);
-                    log.info(msg + "Sent.");
+                    log.info("{} Sent.", msg);
                     createHistoricData(membre);
                 }
 
                 emailSent.add(membre.getEmail());
             }
         } catch (MessagingException | UnsupportedEncodingException e) {
-            log.error("ERROR : " + e.getMessage(), e);
+            log.error("ERROR : {}", e.getMessage(), e);
 //            errors.add(membre);
         }
 /*        if (!errors.isEmpty()) {
