@@ -12,17 +12,14 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import sst.licences.config.ConfigUtil;
-import sst.licences.container.LicencesContainer;
+import sst.licences.container.MemberEligibility;
 import sst.licences.model.Membre;
-import sst.licences.model.Payment;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MembersReport implements IMembreReport {
@@ -57,8 +54,10 @@ public class MembersReport implements IMembreReport {
             document.add(new Paragraph("Membres (" + LocalDate.now().format(dateTimeFormatter) + ")").setBold().setFontSize(14));
 
             // Ajouter une table
-            float[] columnWidths = {20, 20, 50, 15, 30, 5};
-            String[] headers = {"Nom", "Prénom", "Address", "Téléphone", "Nom du chien", "Date d'affiliation"};
+            float[] columnWidths = {20, 20, 50, 15, 30, 5, 5, 5};
+
+            int year = LocalDate.now().getYear();
+            String[] headers = {"Nom", "Prénom", "Address", "Téléphone", "Nom du chien", "Date d'affiliation", "" + year, "" + (year + 1)};
             Table table = new Table(columnWidths);
 
             for (String header : headers) {
@@ -72,6 +71,8 @@ public class MembersReport implements IMembreReport {
                 table.addCell(textCell(member.getGsm()));
                 table.addCell(textCell(member.getDescription() == null ? "" : member.getDescription()));
                 table.addCell(textCell(member.isComite() ? "Comité" : member.getAffiliation().format(dateTimeFormatter)));
+                table.addCell(textCell(member.isComite() || MemberEligibility.isCurrentYearAffiliated(member) ? "X" : ""));
+                table.addCell(textCell(member.isComite() || MemberEligibility.isNextYearAffiliated(member) ? "X" : ""));
             }
 
             document.add(table);
