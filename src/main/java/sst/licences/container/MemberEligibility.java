@@ -19,11 +19,11 @@ public class MemberEligibility {
         LocalDate dateEnd = dateEnd();
         List<Membre> collect = LicencesContainer.me().membres()
                 .stream()
-                .filter(m -> !m.isComite() && (m.getAffiliation() == null ||
+                .filter(m -> (m.getAffiliation() == null ||
                         (m.getAffiliation().isAfter(dateStart) && m.getAffiliation().isBefore(dateEnd))))
                 .filter(m -> m.daysFromLastAffiliationEmail() > 30)
                 .collect(Collectors.toList());
-        log.debug("" + collect.size() + " membres éligibles pour email ! ");
+        log.debug("{} membres éligibles pour email ! ", collect.size());
         return collect;
     }
 

@@ -7,6 +7,7 @@ import sst.licences.model.Email;
 import sst.licences.model.Membre;
 
 import javax.mail.*;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
@@ -95,7 +96,17 @@ public abstract class SendAnEmail {
                 new InternetAddress("stephane.stiennon@gmail.com", "Stéphane Stiennon")};
         message.setReplyTo(replyTo);
 
-        Transport.send(message);
+        try {
+            Transport.send(message);
+        } catch (AddressException ae) {
+            log.error("Address Exception : {} {} {}", membre.getPrenom(), membre.getNom(), membre.getEmail());
+            Address[] tos = message.getRecipients(Message.RecipientType.TO);
+            String tosStr = tos == null ? "[]" : java.util.Arrays.stream(tos)
+                    .map(java.util.Objects::toString)
+                    .collect(java.util.stream.Collectors.joining(", "));
+            log.error("Address Exception : {}", tosStr);
+            log.error("Address Exception : {}", ae.getMessage(), ae);
+        }
     }
 
     private Properties gmailProperties() {

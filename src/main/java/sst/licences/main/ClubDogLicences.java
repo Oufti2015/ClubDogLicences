@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
+import sst.licences.bank.BankIdentifierGenerator;
 import sst.licences.container.LicencesContainer;
 import sst.licences.control.MainController;
 
@@ -29,6 +30,8 @@ public class ClubDogLicences extends Application {
         checkEnvironmentVariable(LicencesConstants.ENV_MAIL_PWD, false);
         checkEnvironmentVariable(LicencesConstants.ENV_TEST_MODE, true);
         LicencesContainer.loadJSON();
+        log.info("Licences loaded: {} members", LicencesContainer.me().membres().size());
+        BankIdentifierGenerator.checkTechnicalId();
 
         FXMLLoader loader = new FXMLLoader();
         URL fxml = ClubDogLicences.class.getResource("/licenses.fxml");

@@ -67,20 +67,11 @@ public class BankIdentifierGenerator {
     public static void checkTechnicalId() {
         boolean errorFound = false;
         for (Membre m : LicencesContainer.me().membres()) {
-            if (m.isComite()) {
-                if (m.getTechnicalIdentifier() != null) {
-                    log.warn(m.fullName() + " " + m.getTechnicalIdentifier() + " est dans le comité...");
-                    BankIdentifierGenerator.reset(m);
-                    m.setTechnicalIdentifier(null, true);
-                    errorFound = true;
-                }
-            } else {
-                if (!BankIdentifierGenerator.correctTechId(m.getTechnicalIdentifier())) {
-                    log.warn(m.fullName() + " " + m.getTechnicalIdentifier());
-                    BankIdentifierGenerator.reset(m);
-                    m.setTechnicalIdentifier(BankIdentifierGenerator.newId(m), true);
-                    errorFound = true;
-                }
+            if (m.getTechnicalIdentifier() == null || !BankIdentifierGenerator.correctTechId(m.getTechnicalIdentifier())) {
+                log.warn("{} {}", m.fullName(), m.getTechnicalIdentifier());
+                BankIdentifierGenerator.reset(m);
+                m.setTechnicalIdentifier(BankIdentifierGenerator.newId(m), true);
+                errorFound = true;
             }
         }
         if (errorFound) {
