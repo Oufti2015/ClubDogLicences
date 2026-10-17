@@ -672,7 +672,8 @@ public class MainController {
             new PaymentReport2().input(LicencesContainer.me().payments()
                             .stream()
                             .filter(p -> p.getDate().isAfter(threeMonthsAgo))
-                            .filter(p -> amounts.contains(p.getMontant())).sorted()
+                            .filter(p -> amounts.contains(p.getMontant()))
+                            .sorted()
                             .collect(Collectors.toList()))
                     .format();
 
